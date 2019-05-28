@@ -110,14 +110,14 @@ $$\hat{x} = \mathop{\arg\min}_{\hat{x}} E[c(\hat{x}, x)|y]$$
 
 3.  均匀误差函数，对应最大后验估计。
 
- $$c(\hat{x}, x)   =
+ $$\begin{equation}c(\hat{x}, x)   =
             \left\{
             \begin{array}{lr}
             1 \quad (|\hat{x}-x|\geq\Delta/2) &  \\
             &\Delta>0\\
             0 \quad (|\hat{x}-x|<\Delta/2) & 
             \end{array}
-            \right.$$
+            \right.\end{equation}$$
 
 ### 3.1 最小均方估计（MMSE）
 
@@ -136,10 +136,10 @@ $$\hat{x} =\int_{x}x p(x|y)dx = E[ x| y]$$
 
 亦可以使用贝叶斯公式展开，得到： 
 
-$$\begin{aligned}
+$$\begin{split}
     \hat{x} = \int_{x}x \frac{p(y|x)p(x)}{p(y)} dx \\
             = \frac{\int_{x}xp(y|x)p(x)dx}{\int_{x}p(y|x)p(x)dx}
-    \end{aligned}$$
+    \end{split}$$
 
 在语音增强的模型里，纯净语音谱的估计为其在带噪语音谱下的条件均值。
 
@@ -232,12 +232,10 @@ $$H_{k} = \sqrt{\frac{\xi_{k}}{1+\xi_{k}} (\frac{1+v_{k}}{\gamma_{k}})}$$
 
 当贝叶斯估计器采用均匀误差函数时，平均误差为： 
 
-$$
-\begin{split}
+$$\begin{split}
     E[c(\hat{x}, x)|y] &= \int_{-\infty}^{\hat{x}-\Delta/2}  p(x|y)dx + \int_{\hat{x}+\Delta/2}^{\infty}  p(x|y)dx   \\
                        &= 1-\int_{\hat{x}\Delta/2}^{\hat{x}+\Delta/2}  p(x|y)dx 
-\end{split}
-$$
+\end{split}$$
 
 显然要使得平均误差最小，就是要求目标估计$\hat{x}$，使得
 $p(x|y)$最大。这种估计模型称作最大后验估计(Maximum A Posteriori

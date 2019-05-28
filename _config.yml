@@ -1,1 +1,55 @@
-theme: jekyll-theme-minimal
+﻿title: All Articles
+description: My Personal Thoughts 
+author: wjchen
+github: https://github.com/chenwj1989
+about: I'm an R&D engineer on telecom, signal processing, and software.
+disqus_shortname: wjchen
+google_analytics: UA-XXXXXXXX-Y
+avatar_url: /static/img/avatar.jpg
+
+enableTags: true
+tagarray: []
+
+collections:
+  project:
+    output: true
+    permalink: /project/:path/
+
+social:
+    #- icon: fa-facebook
+    #  link: "#"
+    #- icon: fa-twitter
+    #  link: "#"
+    #- icon: fa-linkedin
+   #   link: "#"
+    #- icon: fa-stack-exchange
+   #   link: "#"
+    - icon: fa-github
+      link: "https://github.com/chenwj1989"
+
+share:
+  twitter_username: #
+  fb_appid: #
+
+urls:
+    - text: My Projects
+      url: /projects/
+    - text: About Me
+      url: /about/
+
+url: "https://chenwj1989.github.io"
+baseurl: ""
+paginate: 20
+per_page: 20
+paginate_path: "/page/:num/"
+markdown: kramdown
+gems:
+  - jekyll-paginate
+  - jekyll-gist
+
+compress_html:
+  clippings: all
+  comments: ["<!-- ", " -->"]
+  endings: all
+  ignore:
+    envs: ['development']

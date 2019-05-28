@@ -1,0 +1,9 @@
+[
+	{
+		"slug": "cool-project",
+		"name": "Beamforming_Examples",
+		"image": "beamforming.png",
+		"url": "https://github.com/chenwj1989/Beamforming_Examples",
+		"tags": ["Signal Processing","Microphone Array", "Matlab"]
+	}
+]

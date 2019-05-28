@@ -233,15 +233,15 @@ $$H_{k} = \sqrt{\frac{\xi_{k}}{1+\xi_{k}} (\frac{1+v_{k}}{\gamma_{k}})}$$
 当贝叶斯估计器采用均匀误差函数时，平均误差为： 
 
 $$
-\begin{aligned}
-    E[c(\hat{x}, x)|y] &=\int_{-\infty}^{\hat{x}-\Delta/2}  p(x|y)dx + \int_{\hat{x}+\Delta/2}^{\infty}  p(x|y)dx   \\
-    &= 1-\int_{\hat{x}\Delta/2}^{\hat{x}+\Delta/2}  p(x|y)dx 
-\end{aligned}
+\begin{split}
+    E[c(\hat{x}, x)|y] &= \int_{-\infty}^{\hat{x}-\Delta/2}  p(x|y)dx + \int_{\hat{x}+\Delta/2}^{\infty}  p(x|y)dx   \\
+                       &= 1-\int_{\hat{x}\Delta/2}^{\hat{x}+\Delta/2}  p(x|y)dx 
+\end{split}
 $$
 
 显然要使得平均误差最小，就是要求目标估计$\hat{x}$，使得
 $p(x|y)$最大。这种估计模型称作最大后验估计(Maximum A Posteriori
-Estimation)。这个模型的意思是只有估计值$\hat{x}$与原始值$x$相等，误差才为$0$，其他时候误差均匀为1。估计值可以表达为：
+Estimation)。这个模型的意思是只有估计值$\hat{x}$与原始值$x$相等，误差才为0，其他时候误差均匀为1。估计值可以表达为：
 
 $$\hat{x} =\mathop{\arg\min}_{x} p(x|y)$$
 

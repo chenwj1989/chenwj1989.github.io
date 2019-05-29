@@ -242,25 +242,11 @@ Function）。对纯净信号$x$的估计，表达为求解合适的$x$值，使
 
 <script type="math/tex; mode=display">E[c(\hat{x}, x)] = \int_{x}\int_{y}c(\hat{x}, x)p(x, y)dxdy</script>
 
-<table>
-  <tbody>
-    <tr>
-      <td>对联合概率密度进行分解，提取$p(y)$与条件概率密度$p(x</td>
-      <td>y)$：</td>
-    </tr>
-  </tbody>
-</table>
+<p>根据条件概率密度公式对联合概率密度进行分解：</p>
 
-<script type="math/tex; mode=display">E[c(\hat{x}, x)] = \int_{y} \left[ \int_{x}c(\hat{x}, x)p(x|y)dx\right] p(y)dy</script>
+<script type="math/tex; mode=display">E[c(\hat{x}, x)]  = \int_{x}\int_{y}c(\hat{x}, x)p(x|y)p(y)dxdy = \int_{y} \left[ \int_{x}c(\hat{x}, x)p(x|y)dx\right] p(y)dy</script>
 
-<table>
-  <tbody>
-    <tr>
-      <td>因为估计值$\hat{x}$与$p(y)$相互独立，对$\hat{x}$的求解可以等价于对$\int_{x}c(\hat{x}, x)p(x</td>
-      <td>y)dx$求极大值，也就是：</td>
-    </tr>
-  </tbody>
-</table>
+<p>因为估计值$\hat{x}$与$p(y)$相互独立，可以把外层对$y$的积分消除，也就是：</p>
 
 <script type="math/tex; mode=display">\hat{x} = \mathop{\arg\min}_{\hat{x}} E[c(\hat{x}, x)|y]</script>
 
@@ -318,7 +304,7 @@ Estimation)[@ephraim1985speech]使用平方误差函数，平均误差为：</p>
 
 <script type="math/tex; mode=display">\hat{X}(\omega_{k}) = E[X(\omega_{k})| Y(\omega_{k})]</script>
 
-<p>上式中，为得到纯净语音谱需要分别估计谱幅度$\hat{X}<em>{k}$和谱相位$\hat{\theta}</em>{x}(k)$。</p>
+<p>上式中，为得到纯净语音谱需要分别估计谱幅度和谱相位: $\hat{X}, \hat{\theta}_{x}$。</p>
 
 <script type="math/tex; mode=display">\hat{X}_{k}e^{j\hat{\theta}_{x}(k)} = E[ X_{k}e^{j\theta_{x}(k)}| Y(\omega_{k})]</script>
 
@@ -452,6 +438,18 @@ Estimation)的语音增强算法。一种是同时求解幅度和相位的混合
 	<span class="k">return</span> <span class="n">gain</span>
 </code></pre></div></div>
 <p><br /></p>
+
+<p><strong>参考文献</strong></p>
+
+<p>[1] 张贤达, 现代信号处理. 清华大学出版社有限公司, 2002.</p>
+
+<p>[2] P. C. Loizou, Speech enhancement: theory and practice. CRC press, 2007.</p>
+
+<p>[3] R. McAulay and M. Malpass, Speech enhancement using a soft-decision noise suppression filter,” IEEE Transactions on Acoustics, Speech, and Signal Processing, vol. 28, no. 2, pp. 137-145,1980.</p>
+
+<p>[4] Y. Ephraim and D. Malah, Speech enhancement using a minimum mean-square error log-spectral amplitude estimator,” IEEE transactions on acoustics, speech, and signal processing,vol. 33, no. 2, pp. 443-445, 1985.</p>
+
+<p>[5] P. J. Wolfe and S. J. Godsill, \Efficient alternatives to the ephraim and malah suppression rule for audio signal enhancement,” EURASIP Journal on Applied Signal Processing, vol. 2003, pp.1043-1051, 2003.</p>
 </div>
   <div class="share-page">
   <span style="float: left;">Share this on &rarr;&nbsp;&nbsp;</span>

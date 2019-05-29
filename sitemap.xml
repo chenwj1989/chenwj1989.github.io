@@ -5,8 +5,8 @@
     <description>My Personal Thoughts</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/sitemap.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 29 May 2019 11:39:58 +0800</pubDate>
-    <lastBuildDate>Wed, 29 May 2019 11:39:58 +0800</lastBuildDate>
+    <pubDate>Wed, 29 May 2019 14:07:51 +0800</pubDate>
+    <lastBuildDate>Wed, 29 May 2019 14:07:51 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -124,25 +124,11 @@ Function）。对纯净信号$x$的估计，表达为求解合适的$x$值，使
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;E[c(\hat{x}, x)] = \int_{x}\int_{y}c(\hat{x}, x)p(x, y)dxdy&lt;/script&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;对联合概率密度进行分解，提取$p(y)$与条件概率密度$p(x&lt;/td&gt;
-      &lt;td&gt;y)$：&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;p&gt;根据条件概率密度公式对联合概率密度进行分解：&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;E[c(\hat{x}, x)] = \int_{y} \left[ \int_{x}c(\hat{x}, x)p(x|y)dx\right] p(y)dy&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;E[c(\hat{x}, x)]  = \int_{x}\int_{y}c(\hat{x}, x)p(x|y)p(y)dxdy = \int_{y} \left[ \int_{x}c(\hat{x}, x)p(x|y)dx\right] p(y)dy&lt;/script&gt;
 
-&lt;table&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;因为估计值$\hat{x}$与$p(y)$相互独立，对$\hat{x}$的求解可以等价于对$\int_{x}c(\hat{x}, x)p(x&lt;/td&gt;
-      &lt;td&gt;y)dx$求极大值，也就是：&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
+&lt;p&gt;因为估计值$\hat{x}$与$p(y)$相互独立，可以把外层对$y$的积分消除，也就是：&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{x} = \mathop{\arg\min}_{\hat{x}} E[c(\hat{x}, x)|y]&lt;/script&gt;
 
@@ -200,7 +186,7 @@ Estimation)[@ephraim1985speech]使用平方误差函数，平均误差为：&lt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{X}(\omega_{k}) = E[X(\omega_{k})| Y(\omega_{k})]&lt;/script&gt;
 
-&lt;p&gt;上式中，为得到纯净语音谱需要分别估计谱幅度$\hat{X}&lt;em&gt;{k}$和谱相位$\hat{\theta}&lt;/em&gt;{x}(k)$。&lt;/p&gt;
+&lt;p&gt;上式中，为得到纯净语音谱需要分别估计谱幅度和谱相位: $\hat{X}, \hat{\theta}_{x}$。&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{X}_{k}e^{j\hat{\theta}_{x}(k)} = E[ X_{k}e^{j\theta_{x}(k)}| Y(\omega_{k})]&lt;/script&gt;
 
@@ -334,6 +320,18 @@ Estimation)的语音增强算法。一种是同时求解幅度和相位的混合
 	&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gain&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;参考文献&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;[1] 张贤达, 现代信号处理. 清华大学出版社有限公司, 2002.&lt;/p&gt;
+
+&lt;p&gt;[2] P. C. Loizou, Speech enhancement: theory and practice. CRC press, 2007.&lt;/p&gt;
+
+&lt;p&gt;[3] R. McAulay and M. Malpass, Speech enhancement using a soft-decision noise suppression filter,” IEEE Transactions on Acoustics, Speech, and Signal Processing, vol. 28, no. 2, pp. 137-145,1980.&lt;/p&gt;
+
+&lt;p&gt;[4] Y. Ephraim and D. Malah, Speech enhancement using a minimum mean-square error log-spectral amplitude estimator,” IEEE transactions on acoustics, speech, and signal processing,vol. 33, no. 2, pp. 443-445, 1985.&lt;/p&gt;
+
+&lt;p&gt;[5] P. J. Wolfe and S. J. Godsill, \Efficient alternatives to the ephraim and malah suppression rule for audio signal enhancement,” EURASIP Journal on Applied Signal Processing, vol. 2003, pp.1043-1051, 2003.&lt;/p&gt;
 </description>
         <pubDate>Tue, 28 May 2019 15:32:04 +0800</pubDate>
         <link>http://localhost:4000/speech/%E8%AF%AD%E9%9F%B3/2019/05/28/Single-Channel-Speech-Enhancement-Statistical-Model.html</link>

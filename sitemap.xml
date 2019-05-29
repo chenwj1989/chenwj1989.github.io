@@ -5,8 +5,8 @@
     <description>My Personal Thoughts</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/sitemap.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 29 May 2019 14:07:51 +0800</pubDate>
-    <lastBuildDate>Wed, 29 May 2019 14:07:51 +0800</lastBuildDate>
+    <pubDate>Wed, 29 May 2019 17:51:53 +0800</pubDate>
+    <lastBuildDate>Wed, 29 May 2019 17:51:53 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -334,8 +334,8 @@ Estimation)的语音增强算法。一种是同时求解幅度和相位的混合
 &lt;p&gt;[5] P. J. Wolfe and S. J. Godsill, \Efficient alternatives to the ephraim and malah suppression rule for audio signal enhancement,” EURASIP Journal on Applied Signal Processing, vol. 2003, pp.1043-1051, 2003.&lt;/p&gt;
 </description>
         <pubDate>Tue, 28 May 2019 15:32:04 +0800</pubDate>
-        <link>http://localhost:4000/speech/%E8%AF%AD%E9%9F%B3/2019/05/28/Single-Channel-Speech-Enhancement-Statistical-Model.html</link>
-        <guid isPermaLink="true">http://localhost:4000/speech/%E8%AF%AD%E9%9F%B3/2019/05/28/Single-Channel-Speech-Enhancement-Statistical-Model.html</guid>
+        <link>http://localhost:4000/post/cn/monaural-speech-enhancement-statistical-cn.html</link>
+        <guid isPermaLink="true">http://localhost:4000/post/cn/monaural-speech-enhancement-statistical-cn.html</guid>
         
         
         <category>speech</category>

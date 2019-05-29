@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/favicon.ico" />
+    <title>单通道语音增强之统计信号模型 - All Articles</title>
+    <meta name="author" content="wjchen" />
+    <meta name="description" content="单通道语音增强之统计信号模型" />
+    <meta name="keywords" content="单通道语音增强之统计信号模型, All Articles, speech, 语音" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <meta content="" property="fb:app_id">
+    <meta content="All Articles" property="og:site_name">
+
+    
+
+    
+      <meta content="单通道语音增强之统计信号模型" property="og:title">
+      <meta content="article" property="og:type">
+    
+
+    
+      <meta content="My Personal Thoughts" property="og:description">
+    
+
+    
+      <meta content="http://localhost:4000/speech/%E8%AF%AD%E9%9F%B3/2019/05/28/Single-Channel-Speech-Enhancement-Statistical-Model.html" property="og:url">
+    
+
+    
+      <meta content="2019-05-28T15:32:04+08:00" property="article:published_time">
+      <meta content="http://localhost:4000/about/" property="article:author">
+    
+
+    
+      <meta content="http://localhost:4000/static/img/avatar.jpg" property="og:image">
+    
+
+    
+      
+        <meta content="speech" property="article:section">
+      
+    
+
+    
+      
+    
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@">
+
+    
+      <meta name="twitter:title" content="单通道语音增强之统计信号模型">
+    
+
+    
+      <meta name="twitter:url" content="http://localhost:4000/speech/%E8%AF%AD%E9%9F%B3/2019/05/28/Single-Channel-Speech-Enhancement-Statistical-Model.html">
+    
+
+    
+      <meta name="twitter:description" content="My Personal Thoughts">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="/static/css/fonts.css" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+          <a href="/"><img class="profile-avatar" src="/static/img/avatar.jpg" height="85px" width="85px" /></a>
+          <h1 class="author-name">wjchen</h1>
+          
+            <div class="profile-about">
+              I'm an R&D engineer on telecom, signal processing, and software.
+            </div>
+          
+          <div class="social">
+            <ul>
+              
+                <li><a href="https://github.com/chenwj1989" target="_blank"><i class="fa fa-github"></i></a></li>
+              
+            </ul>
+          </div>
+          <div class="search" id="js-search">
+            <input type="text" placeholder="(sitemap)~$ type to search" class="search__input form-control" id="js-search__input">
+            <ul class="search__results" id="js-search__results"></ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/projects/">My Projects</a></li>
+            
+              <li><a class="about" href="/about/">About Me</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-8 col-offset-1 main-layout">
+        <header class="post-header">
+  <h1 class="post-title">单通道语音增强之统计信号模型</h1>
+</header>
+
+<span class="time">28 May 2019</span>
+
+  <span class="categories">
+    &raquo; <a href="/category/speech">speech</a>, <a href="/category/语音">语音</a>
+  </span>
+
+
+<div class="content">
+  <div class="post"><p><br /></p>
+<ul id="markdown-toc">
+  <li><a href="#1-信号估计理论简述" id="markdown-toc-1-信号估计理论简述">1. 信号估计理论简述</a></li>
+  <li><a href="#2-最大似然估计ml" id="markdown-toc-2-最大似然估计ml">2. 最大似然估计ML</a></li>
+  <li><a href="#3贝叶斯估计" id="markdown-toc-3贝叶斯估计">3.贝叶斯估计</a>    <ul>
+      <li><a href="#31-最小均方估计mmse" id="markdown-toc-31-最小均方估计mmse">3.1 最小均方估计（MMSE）</a>        <ul>
+          <li><a href="#311-mmse谱幅度估计" id="markdown-toc-311-mmse谱幅度估计">3.1.1 MMSE谱幅度估计</a></li>
+          <li><a href="#312-mmse对数谱幅度估计" id="markdown-toc-312-mmse对数谱幅度估计">3.1.2 MMSE对数谱幅度估计</a></li>
+          <li><a href="#313-mmse平方谱幅度估计" id="markdown-toc-313-mmse平方谱幅度估计">3.1.3 MMSE平方谱幅度估计</a></li>
+        </ul>
+      </li>
+      <li><a href="#32-最大后验估计-map" id="markdown-toc-32-最大后验估计-map">3.2 最大后验估计 MAP</a>        <ul>
+          <li><a href="#321-幅度和相位混合最大后验估计" id="markdown-toc-321-幅度和相位混合最大后验估计">3.2.1 幅度和相位混合最大后验估计</a></li>
+          <li><a href="#322-纯幅度最大后验估计" id="markdown-toc-322-纯幅度最大后验估计">3.2.2 纯幅度最大后验估计</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="1-信号估计理论简述">1. 信号估计理论简述</h2>
+
+<p>信号估计理论是现代统计处理的基础课题[@ZhangXianDa2002ModernSP]，在通信、语音、图像领域均有广泛应用。语音增强，就是从带噪的语音测量信号中估计原始的无噪语音，这是典型的信号估计问题。
+《语音增强–理论与实践》[@loizou2007speech]一书中列举了用于语音增强的一系列统计模型。</p>
+
+<p>假设麦克风采集到的带噪语音序列为<script type="math/tex">y[n]</script>，并且噪声都是加性噪声。则带噪语音序列为无噪语音序列与噪声序列的和。原始语音信号与噪声均可视为随机信号。</p>
+
+<script type="math/tex; mode=display">y[n] = x[n] + d[n]</script>
+
+<p>在时域对$x[n]$进行估计是非常困难的，通过傅立叶变换，我们可以将信号分解为频域上互相独立的系数。信号估计模型转变为对每一个频点的系数进行估计的模型，不同频点之间的参数是相互独立的。</p>
+
+<script type="math/tex; mode=display">Y(\omega_{k}) = X(\omega_{k}) + D(\omega_{k})</script>
+
+<p>这个方法就叫做统计信号谱分析（Statistical Spectral
+Analysis)。显然地，纯净信号谱$X(\omega_{k})$带有幅度与相位两参数，我们实际上是对幅度$X_{k}$和相位$\theta_{y}(k)$进行参数估计。</p>
+
+<script type="math/tex; mode=display">Y_{k}e^{j\theta_{y}(k)} = X_{k}e^{j\theta_{x}(k)} + D_{k}e^{j\theta_{d}(k)}</script>
+
+<p>重组谱幅度和谱相位估计值即可恢复纯净语音谱，估计值用上标来表示：$\hat{X}(\omega_{k})=\hat{X}(k)e^{j\hat{\theta}_{x}(k)}$。</p>
+
+<p>实际信号的幅度和相位是不方便直接用在运算过程中的，因为信号取值范围不定，且瞬时变化。在噪声抑制领域，更常用的语音谱估计方法是对抑制增益(Suppression
+Gain)进行估计，不同的估计准则称为抑制准则(Supression Rule)。</p>
+
+<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = H_{k}Y(\omega_{k})</script>
+
+<p>通常会根据先验信噪比、后验信噪比来估计抑制增益$H_{k}$。
+并且可以在只有噪声出现的时刻更新$H_{k}$，
+在语音存在的时刻进行抑制，无须每帧去调用噪声抑制算法，计算过程比直接估计信号谱灵活。</p>
+
+<p>综上，语音增强的典型流程就是：</p>
+
+<ol>
+  <li>
+    <p>对带噪语音y[n]分帧， 每一帧进行DFT得到$Y(\omega_{k})$。</p>
+  </li>
+  <li>
+    <p>估计或者沿用上一帧的抑制增益$H_{k}$，得到纯净语音谱$\hat{X}(\omega_{k})$</p>
+  </li>
+  <li>
+    <p>对$\hat{X}(\omega_{k})$进行IDFT,得到纯净语音序列的估计$x[n]$。</p>
+  </li>
+</ol>
+
+<p>为了估计模型的建模，对测量信号、估计信号、噪声信号都需要作一些数学上的假设和简化。其中对噪声一般会作以下假设：</p>
+
+<ol>
+  <li>
+    <p>噪声是与语音独立的加性噪声；</p>
+  </li>
+  <li>
+    <p>每一帧噪声的统计分布是稳态的；</p>
+  </li>
+  <li>
+    <p>噪声的傅立叶级数是零均值复高斯分布。</p>
+  </li>
+</ol>
+
+<script type="math/tex; mode=display">\left[D(\omega_{k})\right] = 
+\frac{1}{\pi\lambda_{d}(k)}
+\exp\left[-\frac{|D(\omega_{k})|^2}{\lambda_{d}(k)}\right]</script>
+
+<h2 id="2-最大似然估计ml">2. 最大似然估计ML</h2>
+
+<p>基如果不考虑信号的先验分布，即认为信号值是确定信号，而不是随机信号，我们只需要分析含有信号$x$为参数的带噪信号$y$的概率分布$p(y;x)$，并使之最大。这种估计方法叫最大似然估计器（Maximum
+Likelihood
+Estimation）。将$y$的带参概率分布$p(y;x)$称为似然函数（Likelihood
+Function）。对纯净信号$x$的估计，表达为求解合适的$x$值，使得似然函数$p(y;x)$最大。
+<script type="math/tex">\hat{x} = \mathop{\arg\max}_{x}p(y;x)</script></p>
+
+<p>文献[@mcaulay1980speech]最早将最大似然估计法用在语音增强领域。对于纯净语音，可以假设纯净语音幅度$X_{k}$和相位$\theta_{y}(k)$是未知但确定，无需考虑其先验概率分布。最大似然语音增强模型表达为：</p>
+
+<script type="math/tex; mode=display">\hat{X}_{k},\hat{\theta}_{k} = \mathop{\arg\max}_{X_{k},\theta_{k}} p\left[Y(\omega_{k});X_{k},\theta_{k}\right]</script>
+
+<p>把$D_{k}e^{\theta_{d}(k)}=Y_{k}e^{\theta_{y}(k)} - X_{k}e^{\theta_{x}(k)} $代入噪声零均值复高斯分布公式中，得到：</p>
+
+<script type="math/tex; mode=display">p\left[Y(\omega_{k});X_{k},\theta_{k}\right] = \frac{1}{\pi \lambda_{d}(k)}\exp\left[-\frac{|Y(\omega_{k}) - X_{k}e^{j\theta_{x}(k)}|^2}{\lambda_{d}(k)}\right]</script>
+
+<script type="math/tex; mode=display">H_{k} = \frac{1}{2}+\frac{1}{2}\sqrt{\frac{\xi_{k}}{1+\xi_{k}}}</script>
+
+<h2 id="3贝叶斯估计">3.贝叶斯估计</h2>
+
+<p>如果比最大似然估计更进一步，考虑待估计量$x$也是随机变量，且$x$的先验分布为$p(x)$，这种假设下的估计方法叫做贝叶斯估计[@ZhangXianDa2002ModernSP]。定义估计值$\hat{x}$与实际值$x$之间的误差函数为$c(\hat{x},x)$，贝叶斯估计器的目标即为找出是平均误差$E[c(\hat{x},x)]$最小的估计值$x$。</p>
+
+<script type="math/tex; mode=display">\hat{x} = \mathop{\arg\min}_{\hat{x}} E[c(\hat{x}, x)]</script>
+
+<p>对于待估计的纯净语音谱，贝叶斯估计器可以表达为：</p>
+
+<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = \mathop{\arg\min}_{\hat{X_{k}}} E[c(\hat{X}(\omega_{k}), X(\omega_{k}))]</script>
+
+<p>误差$c(\hat{x},x)$的期望值取决于待测信号与测量信号的联合概率分布。</p>
+
+<script type="math/tex; mode=display">E[c(\hat{x}, x)] = \int_{x}\int_{y}c(\hat{x}, x)p(x, y)dxdy</script>
+
+<table>
+  <tbody>
+    <tr>
+      <td>对联合概率密度进行分解，提取$p(y)$与条件概率密度$p(x</td>
+      <td>y)$：</td>
+    </tr>
+  </tbody>
+</table>
+
+<script type="math/tex; mode=display">E[c(\hat{x}, x)] = \int_{y} \left[ \int_{x}c(\hat{x}, x)p(x|y)dx\right] p(y)dy</script>
+
+<table>
+  <tbody>
+    <tr>
+      <td>因为估计值$\hat{x}$与$p(y)$相互独立，对$\hat{x}$的求解可以等价于对$\int_{x}c(\hat{x}, x)p(x</td>
+      <td>y)dx$求极大值，也就是：</td>
+    </tr>
+  </tbody>
+</table>
+
+<script type="math/tex; mode=display">\hat{x} = \mathop{\arg\min}_{\hat{x}} E[c(\hat{x}, x)|y]</script>
+
+<p>误差函数$c(\hat{x}, x)$的计算模型，会引出不同种类的估计器。典型的误差函数有几种类型[@ZhangXianDa2002ModernSP]：</p>
+
+<ol>
+  <li>
+    <p>平方误差函数，对应最小均方估计。</p>
+
+    <script type="math/tex; mode=display">c(\hat{x}, x)  = (\hat{x} - x)^2</script>
+  </li>
+  <li>
+    <p>绝对值误差函数，对应条件中位数估计。</p>
+
+    <script type="math/tex; mode=display">c(\hat{x}, x)  = |\hat{x} - x|</script>
+  </li>
+  <li>
+    <p>均匀误差函数，对应最大后验估计。</p>
+  </li>
+</ol>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{equation}c(\hat{x}, x)   =
+            \left\{
+            \begin{array}{lr}
+            1 \quad (|\hat{x}-x|\geq\Delta/2) &  \\
+            &\Delta>0\\
+            0 \quad (|\hat{x}-x|<\Delta/2) & 
+            \end{array}
+            \right.\end{equation} %]]></script>
+
+<h3 id="31-最小均方估计mmse">3.1 最小均方估计（MMSE）</h3>
+
+<p>最小均方估计(Minimum Mean Square Error
+Estimation)[@ephraim1985speech]使用平方误差函数，平均误差为：</p>
+
+<script type="math/tex; mode=display">E[c(\hat{x}, x)|y]=\int_{x}(\hat{x} - x)^2 p(x|y)dx</script>
+
+<p>为求平均误差的极大值，可对估计量$\hat{x}$求导，并求极值点。</p>
+
+<script type="math/tex; mode=display">\frac{\partial E[c(\hat{x}, x)|y]}{\partial \hat{x}}=\int_{x}2(\hat{x} - x) p(x|y)dx =0</script>
+
+<p>显然极值点的$\hat{x}$为被估计量$x$的条件均值：</p>
+
+<script type="math/tex; mode=display">\hat{x} =\int_{x}x p(x|y)dx = E[ x| y]</script>
+
+<p>亦可以使用贝叶斯公式展开，得到：</p>
+
+<script type="math/tex; mode=display">\begin{split}
+    \hat{x} = \int_{x}x \frac{p(y|x)p(x)}{p(y)} dx \\
+            = \frac{\int_{x}xp(y|x)p(x)dx}{\int_{x}p(y|x)p(x)dx}
+    \end{split}</script>
+
+<p>在语音增强的模型里，纯净语音谱的估计为其在带噪语音谱下的条件均值。</p>
+
+<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = E[X(\omega_{k})| Y(\omega_{k})]</script>
+
+<p>上式中，为得到纯净语音谱需要分别估计谱幅度$\hat{X}<em>{k}$和谱相位$\hat{\theta}</em>{x}(k)$。</p>
+
+<script type="math/tex; mode=display">\hat{X}_{k}e^{j\hat{\theta}_{x}(k)} = E[ X_{k}e^{j\theta_{x}(k)}| Y(\omega_{k})]</script>
+
+<p>同时估计谱幅度和谱相位是很难的，研究者提出了许多分别估计谱幅度和谱相位的方法，估计完成后再用两者重组复语音信号。</p>
+
+<script type="math/tex; mode=display">\hat{X}_{k} = E[ X_{k}| Y(\omega_{k})]</script>
+
+<script type="math/tex; mode=display">e^{j\hat{\theta}_{x}(k)} = E[ e^{j\theta_{x}(k)}| Y(\omega_{k})]</script>
+
+<h4 id="311-mmse谱幅度估计">3.1.1 MMSE谱幅度估计</h4>
+
+<p>最小均方根估计器MMSE short-time spectral amplitude</p>
+
+<script type="math/tex; mode=display">\hat{X_{k}} = E[ X_{k}| Y(\omega_{k})]</script>
+
+<script type="math/tex; mode=display">v_{k} = \frac{\xi_{k}}{1+\xi_{k}}\gamma_{k}</script>
+
+<script type="math/tex; mode=display">H_{k} =\frac{\sqrt{\pi v_{k}}}{ 2\gamma_{k}}[(1+v_{k})I_{0}(\frac{v_k}{2})+v_{1}I_{1}(\frac{v_{k}}{2})]\exp(\frac{-v_{k}}{2})</script>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">def</span> <span class="nf">mmse_stsa_gain</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+		<span class="n">gamma</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'gamma'</span><span class="p">]</span>
+		<span class="n">ksi</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'ksi'</span><span class="p">]</span>
+			
+		<span class="n">vk</span> <span class="o">=</span> <span class="n">ksi</span> <span class="o">*</span> <span class="n">gamma</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">ksi</span><span class="p">)</span>
+		<span class="n">j0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">i0</span><span class="p">(</span><span class="n">vk</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+		<span class="n">j1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">i1</span><span class="p">(</span><span class="n">vk</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+			
+		<span class="n">A</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">pi</span> <span class="o">*</span> <span class="n">vk</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">gamma</span>
+		<span class="n">B</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">vk</span><span class="p">)</span> <span class="o">*</span> <span class="n">j0</span> <span class="o">+</span> <span class="n">vk</span> <span class="o">*</span> <span class="n">j1</span>
+		<span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">vk</span><span class="p">)</span>
+		<span class="n">gain</span> <span class="o">=</span> <span class="n">A</span> <span class="o">*</span> <span class="n">B</span> <span class="o">*</span> <span class="n">C</span>
+		<span class="k">return</span> <span class="n">gain</span>
+</code></pre></div></div>
+
+<h4 id="312-mmse对数谱幅度估计">3.1.2 MMSE对数谱幅度估计</h4>
+
+<p>对数最小均方根估计器The MMSE log spectral amplitude (MMSE-LSA)，
+或者缩写为LogMMSE估计器。</p>
+
+<script type="math/tex; mode=display">c(\hat{X_{k}}, X_{k})  = (\log{X_{k}}- \log{X_{k}})^2</script>
+
+<script type="math/tex; mode=display">\log{\hat{X_{k}}} = E[ \log{X_{k}}| Y(\omega_{k})]</script>
+
+<script type="math/tex; mode=display">H_{k} = \frac{\xi_{k}}{1+\xi_{k}}\exp(\frac{1}{2}\int_{v_{k}}^{\infty}\frac{e^{-t}}{t}dt)</script>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">def</span> <span class="nf">logmmse_gain</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+		<span class="n">gamma</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'gamma'</span><span class="p">]</span>
+		<span class="n">ksi</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'ksi'</span><span class="p">]</span>
+		<span class="n">A</span> <span class="o">=</span> <span class="n">ksi</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">ksi</span><span class="p">)</span>
+		<span class="n">vk</span> <span class="o">=</span> <span class="n">A</span> <span class="o">*</span> <span class="n">gamma</span>
+		<span class="n">ei_vk</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">expn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">vk</span><span class="p">)</span>
+		<span class="n">gain</span> <span class="o">=</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">ei_vk</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">gain</span>
+</code></pre></div></div>
+
+<h4 id="313-mmse平方谱幅度估计">3.1.3 MMSE平方谱幅度估计</h4>
+
+<p>频谱幅度平方估计器MMSE magnitude squared[@wolfe2003efficient]</p>
+
+<script type="math/tex; mode=display">\hat{X_{k}^2} = E[ X_{k}^2| Y_{k}]</script>
+
+<script type="math/tex; mode=display">\hat{X_{k}^2} = \frac{\xi_{k}}{1+\xi_{k}} (\frac{1+v_{k}}{\gamma_{k}})Y_{k}^2</script>
+
+<script type="math/tex; mode=display">H_{k} = \sqrt{\frac{\xi_{k}}{1+\xi_{k}} (\frac{1+v_{k}}{\gamma_{k}})}</script>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">def</span> <span class="nf">mmse_sqr_gain</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+		<span class="n">gamma</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'gamma'</span><span class="p">]</span>
+		<span class="n">ksi</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'ksi'</span><span class="p">]</span>
+			
+		<span class="n">vk</span> <span class="o">=</span> <span class="n">ksi</span> <span class="o">*</span> <span class="n">gamma</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">ksi</span><span class="p">)</span>
+		<span class="n">j0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">i0</span><span class="p">(</span><span class="n">vk</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+		<span class="n">j1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">i1</span><span class="p">(</span><span class="n">vk</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+			
+		<span class="n">A</span> <span class="o">=</span> <span class="n">ksi</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">ksi</span><span class="p">)</span>
+		<span class="n">B</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">vk</span><span class="p">)</span> <span class="o">/</span> <span class="n">gamma</span>
+		<span class="n">gain</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">A</span> <span class="o">*</span> <span class="n">B</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">gain</span>
+</code></pre></div></div>
+
+<h3 id="32-最大后验估计-map">3.2 最大后验估计 MAP</h3>
+
+<p>当贝叶斯估计器采用均匀误差函数时，平均误差为：</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{split}
+    E[c(\hat{x}, x)|y] &= \int_{-\infty}^{\hat{x}-\Delta/2}  p(x|y)dx + \int_{\hat{x}+\Delta/2}^{\infty}  p(x|y)dx   \\
+                       &= 1-\int_{\hat{x}\Delta/2}^{\hat{x}+\Delta/2}  p(x|y)dx 
+\end{split} %]]></script>
+
+<p>显然要使得平均误差最小，就是要求目标估计$\hat{x}$，使得
+$p(x|y)$最大。这种估计模型称作最大后验估计(Maximum A Posteriori
+Estimation)。这个模型的意思是只有估计值$\hat{x}$与原始值$x$相等，误差才为0，其他时候误差均匀为1。估计值可以表达为：</p>
+
+<script type="math/tex; mode=display">\hat{x} =\mathop{\arg\min}_{x} p(x|y)</script>
+
+<p>在语音增强的模型里，纯净语音谱的估计为其在带噪语音谱下的条件均值。</p>
+
+<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = \mathop{\arg\min}_{ X(\omega_{k})}\quad p\left[X(\omega_{k})| Y(\omega_{k})\right]</script>
+
+<p>文献[@wolfe2003efficient]提出了两种基于最大后验估计(Maximum A Posteriori
+Estimation)的语音增强算法。一种是同时求解幅度和相位的混合最大后验估计：
+另外一种是单纯估计幅度的方法，两种估计器最后的噪声抑制增益略有不同。</p>
+
+<h4 id="321-幅度和相位混合最大后验估计">3.2.1 幅度和相位混合最大后验估计</h4>
+
+<p>[@wolfe2003efficient]</p>
+
+<script type="math/tex; mode=display">H_{k} = \frac{\xi_{k}+\sqrt{\xi_{k}^2+2(1+\xi_{k})\frac{\xi_{k}}{\gamma_{k}}}}{2(1+\xi_{k})}</script>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">map_joint_gain</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+	<span class="n">gamma</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'gamma'</span><span class="p">]</span>
+	<span class="n">ksi</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'ksi'</span><span class="p">]</span>
+	
+	<span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-6</span>
+	<span class="n">gain</span> <span class="o">=</span> <span class="p">(</span><span class="n">ksi</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">ksi</span><span class="o">^</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">ksi</span><span class="p">)</span><span class="o">*</span> <span class="n">ksi</span><span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)))</span> <span class="o">/</span> <span class="mf">2.0</span><span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">ksi</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">gain</span>
+</code></pre></div></div>
+
+<h4 id="322-纯幅度最大后验估计">3.2.2 纯幅度最大后验估计</h4>
+
+<p>[@wolfe2003efficient]</p>
+
+<script type="math/tex; mode=display">H_{k} = \frac{\xi_{k}+\sqrt{\xi_{k}^2+(1+\xi_{k})\frac{\xi_{k}}{\gamma_{k}}}}{2(1+\xi_{k})}</script>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">map_sa_gain</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+	<span class="n">gamma</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'gamma'</span><span class="p">]</span>
+	<span class="n">ksi</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'ksi'</span><span class="p">]</span>
+	
+	<span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-6</span>
+	<span class="n">gain</span> <span class="o">=</span> <span class="p">(</span><span class="n">ksi</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">ksi</span><span class="o">^</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">ksi</span><span class="p">)</span><span class="o">*</span> <span class="n">ksi</span><span class="o">/</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">+</span> <span class="n">eps</span><span class="p">)))</span> <span class="o">/</span> <span class="mf">2.0</span><span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">ksi</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">gain</span>
+</code></pre></div></div>
+<p><br /></p>
+</div>
+  <div class="share-page">
+  <span style="float: left;">Share this on &rarr;&nbsp;&nbsp;</span>
+
+  <!-- Twitter -->
+  <a href="https://twitter.com/share" class="twitter-share-button" data-via="">Tweet</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+  <!-- Facebook -->
+  <div class="fb-share-button" data-href="http://localhost:4000/speech/%E8%AF%AD%E9%9F%B3/2019/05/28/Single-Channel-Speech-Enhancement-Statistical-Model.html" data-layout="button_count" style="position: relative; top: -8px; left: 3px;"></div>
+</div>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</div>
+
+
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+  
+
+<div class="PageNavigation">
+  
+  
+</div>
+
+<div class="disqus-comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var disqus_shortname = "wjchen";
+    var disqus_identifier = "http://localhost:4000_单通道语音增强之统计信号模型";
+    var disqus_title = "单通道语音增强之统计信号模型";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    /* ]]> */
+  </script>
+</div>
+
+        <footer>
+          &copy; wjchen
+          
+            - <a href="https://github.com/chenwj1989">https://github.com/chenwj1989</a> - Powered by Jekyll.
+          
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/jquery-1.11.0.min.js"></script>
+    <script src="/static/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+	<script type="text/x-mathjax-config"> 
+   		MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); 
+   	</script>
+    <script type="text/x-mathjax-config">
+    	MathJax.Hub.Config({tex2jax: {
+             inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+             processEscapes: true
+           }
+         });
+    </script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  CommonHTML: {
+    scale: 90
+  }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
+  </body>
+</html>
+

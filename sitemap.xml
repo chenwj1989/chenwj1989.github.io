@@ -5,8 +5,8 @@
     <description>My Personal Thoughts</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/sitemap.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 20 Jun 2019 16:05:41 +0800</pubDate>
-    <lastBuildDate>Thu, 20 Jun 2019 16:05:41 +0800</lastBuildDate>
+    <pubDate>Thu, 20 Jun 2019 16:41:53 +0800</pubDate>
+    <lastBuildDate>Thu, 20 Jun 2019 16:41:53 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -153,10 +153,13 @@ p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k) = \sum_{k}^{}\
     &lt;/tr&gt;
 &lt;/table&gt;
 &lt;p&gt;&lt;br /&gt;
-When each data sample $x_i$ is d-dimensional, and the data set $x$ seem scattering to multiple clusters, the data can be modeled by a multivariate version Gaussian mixture model.
-\begin{equation}
-p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \Sigma_k) = \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x-\mu_k)^T\Sigma_{k}^{-1}(x-\mu_k)\right]
-\end{equation}&lt;/p&gt;
+When each data sample $x_i$ is d-dimensional, and the data set $x$ seem scattering to multiple clusters, the data can be modeled by a multivariate version Gaussian mixture model.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align}
+p(x|\Theta) &amp;= \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \Sigma_k) \nonumber \\
+&amp;= \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x-\mu_k)^T\Sigma_{k}^{-1}(x-\mu_k)\right]
+\end{align} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;In the models,  $\Theta$ means all parameters, and $\alpha_k$ is the prior probability of th $k^{th}$ Gaussian model, and
 \begin{equation}
@@ -233,10 +236,20 @@ L(x|\Theta) &amp;= \sum_{i}\ln\left[p(x_{i}, z|\mu_k, \sigma_k) \right] \nonumbe
 &amp;= \sum_{i}\ln \sum_{k} p(z=k|x_{i},\mu_k, \sigma_k) \frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z=k|x_{i},\mu_k, \sigma_k)} \\
 \end{align} %]]&gt;&lt;/script&gt;
 
-&lt;p&gt;What’s $p(z=k|x_{i},\mu_k, \sigma_k)$? It can be derived by the Bayes’ law.
-\begin{equation}
-p(z=k|x_{i},\mu_k, \sigma_k) = \frac{ p(x_{i}|z=k,\mu_k, \sigma_k)}{ \sum_{k} p(x_{i}|z=k, \mu_k, \sigma_k)} =  \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)} 
-\end{equation}&lt;/p&gt;
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;What’s $p(z=k&lt;/td&gt;
+      &lt;td&gt;x_{i},\mu_k, \sigma_k)$? It can be derived by the Bayes’ law.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{align}
+p(z=k|x_{i},\mu_k, \sigma_k) &amp;= \frac{ p(x_{i}|z=k,\mu_k, \sigma_k)}{ \sum_{k} p(x_{i}|z=k, \mu_k, \sigma_k)} \nonumber \\
+&amp;=  \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)} 
+\end{align} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;Define
 \begin{equation}
@@ -256,14 +269,16 @@ achieved.&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;Calculate latent parameters $\omega_{i,k}^t$ by applying $\Theta^t$
-into the GMM. This step is called &lt;strong&gt;expectation step&lt;/strong&gt;.
-&lt;script type=&quot;math/tex&quot;&gt;\omega_{i,k}^t = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}&lt;/script&gt;&lt;/p&gt;
+into the GMM. This step is called &lt;strong&gt;expectation step&lt;/strong&gt;.&lt;/p&gt;
+
+    &lt;script type=&quot;math/tex; mode=display&quot;&gt;\omega_{i,k}^t = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}&lt;/script&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;With $\omega_{i,k}$, maximize the target log likelihood function, to
 update GMM parameters $\Theta^{t+1}$. This step is called
-&lt;strong&gt;maximization step&lt;/strong&gt;.
-&lt;script type=&quot;math/tex&quot;&gt;\Theta^{t+1} = \mathop{\arg\max}_{\Theta} \sum_{i}\ln \sum_{k} \omega_{i,k}^t \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}&lt;/script&gt;&lt;/p&gt;
+&lt;strong&gt;maximization step&lt;/strong&gt;.&lt;/p&gt;
+
+    &lt;script type=&quot;math/tex; mode=display&quot;&gt;\Theta^{t+1} = \mathop{\arg\max}_{\Theta} \sum_{i}\ln \sum_{k} \omega_{i,k}^t \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}&lt;/script&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
@@ -325,10 +340,10 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \om
 
 &lt;p&gt;As defined in GMM, $\alpha_k$ is constrained by $\sum_{k}\alpha_k =1$, so estimating $\alpha_k$ is a constrained optimization problem.&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{gathered}
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{align}
 \alpha_k^{t+1} := \mathop{\arg\max}_{\alpha_k}{ \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}\\
 \text{subject to}  \sum_{k}\alpha_k =1 \nonumber
-\end{gathered}&lt;/script&gt;
+\end{align}&lt;/script&gt;
 
 &lt;p&gt;The method of Lagrange multipliers is used to find the local maxima of such constrained optimization problem. We can construct a Lagrangean function:
 \begin{equation}
@@ -501,8 +516,9 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega
 \frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} =   \frac{1}{2}\sum_{i}\omega_{i,k}^t \left[\Sigma_k - (x_i-\mu_k)(x_i-\mu_k)^T\right] = 0&lt;br /&gt;
 \end{equation}&lt;/p&gt;
 
-&lt;p&gt;Similarly, we get the update equation for  $\Sigma_k$ at iteration $t+1$, and it depends on $\mu_k$. So again $\mu_k^{t+1}$ is calculated first and then applied to the update equation for $Sigma_k$
-\begin{equation}
+&lt;p&gt;Similarly, we get the update equation for  $\Sigma_k$ at iteration $t+1$, and it depends on $\mu_k$. So again $\mu_k^{t+1}$ is calculated first and then applied to the update equation for $\Sigma_k$&lt;/p&gt;
+
+&lt;p&gt;\begin{equation}
 \Sigma_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t (x_i-\mu_k^{t+1})(x_i-\mu_k^{t+1})^T }{\sum_{i}\omega_{i,k}^t} 
 \end{equation}&lt;/p&gt;
 

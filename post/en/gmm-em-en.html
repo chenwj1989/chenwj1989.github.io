@@ -275,10 +275,13 @@ p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k) = \sum_{k}^{}\
     </tr>
 </table>
 <p><br />
-When each data sample $x_i$ is d-dimensional, and the data set $x$ seem scattering to multiple clusters, the data can be modeled by a multivariate version Gaussian mixture model.
-\begin{equation}
-p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \Sigma_k) = \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x-\mu_k)^T\Sigma_{k}^{-1}(x-\mu_k)\right]
-\end{equation}</p>
+When each data sample $x_i$ is d-dimensional, and the data set $x$ seem scattering to multiple clusters, the data can be modeled by a multivariate version Gaussian mixture model.</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+p(x|\Theta) &= \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \Sigma_k) \nonumber \\
+&= \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x-\mu_k)^T\Sigma_{k}^{-1}(x-\mu_k)\right]
+\end{align} %]]></script>
 
 <p>In the models,  $\Theta$ means all parameters, and $\alpha_k$ is the prior probability of th $k^{th}$ Gaussian model, and
 \begin{equation}
@@ -355,10 +358,20 @@ L(x|\Theta) &= \sum_{i}\ln\left[p(x_{i}, z|\mu_k, \sigma_k) \right] \nonumber \\
 &= \sum_{i}\ln \sum_{k} p(z=k|x_{i},\mu_k, \sigma_k) \frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z=k|x_{i},\mu_k, \sigma_k)} \\
 \end{align} %]]></script>
 
-<p>What’s $p(z=k|x_{i},\mu_k, \sigma_k)$? It can be derived by the Bayes’ law.
-\begin{equation}
-p(z=k|x_{i},\mu_k, \sigma_k) = \frac{ p(x_{i}|z=k,\mu_k, \sigma_k)}{ \sum_{k} p(x_{i}|z=k, \mu_k, \sigma_k)} =  \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)} 
-\end{equation}</p>
+<table>
+  <tbody>
+    <tr>
+      <td>What’s $p(z=k</td>
+      <td>x_{i},\mu_k, \sigma_k)$? It can be derived by the Bayes’ law.</td>
+    </tr>
+  </tbody>
+</table>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{align}
+p(z=k|x_{i},\mu_k, \sigma_k) &= \frac{ p(x_{i}|z=k,\mu_k, \sigma_k)}{ \sum_{k} p(x_{i}|z=k, \mu_k, \sigma_k)} \nonumber \\
+&=  \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)} 
+\end{align} %]]></script>
 
 <p>Define
 \begin{equation}
@@ -378,14 +391,16 @@ achieved.</p>
   </li>
   <li>
     <p>Calculate latent parameters $\omega_{i,k}^t$ by applying $\Theta^t$
-into the GMM. This step is called <strong>expectation step</strong>.
-<script type="math/tex">\omega_{i,k}^t = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}</script></p>
+into the GMM. This step is called <strong>expectation step</strong>.</p>
+
+    <script type="math/tex; mode=display">\omega_{i,k}^t = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}</script>
   </li>
   <li>
     <p>With $\omega_{i,k}$, maximize the target log likelihood function, to
 update GMM parameters $\Theta^{t+1}$. This step is called
-<strong>maximization step</strong>.
-<script type="math/tex">\Theta^{t+1} = \mathop{\arg\max}_{\Theta} \sum_{i}\ln \sum_{k} \omega_{i,k}^t \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}</script></p>
+<strong>maximization step</strong>.</p>
+
+    <script type="math/tex; mode=display">\Theta^{t+1} = \mathop{\arg\max}_{\Theta} \sum_{i}\ln \sum_{k} \omega_{i,k}^t \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}</script>
   </li>
 </ul>
 
@@ -447,10 +462,10 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \om
 
 <p>As defined in GMM, $\alpha_k$ is constrained by $\sum_{k}\alpha_k =1$, so estimating $\alpha_k$ is a constrained optimization problem.</p>
 
-<script type="math/tex; mode=display">\begin{gathered}
+<script type="math/tex; mode=display">\begin{align}
 \alpha_k^{t+1} := \mathop{\arg\max}_{\alpha_k}{ \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}\\
 \text{subject to}  \sum_{k}\alpha_k =1 \nonumber
-\end{gathered}</script>
+\end{align}</script>
 
 <p>The method of Lagrange multipliers is used to find the local maxima of such constrained optimization problem. We can construct a Lagrangean function:
 \begin{equation}
@@ -623,8 +638,9 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega
 \frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} =   \frac{1}{2}\sum_{i}\omega_{i,k}^t \left[\Sigma_k - (x_i-\mu_k)(x_i-\mu_k)^T\right] = 0<br />
 \end{equation}</p>
 
-<p>Similarly, we get the update equation for  $\Sigma_k$ at iteration $t+1$, and it depends on $\mu_k$. So again $\mu_k^{t+1}$ is calculated first and then applied to the update equation for $Sigma_k$
-\begin{equation}
+<p>Similarly, we get the update equation for  $\Sigma_k$ at iteration $t+1$, and it depends on $\mu_k$. So again $\mu_k^{t+1}$ is calculated first and then applied to the update equation for $\Sigma_k$</p>
+
+<p>\begin{equation}
 \Sigma_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t (x_i-\mu_k^{t+1})(x_i-\mu_k^{t+1})^T }{\sum_{i}\omega_{i,k}^t} 
 \end{equation}</p>
 

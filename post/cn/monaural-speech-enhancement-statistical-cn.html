@@ -8,7 +8,7 @@
     <title>单通道语音增强之统计信号模型 - All Articles</title>
     <meta name="author" content="wjchen" />
     <meta name="description" content="单通道语音增强之统计信号模型" />
-    <meta name="keywords" content="单通道语音增强之统计信号模型, All Articles, speech, 语音" />
+    <meta name="keywords" content="单通道语音增强之统计信号模型, All Articles, 语音" />
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <meta content="" property="fb:app_id">
     <meta content="All Articles" property="og:site_name">
@@ -39,7 +39,7 @@
 
     
       
-        <meta content="speech" property="article:section">
+        <meta content="语音" property="article:section">
       
     
 
@@ -128,7 +128,7 @@
 <span class="time">28 May 2019</span>
 
   <span class="categories">
-    &raquo; <a href="/category/speech">speech</a>, <a href="/category/语音">语音</a>
+    &raquo; <a href="/category/语音">语音</a>
   </span>
 
 
@@ -299,10 +299,10 @@ Estimation)[@ephraim1985speech]使用平方误差函数，平均误差为：</p>
 
 <p>亦可以使用贝叶斯公式展开，得到：</p>
 
-<script type="math/tex; mode=display">\begin{split}
+<script type="math/tex; mode=display">\begin{align}
     \hat{x} = \int_{x}x \frac{p(y|x)p(x)}{p(y)} dx \\
-            = \frac{\int_{x}xp(y|x)p(x)dx}{\int_{x}p(y|x)p(x)dx}
-    \end{split}</script>
+            = \frac{\int_{x}xp(y|x)p(x)dx}{\int_{x}p(y|x)p(x)dx} \nonumber
+\end{align}</script>
 
 <p>在语音增强的模型里，纯净语音谱的估计为其在带噪语音谱下的条件均值。</p>
 
@@ -393,10 +393,10 @@ Estimation)[@ephraim1985speech]使用平方误差函数，平均误差为：</p>
 <p>当贝叶斯估计器采用均匀误差函数时，平均误差为：</p>
 
 <script type="math/tex; mode=display">% <![CDATA[
-\begin{split}
+\begin{align}
     E[c(\hat{x}, x)|y] &= \int_{-\infty}^{\hat{x}-\Delta/2}  p(x|y)dx + \int_{\hat{x}+\Delta/2}^{\infty}  p(x|y)dx   \\
-                       &= 1-\int_{\hat{x}\Delta/2}^{\hat{x}+\Delta/2}  p(x|y)dx 
-\end{split} %]]></script>
+                       &= 1-\int_{\hat{x}\Delta/2}^{\hat{x}+\Delta/2}  p(x|y)dx  \nonumber
+\end{align} %]]></script>
 
 <p>显然要使得平均误差最小，就是要求目标估计$\hat{x}$，使得
 $p(x|y)$最大。这种估计模型称作最大后验估计(Maximum A Posteriori
@@ -453,7 +453,7 @@ Estimation)的语音增强算法。一种是同时求解幅度和相位的混合
 
 <p>[4] Y. Ephraim and D. Malah, Speech enhancement using a minimum mean-square error log-spectral amplitude estimator,” IEEE transactions on acoustics, speech, and signal processing,vol. 33, no. 2, pp. 443-445, 1985.</p>
 
-<p>[5] P. J. Wolfe and S. J. Godsill, \Efficient alternatives to the ephraim and malah suppression rule for audio signal enhancement,” EURASIP Journal on Applied Signal Processing, vol. 2003, pp.1043-1051, 2003.</p>
+<p>[5] P. J. Wolfe and S. J. Godsill, Efficient alternatives to the ephraim and malah suppression rule for audio signal enhancement,” EURASIP Journal on Applied Signal Processing, vol. 2003, pp.1043-1051, 2003.</p>
 </div>
   <div class="share-page">
   <span style="float: left;">Share this on &rarr;&nbsp;&nbsp;</span>
@@ -484,8 +484,6 @@ Estimation)的语音增强算法。一种是同时求解幅度和相位的混合
         
           
       
-          
-      
     
   
     
@@ -493,12 +491,11 @@ Estimation)的语音增强算法。一种是同时求解幅度和相位的混合
         
           
       
-          
-      
     
-        
-          
+  
+    
       
+        
           
       
     

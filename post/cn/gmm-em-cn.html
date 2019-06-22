@@ -5,10 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="/static/img/favicon.ico" />
-    <title>Gaussian Mixture Model and  Expectation-Maximization Algorithm - All Articles</title>
+    <title>高斯混合模型与EM算法的推导 - All Articles</title>
     <meta name="author" content="wjchen" />
-    <meta name="description" content="Gaussian Mixture Model and  Expectation-Maximization Algorithm" />
-    <meta name="keywords" content="Gaussian Mixture Model and  Expectation-Maximization Algorithm, All Articles, machine_learning" />
+    <meta name="description" content="高斯混合模型与EM算法的推导" />
+    <meta name="keywords" content="高斯混合模型与EM算法的推导, All Articles, 机器学习" />
     <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <meta content="" property="fb:app_id">
     <meta content="All Articles" property="og:site_name">
@@ -16,7 +16,7 @@
     
 
     
-      <meta content="Gaussian Mixture Model and  Expectation-Maximization Algorithm" property="og:title">
+      <meta content="高斯混合模型与EM算法的推导" property="og:title">
       <meta content="article" property="og:type">
     
 
@@ -25,11 +25,11 @@
     
 
     
-      <meta content="http://localhost:4000/post/en/gmm-em-en.html" property="og:url">
+      <meta content="http://localhost:4000/post/cn/gmm-em-cn.html" property="og:url">
     
 
     
-      <meta content="2019-06-18T14:32:04+08:00" property="article:published_time">
+      <meta content="2019-06-19T14:32:04+08:00" property="article:published_time">
       <meta content="http://localhost:4000/about/" property="article:author">
     
 
@@ -39,7 +39,7 @@
 
     
       
-        <meta content="machine_learning" property="article:section">
+        <meta content="机器学习" property="article:section">
       
     
 
@@ -52,11 +52,11 @@
     <meta name="twitter:creator" content="@">
 
     
-      <meta name="twitter:title" content="Gaussian Mixture Model and  Expectation-Maximization Algorithm">
+      <meta name="twitter:title" content="高斯混合模型与EM算法的推导">
     
 
     
-      <meta name="twitter:url" content="http://localhost:4000/post/en/gmm-em-en.html">
+      <meta name="twitter:url" content="http://localhost:4000/post/cn/gmm-em-cn.html">
     
 
     
@@ -122,114 +122,109 @@
       </div>
       <div class="col-sm-8 col-offset-1 main-layout">
         <header class="post-header">
-  <h1 class="post-title">Gaussian Mixture Model and  Expectation-Maximization Algorithm</h1>
+  <h1 class="post-title">高斯混合模型与EM算法的推导</h1>
 </header>
 
-<span class="time">18 Jun 2019</span>
+<span class="time">19 Jun 2019</span>
 
   <span class="categories">
-    &raquo; <a href="/category/machine_learning">machine_learning</a>
+    &raquo; <a href="/category/机器学习">机器学习</a>
   </span>
 
 
 <div class="content">
   <div class="post"><p><br /></p>
 <ul id="markdown-toc">
-  <li><a href="#1-preliminary-topics" id="markdown-toc-1-preliminary-topics">1. Preliminary Topics</a>    <ul>
-      <li><a href="#11-gaussian-distribution" id="markdown-toc-11-gaussian-distribution">1.1 Gaussian Distribution</a></li>
-      <li><a href="#12-jensens-inequality" id="markdown-toc-12-jensens-inequality">1.2 Jensen’s Inequality</a></li>
-      <li><a href="#13-matrix-derivatives" id="markdown-toc-13-matrix-derivatives">1.3 Matrix Derivatives</a></li>
+  <li><a href="#1-预备知识" id="markdown-toc-1-预备知识">1. 预备知识</a>    <ul>
+      <li><a href="#11-高斯分布" id="markdown-toc-11-高斯分布">1.1 高斯分布</a></li>
+      <li><a href="#12-jensen不等式" id="markdown-toc-12-jensen不等式">1.2 Jensen不等式</a></li>
+      <li><a href="#13-矩阵求导" id="markdown-toc-13-矩阵求导">1.3 矩阵求导</a></li>
     </ul>
   </li>
-  <li><a href="#2gaussian-mixture-model-gmm-and-expectation-maximizationem-algorithm" id="markdown-toc-2gaussian-mixture-model-gmm-and-expectation-maximizationem-algorithm">2.Gaussian Mixture Model (GMM) and Expectation-Maximization(EM) Algorithm</a>    <ul>
-      <li><a href="#21-gmm" id="markdown-toc-21-gmm">2.1 GMM</a></li>
-      <li><a href="#22-em" id="markdown-toc-22-em">2.2 EM</a></li>
+  <li><a href="#2高斯混合模型和em算法" id="markdown-toc-2高斯混合模型和em算法">2.高斯混合模型和EM算法</a>    <ul>
+      <li><a href="#21-高斯混合模型gmm" id="markdown-toc-21-高斯混合模型gmm">2.1 高斯混合模型(GMM)</a></li>
+      <li><a href="#22-em算法" id="markdown-toc-22-em算法">2.2 EM算法</a></li>
     </ul>
   </li>
-  <li><a href="#3em-algorithm-for-univariate-gmm" id="markdown-toc-3em-algorithm-for-univariate-gmm">3.EM Algorithm for Univariate GMM</a>    <ul>
+  <li><a href="#3em算法解单变量gmm" id="markdown-toc-3em算法解单变量gmm">3.EM算法解单变量GMM</a>    <ul>
       <li><a href="#31-e-step" id="markdown-toc-31-e-step">3.1 E-Step:</a></li>
       <li><a href="#32-m-step" id="markdown-toc-32-m-step">3.2 M-Step:</a></li>
     </ul>
   </li>
-  <li><a href="#4em-algorithm-for-multivariate-gmm" id="markdown-toc-4em-algorithm-for-multivariate-gmm">4.EM Algorithm for Multivariate GMM</a>    <ul>
+  <li><a href="#4em算法解多变量gmm" id="markdown-toc-4em算法解多变量gmm">4.EM算法解多变量GMM</a>    <ul>
       <li><a href="#41-e-step" id="markdown-toc-41-e-step">4.1 E-Step:</a></li>
       <li><a href="#42-m-step" id="markdown-toc-42-m-step">4.2 M-Step:</a></li>
     </ul>
   </li>
-  <li><a href="#5summary" id="markdown-toc-5summary">5.Summary</a></li>
+  <li><a href="#5总结" id="markdown-toc-5总结">5.总结</a></li>
 </ul>
 
-<h2 id="1-preliminary-topics">1. Preliminary Topics</h2>
+<h2 id="1-预备知识">1. 预备知识</h2>
 
-<h3 id="11-gaussian-distribution">1.1 Gaussian Distribution</h3>
+<h3 id="11-高斯分布">1.1 高斯分布</h3>
 
-<p>The Gaussian distribution is very widely used to fit random data. The
-probability density for a one-dimensional random variable $x$ follows:</p>
+<p>高斯分布是拟合随机数据最常用的模型。单变量$x$的高斯分布概率密函数如下:</p>
 
 <p>\begin{equation}
 \textit{N}(x; \mu, \sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]
 \end{equation}</p>
 
-<p>where</p>
+<p>其中</p>
 <ul>
   <li>
-    <p>$\mu $ is the mean or expectation of the distribution,</p>
+    <p>$\mu $ 分布的数学期望,</p>
   </li>
   <li>
-    <p>$\sigma$ is the standard deviation, and $ \sigma ^{2}$ is the
-variance.</p>
+    <p>$\sigma$ 标准差, $ \sigma ^{2}$ 是方差.</p>
   </li>
 </ul>
 
-<p>More generally, when the data set is a d-dimensional data, it can be fit by a multivariate Gaussian model. The probability density is:
+<p>更一般的情况，如果数据集是d维的数据, 就可以用多变量高斯模型来拟合。概率密度是:
 \begin{equation}
 \textit{N}(x; \mu, \Sigma) = \frac{1}{\sqrt{(2\pi)^d\det(\Sigma)}}\exp\left[-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu)\right]
 \end{equation}</p>
 
-<p>where</p>
+<p>其中</p>
 <ul>
-  <li>$x$ is a N-by-d vector, representing N sets of d-dimensional random data,</li>
-  <li>$\mu$ is a 1-by-d vector, representing the mean of each dimension,</li>
-  <li>$\Sigma$ is a d-by-d matrix, representing the covariance matrix</li>
+  <li>$x$是一个N*d的向量, 代表N组d维数据,</li>
+  <li>$\mu$是一个1*d 的向量, 代表每维的数学期望,</li>
+  <li>$\Sigma$是一个d*d的矩阵, 代表模型的协方差矩阵</li>
 </ul>
 
-<h3 id="12-jensens-inequality">1.2 Jensen’s Inequality</h3>
+<h3 id="12-jensen不等式">1.2 Jensen不等式</h3>
 
-<p>Here statements of Jensen’s inequality in the context of probability theory. These would be used to simplify the target function in an EM process.</p>
+<p>这里给出随机分析里面Jensen’s不等式的结论。在EM算法的求解过程中，Jensen不等式可以简化目标函数。</p>
 
-<p><strong>Theorem.</strong>For convex function $f$ and a random variable $x$:
+<p><strong>定理.</strong>  对一个凸函数$f$和随机变量$x$:
 \begin{equation}
 f\left[E(x)\right] \leq E\left[f(x)\right]
 \end{equation}</p>
 
-<figure align="center" style="width: 60%;margin:auto">
-  <img width="70%" height="70%" src="/static/posts/convex.png" />
-  <figcaption>Fig.1 - An example of a convex function. Let $x$ be evenly distributed between
-a and b. The expectation of $f(x)$ is always above $f[E(x)]$.</figcaption>
+<figure align="center" style="width: 70%;margin:auto">
+  <img width="60%" height="auto" src="/static/posts/convex.png" />
+  <figcaption>Fig.1 - 凸函数例子，设定$x$在a和b间均匀分布，$f(x)$的期望总比$f[E(x)]$大。</figcaption>
 </figure>
 <p><br />
-<strong>Theorem.</strong> For concave function $f$ and a random variable $x$:
+<strong>定理.</strong>  对一个凹函数$f$和随机变量$x$:
 \begin{equation}
 f\left[E(x)\right] \geq E\left[f(x)\right]
 \end{equation}</p>
 
-<figure align="center" style="width: 60%;margin:auto">
-  <img width="70%" height="70%" src="/static/posts/concave.png" />
-  <figcaption>Fig.2 - An example of a concave function. Let $x$ be evenly distributed
-between a and b. The expectation of $f(x)$ is always under $f[E(x)]$.</figcaption>
+<figure align="center" style="width: 70%;margin:auto">
+  <img width="60%" height="auto" src="/static/posts/concave.png" />
+  <figcaption>Fig.2 - 凹函数例子，设定$x$在a和b间均匀分布，$f(x)$的期望总比$f[E(x)]$小。</figcaption>
 </figure>
 
-<h3 id="13-matrix-derivatives">1.3 Matrix Derivatives</h3>
+<h3 id="13-矩阵求导">1.3 矩阵求导</h3>
 
-<p>In order to solve the parameters in a Gaussian mixture model, we need
-some rules about derivatives of a matrix or a vector. Here are some 
-useful equations cited from <em>The Matrix Cookbook</em>.</p>
+<p>多维高斯混合模型的求解需要借助于矩阵和向量求导的公式。
+下面是从 《The Matrix Cookbook》一书中摘录在推导过程中可能会用到的公式。</p>
 
 <script type="math/tex; mode=display">% <![CDATA[
 \begin{align}
 \frac{\partial x^Ta}{\partial x} &= \frac{\partial a^Tx}{\partial x} = a\\
 \frac{\partial x^TBx}{\partial x} &=  (B + B^T )x\\
-\frac{\partial (x -s)^TW(x-s)}{\partial x} &= -2W(x-s), \text{ (W is symmetric)} \\
+\frac{\partial (x -s)^TW(x-s)}{\partial x} &= -2W(x-s), \text{ (W是对称矩阵)} \\
 \frac{\partial a^TXa}{\partial X} &= \frac{\partial a^TX^Ta}{\partial X} = aa^T\\
 \frac{\partial \det(X)}{\partial X} &= \det(X)(X^{-1})^T\\
 \frac{\partial \ln \det(X)}{\partial X} &= (X^{-1})^T\\
@@ -242,16 +237,13 @@ useful equations cited from <em>The Matrix Cookbook</em>.</p>
 \frac{\partial Tr(AX^-1B)}{\partial X} &= -(X^{-1}BAX^{-1})^T\\
 \end{align} %]]></script>
 
-<h2 id="2gaussian-mixture-model-gmm-and-expectation-maximizationem-algorithm">2.Gaussian Mixture Model (GMM) and Expectation-Maximization(EM) Algorithm</h2>
+<h2 id="2高斯混合模型和em算法">2.高斯混合模型和EM算法</h2>
 
-<h3 id="21-gmm">2.1 GMM</h3>
+<h3 id="21-高斯混合模型gmm">2.1 高斯混合模型(GMM)</h3>
 
-<p>For a complex data set in the real-world, it normally consists of a
-mixture of multiple stochastic processes. Therefore a single Gaussian
-distribution cannot fit such data set. Instead, a Gaussian mixture model
-is used to describe a combination of $K$ Gaussian distribution.</p>
+<p>现实采集的数据是比较复杂的，通常无法只用一个高斯分布拟合，而是可以看作多个随机过程的混合。可定义高斯混合模型是$K$个高斯分布的组合，用以拟合复杂数据。</p>
 
-<p>Suppose we have a training set of $N$ independent data points $x = {x_1, x_2 …x_i… x_N}$, and the values show multiple peaks. We can model this data set by a Gaussian mixture model
+<p>假设有一个数据集，包含了$N$个相互独立的数据：$x = {x_1, x_2 …x_i… x_N}$, 这些数据看起来有$K$个峰，这样的数据集可用以下定义的高斯混合模型拟合：
 \begin{equation}
 p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k) = \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\left[-\frac{(x-\mu_k)^2}{2\sigma_k^2}\right]
 \end{equation}</p>
@@ -267,15 +259,15 @@ p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k) = \sum_{k}^{}\
     </tr>
     <tr>
         <td style="text-align:center" valign="top">
-  	<figcaption>Fig.3 - Probability density of a univariate GMM with K=2 </figcaption>
+  	<figcaption>Fig.3 - K=2的单变量GMM概率密度分布 </figcaption>
 	</td>
         <td style="text-align:center" valign="top">
-  	<figcaption>Fig.4 - Samples of a 2d GMM with K=2</figcaption>
+  	<figcaption>Fig.4 -  K=2的双变量GMM例子</figcaption>
 	</td>
     </tr>
 </table>
 <p><br />
-When each data sample $x_i$ is d-dimensional, and the data set $x$ seem scattering to multiple clusters, the data can be modeled by a multivariate version Gaussian mixture model.</p>
+如果每一个数据点$x_i$都是d维的, 这些数据$x$如上图看起来分散在$K$个聚类，这种数据集可以用多变量高斯混合模型拟合。</p>
 
 <script type="math/tex; mode=display">% <![CDATA[
 \begin{align}
@@ -283,35 +275,32 @@ p(x|\Theta) &= \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \Sigma_k) \nonumber \\
 &= \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x-\mu_k)^T\Sigma_{k}^{-1}(x-\mu_k)\right]
 \end{align} %]]></script>
 
-<p>In the models,  $\Theta$ means all parameters, and $\alpha_k$ is the prior probability of th $k^{th}$ Gaussian model, and
+<p>其中$\Theta$ 代表全体高斯模型参数, $\alpha_k$ 是第$k$个高斯模型的先验概率, 各个高斯模型的先验概率加起来等于1。
 \begin{equation}
 \sum_{k}\alpha_k = 1
 \end{equation}</p>
 
-<h3 id="22-em">2.2 EM</h3>
-<p>The expectation-maximization(EM) algorithm is an iterative supervised training algorithm. The task is formulated as:</p>
+<h3 id="22-em算法">2.2 EM算法</h3>
+<p>EM 算法是一种迭代的算法，算法解决的问题可如下表述：</p>
 <ul>
-  <li>We have a training set of $N$ independent data points $x$.</li>
-  <li>Either we know or have a good guess, that the data set is a mixture
-of $K$ Gaussian distributions.</li>
-  <li>The task is to estimate the GMM parameters: K set of ($\alpha_{k}$,
+  <li>采集到一组包含$N$个独立数据的数据集$x$。</li>
+  <li>预先知道、或者根据数据特点估计可以用$K$个高斯分布混合进行数据拟合。</li>
+  <li>目标任务是估计出高斯混合模型的参数：$K$组($\alpha_{k}$,
 $\mu_k$, $\sigma_k$), or ($\alpha_{k}$, $\mu_k$, $\Sigma_{k}$).</li>
 </ul>
 
-<p><strong>Likelihood Function:</strong></p>
+<p><strong>似然函数:</strong></p>
 
-<p>For estimation problems based on data set of independent samples, maximum-likelihood estimation (MLE) is a very widely used and straight forward method to perform estimation.</p>
-
-<p>The probability of N independent tests is described as the product of probability of each test. This is called the likelihood function:
+<p>对于相互独立的一组数据, 最大似然估计(MLE)是最直接的估计方法。$N$个数据点的总概率可以表述成每个数据点的概率之乘积，这被称作似然函数
 \begin{equation}
 p(x|\Theta) = \prod_{i}p(x_i|\Theta)
 \end{equation}</p>
 
-<p>MLE is to estimate the  parameters $\Theta$ by maximizing the likelihood function.</p>
+<p>最大似然估计通过求似然函数的极大值，来估计参数$\Theta$。</p>
 
 <script type="math/tex; mode=display">\Theta = \mathop{\arg\max}_{\Theta} \prod_{i}p(x_i|\Theta)</script>
 
-<p>By applying the MLE , the likelihood function for uni and multiple variate Gaussian mixture models are very complicated. 
+<p>对高斯混合模型使用最大似然估计，求得的似然函数是比较的复杂的，单变量和多变量GMM似然函数结果如下，可以看到多变量GMM似然函数涉及多个矩阵的求逆和乘积等运算。所以要准确估计出$K$组高斯模型的参数，是很难的。
 \begin{equation}
 p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{N}(x_i| \mu_k, \sigma_k) \right]
 \end{equation}
@@ -319,38 +308,37 @@ p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{
 p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{N}(x_i| \mu_k, \Sigma_k)\right]
 \end{equation}</p>
 
-<p>To estimate K set of Gaussian parameters directly and explicitly is difficult. The EM algorithm simplifies the likelihood function of GMM, and provides an iterative way to optimize the estimation.Here we try to briefly describe the EM algorithm for GMM parameter estimation.</p>
-
-<p>First, the likelihood function of a GMM model can be simplified by taking the log likelihood function. An formula with the form of summation is easier for separating independent data samples and taking derivatives of parameters.
+<p>GMM 似然函数首先可以通过求对数进行简化，把乘积变成和。和的形式更方便求导和求极值。
 \begin{equation}
 L(x|\Theta) = \sum_{i}\ln\left[p(x_{i}|\mu_k, \sigma_k) \right] = \sum_{i}\ln\left[\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k) \right]
 \end{equation}</p>
 
-<p><strong>Latent Parameters:</strong></p>
+<p><strong>隐参数:</strong></p>
 
-<p>There is no efficient way to explicitly maximizing the log likelihood function for GMM above. The EM algorithm introduces a latent parameter $z$, that $z \in {1 ,2 … k … K}$. That is used to describe the <strong>probability of a given training sample $x_i$ belonging to cluster z, given full GMM parameters</strong>:
+<p>是否对前面的对数似然函数进行求极大值，就可以求出目标的$K$组高斯模型参数了呢？我看到公式里面有两重求和，其中一重是在对数函数里面，直接求极值并不可行。</p>
+
+<p>EM算法提出了用迭代逼近的方法，来对最优的高斯混合模型进行逼近。为了帮助迭代算法的过程，EM算法提出了隐参数$z$, 每次迭代，先使用上一次的参数计算隐参数$z$的分布，然后使用$z$更新似然函数，对目标参数进行估计。
+在GMM估计问题中，EM算法所设定的隐参量$z$ 一般属于${1 ,2 … k … K}$. 用于描述<strong>计算出GMM中$K$组高斯模型的参数后，某个数据点$x_i$属于第$z$个高斯模型的概率</strong>:
 \begin{equation}
 p(z|x_{i}, \mu_k, \sigma_k)
 \end{equation}</p>
 
-<p>Introduce the latent parameter $z$ in the  probability distribution of $x_i$.</p>
+<p>把隐参量$x$引入到第$i$个数据的概率估计中：</p>
 
 <p>\begin{equation}
 p(x_{i}|\Theta) = \sum_{k} p(x_{i}|z=k,\mu_k, \sigma_k) p(z=k) <br />
 \end{equation}</p>
 
-<p>Compared with $p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k)$, we can conclude that $\alpha_k$ is the prior probability of $p(z=k)$.
+<p>跟高斯混合分布$p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k)$作对比, 发现$\alpha_k$就是$z$的先验分布$p(z=k)$.
 \begin{equation}
 p(z=k) = \alpha_k
 \end{equation}
-and the conditional probability of $x$ given $z=k$ is the $k^{th}$ Gaussian model.
+而在$z=k$条件下的$x$条件概率就是第$k$个高斯模型.
 \begin{equation}
 p(x_{i}|z=k,\mu_k, \sigma_k)  = \textit{N}(x_i; \mu_k, \sigma_k)
 \end{equation}</p>
 
-<p>Now the latent parameter can be introduced into the log likelihood
-function. Be noted that an redundant term $p(z|x_{i},\mu_k, \sigma_k) $
-is added, in order to match the form of Jensen’s inequality.</p>
+<p>现在可以把隐参量代入到对数似然函数中。可以加入冗余项：隐参数在数据$x_i$和高斯参数下的后验概率，从而引入Jensen不等式来简化似然函数。</p>
 
 <script type="math/tex; mode=display">% <![CDATA[
 \begin{align}
@@ -359,14 +347,14 @@ L(x|\Theta) &= \sum_{i}\ln\left[p(x_{i}, z|\mu_k, \sigma_k) \right] \nonumber \\
 &= \sum_{i}\ln \sum_{k} p(z=k|x_{i},\mu_k, \sigma_k) \frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z=k|x_{i},\mu_k, \sigma_k)} \\
 \end{align} %]]></script>
 
-<p><strong>Simplify the Likelihood function:</strong></p>
+<p><strong>似然函数简化:</strong></p>
 
-<p>However the summation inside a log function make it difficult to maximize. Here recall Jensen’s inequality:
+<p>下面通过Jensen不等式简化对数似然函数。
 \begin{equation}
 f\left[E(x)\right] \geq E\left[f(x)\right]
 \end{equation}</p>
 
-<p>Let $u = \frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z|x_{i},\mu_k, \sigma_k)}$ to match Jensen’s inequality.
+<p>对照Jensen不等式，让$u = \frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z|x_{i},\mu_k, \sigma_k)}$。
 \begin{equation}
 f(u) = \ln u
 \end{equation}
@@ -374,11 +362,13 @@ f(u) = \ln u
 E(u) = \sum_{k} p(z|x_{i},\mu_k, \sigma_k) u
 \end{equation}</p>
 
-<p>Therefore,</p>
+<p>得到</p>
 
 <script type="math/tex; mode=display">L(x|\Theta) \geq \sum_{i}\sum_{k} p(z=k|x_{i},\mu_k, \sigma_k) \ln \frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z=k|x_{i},\mu_k, \sigma_k)}</script>
 
-<p>The posterior probability can be derived by the Bayes’ law.</p>
+<p>于是似然函数简化成对数函数的两重求和。等式右侧给似然函数提供了一个下界。</p>
+
+<p>我们可以根据贝叶斯准则进行推导其中的后验概率</p>
 
 <script type="math/tex; mode=display">% <![CDATA[
 \begin{align}
@@ -386,12 +376,12 @@ p(z=k|x_{i},\mu_k, \sigma_k) &= \frac{ p(x_{i}|z=k,\mu_k, \sigma_k)}{ \sum_{k} p
 &=  \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)} 
 \end{align} %]]></script>
 
-<p>Define
+<p>定义
 \begin{equation}
 \omega_{i,k} = p(z=k|x_{i},\mu_k, \sigma_k) = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)} 
 \end{equation}</p>
 
-<p>Then</p>
+<p>那么</p>
 
 <script type="math/tex; mode=display">% <![CDATA[
 \begin{align}
@@ -399,84 +389,83 @@ L(x|\Theta) &= \sum_{i}\ln \sum_{k} \omega_{i,k} \frac{\alpha_{k}\textit{N}(x_{i
 &\geq \sum_{i} \sum_{k} \omega_{i,k} \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}} 
 \end{align} %]]></script>
 
-<p>This equation defines a lower bound for the log likelihood function. Therefore, an iterative target function for the EM algorithm is defined:
+<p>不等式的右侧给似然函数提供了一个下界。EM算法提出迭代逼近的方法，不断提高下界，从而逼近似然函数。每次迭代都以下面这个目标函数作为优化目标：
 \begin{equation}
 Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t} 
 \end{equation}</p>
 
-<p>After $t$ iterations, we’ve got $\Theta^t$，and hence the latent $\omega_{i,k}^t$。 Apply the latest latent parameters in $Q(\Theta,\Theta^{t})$，and then we can update $\Theta^{t+1}$ by maiximization.</p>
+<p>这个式子表示，在第$t$次迭代后，获得参数$\Theta^t$，然后就可以计算隐参数概率$\omega_{i,k}^t$。 将隐参数代回$Q(\Theta,\Theta^{t})$, 进行最大似然优化，即可求出更优的参数$\Theta^{t+1}$。</p>
 
-<p><strong>Iterative Optimization:</strong> </p>
+<p><strong>迭代求解:</strong> </p>
 
-<p>First the parameters $\Theta$ are initialized, and then $\omega$ and $\Theta$ are updated iteratively.</p>
+<p>迭代开始时，算法先初始化一组参数值$\Theta$, 然后间隔地更新$\omega$和$\Theta$。</p>
 <ul>
   <li>
-    <p>After iteration t, a set of parameters $\Theta^t$ have been
-achieved.</p>
+    <p>经过$t$轮迭代,已获得一组目标参数$\Theta^t$临时的值。</p>
   </li>
   <li>
-    <p>Calculate latent parameters $\omega_{i,k}^t$ by applying $\Theta^t$
-into the GMM. This step is called <strong>expectation step</strong>.</p>
+    <p>基于当前的参数$\Theta^t$，用高斯混合模型计算隐参数概率 $\omega_{i,k}^t$ by applying $\Theta^t$。然后将隐参数概率代入对数似然函数，得到似然函数数学期望表达式。
+这一步叫<strong>expectation step</strong>.</p>
 
     <script type="math/tex; mode=display">\omega_{i,k}^t = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}</script>
   </li>
   <li>
-    <p>Apply the latest latent parameters $\omega_{i,k}^t$ in the target function. The target function is derived by simplifying the log likelihood funciton by Jensen’s inequality.
+    <p>如前文使用Jensen推导得出，得到每次更新了隐参数$\omega_{i,k}^t$后的目标函数是：
 \begin{equation}
 Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t} 
 \end{equation}</p>
   </li>
   <li>
-    <p>With $\omega_{i,k}$, maximize the target log likelihood function, to
-update GMM parameters $\Theta^{t+1}$. This step is called
-<strong>maximization step</strong>.</p>
+    <p>利用$\omega_{i,k}$当前值, 最大化目标函数，从而得出新一组GMM参数 $\Theta^{t+1}$.  这一步叫作<strong>maximization step</strong>。</p>
 
     <script type="math/tex; mode=display">\Theta^{t+1} = \mathop{\arg\max}_{\Theta} \sum_{i}\sum_{k} \ln \omega_{i,k}^t \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}</script>
   </li>
 </ul>
 
-<h2 id="3em-algorithm-for-univariate-gmm">3.EM Algorithm for Univariate GMM</h2>
+<h2 id="3em算法解单变量gmm">3.EM算法解单变量GMM</h2>
 
-<p>The complete form of the EM target function for a univariate GMM is 
+<p>单变量 GMM使用EM算法时，完整的目标函数为 
 \begin{equation}
 Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega_{i,k}^t\sqrt{2\pi\sigma_k^2}}\exp\left[-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right]
 \end{equation}</p>
 
 <h3 id="31-e-step">3.1 E-Step:</h3>
 
-<p>The E-step is to estimate the latent parameters for each training sample on K Gaussian models. Hence the latent parameter $\omega$ is a N-by-K matrix.</p>
+<p>E-step目标就是计算隐参数的值， 也就是对每一个数据点，分别计算其属于每一种高斯模型的概率。 所以隐参量$\omega$是一个N*K矩阵.</p>
 
-<p>On every iteration, $\omega_{i,k}$ is calculated from the latest Gaussian parameters $(\alpha_k, \mu_k, \sigma_k)$</p>
+<p>每一次迭代后 $\omega_{i,k}$都可以用最新的高斯参数$(\alpha_k, \mu_k, \sigma_k)$进行更新。</p>
 
 <p>\begin{equation}
 \omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)} 
 \end{equation}</p>
 
-<h3 id="32-m-step">3.2 M-Step:</h3>
-<p>\begin{equation}
-\Theta := \mathop{\arg\max}_{\Theta} Q(\Theta,\Theta^{t}) 
-\end{equation}</p>
-
-<p>The target likelihood function can be expanded to decouple items clearly.
+<p>E-step 就可以把更新的$\omega$代入似然函数，得到目标函数的最新表达。该目标函数展开如下：
 \begin{equation}
 Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)
 \end{equation}</p>
 
-<p><strong>Update $\alpha_k:$</strong></p>
+<h3 id="32-m-step">3.2 M-Step:</h3>
 
-<p>As defined in GMM, $\alpha_k$ is constrained by $\sum_{k}\alpha_k =1$, so estimating $\alpha_k$ is a constrained optimization problem.</p>
+<p>M-step的任务就是最大化目标函数，从而求出高斯参数的估计。
+\begin{equation}
+\Theta := \mathop{\arg\max}_{\Theta} Q(\Theta,\Theta^{t}) 
+\end{equation}</p>
+
+<p><strong>更新$\alpha_k:$</strong></p>
+
+<p>在高斯混合模型定义中，$\alpha_k$受限于$\sum_{k}\alpha_k =1$。所以$\alpha_k$的估计是一个受限优化问题。</p>
 
 <script type="math/tex; mode=display">\begin{align}
 \alpha_k^{t+1} := \mathop{\arg\max}_{\alpha_k}{ \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}\\
 \text{subject to}  \sum_{k}\alpha_k =1 \nonumber
 \end{align}</script>
 
-<p>The method of Lagrange multipliers is used to find the local maxima of such constrained optimization problem. We can construct a Lagrangean function:
+<p>这种问题通常用拉格朗日乘子法计算。下面构造拉格朗日乘子：
 \begin{equation}
 \mathcal{L}(\alpha_k, \lambda) = { \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}+ \lambda\left[\sum_{k}\alpha_k -1\right]
 \end{equation}</p>
 
-<p>The local maxima $\alpha_{k}^{t+1}$ should make the derivative of the Lagrangean function equal to 0. Hence,</p>
+<p>对拉格朗日方程求极值，也就是对$\alpha_k$求导数为0处，该点就是我们要更新的$\alpha_{k}^{t+1}$值。</p>
 
 <script type="math/tex; mode=display">% <![CDATA[
 \begin{align}
@@ -484,7 +473,7 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \om
 \Rightarrow  \alpha_k &= -\frac{\sum_{i}\omega_{i,k}^t}{\lambda}
 \end{align} %]]></script>
 
-<p>By summing the equation for all $k$, the value of $\lambda$ can be calculated.</p>
+<p>将所有$k$项累加, 就可以求得$\lambda$.</p>
 
 <script type="math/tex; mode=display">% <![CDATA[
 \begin{align}
@@ -493,19 +482,19 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \om
 \Rightarrow \lambda &= -N  
 \end{align} %]]></script>
 
-<p>Therefore, $\alpha_k$ on iteration $t+1$ based on latent parameters on iteration $t$ is updated by
+<p>于是利用地$t$次迭代的隐参量，我们就得到了$\alpha_k$在$t+1$次迭代的更新方程：
 \begin{equation}
 \alpha_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t}{N} 
 \end{equation}</p>
 
-<p><strong>Update $\mu_k:$</strong> </p>
+<p><strong>更新$\mu_k:$</strong> </p>
 
-<p>$\mu_k$ is unconstrained, and can be derived by taking the derivative of the target likelihood function.
+<p>$\mu_k$并没有类似$\alpha_k$的限制条件，可以直接把目标函数对$\mu_k$求导数：
 \begin{equation}
 \mu_k^{t+1} :=  \mathop{\arg\max}_{\mu_k}   Q(\Theta,\Theta^{t})
 \end{equation}</p>
 
-<p>Let $\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k}=0$, hence
+<p>让$\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k}=0$, 得到
 \begin{equation}
 \frac{\partial \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)}{\partial \mu_k} =  0
 \end{equation}</p>
@@ -516,24 +505,24 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \om
 \Rightarrow \mu_k\sum_{i}\omega_{i,k}^t = \sum_{i}\omega_{i,k}^tx_i 
 \end{align}</script>
 
-<p>Hence $\mu_k$ on iteration $t+1$ can be updated as a form of weighted mean of $x$.
+<p>所以在$t+1$次迭代， $\mu_k$就用全部$x$的加权平均来求得，权值正是$x_i$属于第$k$个模型产生的概率$\omega_{i,k}^t$。
 \begin{equation}
 \mu_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^tx_i}{\sum_{i}\omega_{i,k}^t} 
 \end{equation}</p>
 
-<p><strong>Update $\sigma_k:$</strong> </p>
+<p><strong>更新$\sigma_k:$</strong> </p>
 
-<p>Similarly, updated $\sigma_k$ is derived by taking the derivative of the target likelihood function with respect to $\sigma_k$.
+<p>类似地, 将目标函数对$\sigma_k$求极大值：
 \begin{equation}
 \sigma_k^{t+1} :=  \mathop{\arg\max}_{\sigma_k}   Q(\Theta,\Theta^{t})
 \end{equation}</p>
 
-<p>Let
+<p>让导数为0：
 \begin{equation}
 \frac{\partial Q(\Theta,\Theta^{t})}{\partial \sigma_k} = \frac{\partial \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)}{\partial \sigma_k}=0
 \end{equation}.</p>
 
-<p>We get</p>
+<p>得到</p>
 
 <script type="math/tex; mode=display">% <![CDATA[
 \begin{align}
@@ -542,35 +531,35 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \om
 \Rightarrow \sigma_k^2 \sum_{i}\omega_{i,k} &= \sum_{i}\omega_{i,k}(x_i-\mu_k)^2 \\
 \end{align} %]]></script>
 
-<p>For $\sigma_k$, we can update $\sigma_k^2$, which is enough for Gaussian model calculation. New $sigma_k^2$ depends on $\mu_k$, so normally $\mu_k^{t+1}$ is calculated first and then applied to the update equation for $\sigma_k^2$
+<p>高斯模型里面使用的都是$\sigma_k^2$,所以就不需要求平方根了。$\sigma_k^2$的更新方程如下，依赖于更新的$\mu_k$。 所以一般都是先把$\mu_k^{t+1}$算出来，然后再更新$\sigma_k^2$。
 \begin{equation}
 (\sigma_k^2)^{t+1} = \frac{\sum_{i}\omega_{i,k}(x_i-\mu_k^{t+1})^2 }{\sum_{i}\omega_{i,k}} 
 \end{equation}</p>
 
-<h2 id="4em-algorithm-for-multivariate-gmm">4.EM Algorithm for Multivariate GMM</h2>
+<h2 id="4em算法解多变量gmm">4.EM算法解多变量GMM</h2>
 
-<p>Similarlyt the target likelihood function for a multivariat GMM is
+<p>同样的，我们可以得到每次迭代的目标函数如下：
 \begin{equation}
 Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega_{i,k}^t\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]
 \end{equation}</p>
 
-<p>Be aware that</p>
+<p>其中</p>
 <ul>
-  <li>$x_i$ is a 1-by-d vecotr,</li>
-  <li>$\alpha_k$ is a real number between [0,1],</li>
-  <li>$\mu_k$ is a 1-by-d vector,</li>
-  <li>$\Sigma_k$ is a d-by-d matrix.</li>
-  <li>$\omega$ is a N-by-K matrix.</li>
+  <li>$x_i$是1*d的向量,</li>
+  <li>$\alpha_k$ 一个0和1间的值,</li>
+  <li>$\mu_k$是1*d的向量,</li>
+  <li>$\Sigma_k$是d*d的矩阵,</li>
+  <li>$\omega$是N*K的矩阵。</li>
 </ul>
 
 <h3 id="41-e-step">4.1 E-Step:</h3>
 
-<p>The E-step to estimate the latent parameters is the same as univariate GMM, except that the Gaussian distribution is a multivariate one, which is more complicated. 
+<p>跟单变量GMM一样，E-step计算隐参数，但是需要用多维高斯分布，利用了多维矩阵乘法和矩阵求逆，计算复杂度要大很多。
 \begin{equation}
 \omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)} 
 \end{equation}</p>
 
-<p>The target likelihood function can be expanded.</p>
+<p>目标函数更新如下：</p>
 
 <script type="math/tex; mode=display">% <![CDATA[
 \begin{align}
@@ -580,33 +569,33 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega
 
 <h3 id="42-m-step">4.2 M-Step:</h3>
 
-<p><strong>Update $\alpha_{k}:$</strong></p>
+<p><strong>更新$\alpha_{k}:$</strong></p>
 
-<p>The formula to update $\alpha_k$ for multivariate GMMs is exactly the same as univariate GMMs.</p>
+<p>多变量GMM下，$\alpha_k$的更新跟单变量 GMM一样。</p>
 
 <script type="math/tex; mode=display">\begin{gather}
 \alpha_k^{t+1} := \mathop{\arg\max}_{\alpha_k}{ \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}\\
 \text{subject to}  \sum_{k}\alpha_k =1 \nonumber
 \end{gather}</script>
 
-<p>Hence we get the same update equation.
+<p>得到完全一样的更新方程：
 \begin{equation}
 \alpha_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t}{N} 
 \end{equation}</p>
 
-<p><strong>Update $\mu_k:$</strong></p>
+<p><strong>更新$\mu_k:$</strong></p>
 
 <p>\begin{equation}
 \mu_k^{t+1} :=  \mathop{\arg\max}_{\mu_k}   Q(\Theta,\Theta^{t})
 \end{equation}</p>
 
-<p>Take the derivative of $Q(\Theta,\Theta^{t})$ with respec to $\mu_k$, we get</p>
+<p>$Q(\Theta,\Theta^{t})$对$\mu_k$求导，得到</p>
 
 <p>\begin{eqnarray}
 \frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k} = \sum_{i}\omega_{i,k}^t\frac{\partial \left[-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]}{\partial \mu_k}  = 0<br />
 \end{eqnarray}</p>
 
-<p>As the covariance matrix $\Sigma_{k}$ is symmetric, the inverse of it is also symmetric.  We can apply $\frac{\partial (x -s)^TW(x-s)}{\partial x} = -2W(x-s)$ (see first section) to the partial derivative.</p>
+<p>实数协方差矩阵$\Sigma_{k}$对称的, 其逆矩阵也是对称的。 于是我们可以利用第一部分列出的公式$\frac{\partial (x -s)^TW(x-s)}{\partial x} = -2W(x-s)$求偏导数.</p>
 
 <p>\begin{equation}
 \frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k} = 
@@ -616,18 +605,18 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega
 \Rightarrow \sum_{i}\omega_{i,k}^t x_i= \mu_k\sum_{i}\omega_{i,k}^t<br />
 \end{equation}</p>
 
-<p>Hence $\mu_k$ on iteration $t+1$ is also updated as a form of weighted mean of $x$. However, in this scenario $\mu_k$ is a 1-by-d vector.
+<p>所以$\mu_k$的更新方程同样是$x$的加权平均，只是这时候$\mu_k$ is a 1*d 向量。
 \begin{equation}
  \mu_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t x_i}{\sum_{i}\omega_{i,k}^t} 
 \end{equation}</p>
 
-<p><strong>Update $\Sigma_k:$</strong></p>
+<p><strong>更新$\Sigma_k:$</strong></p>
 
 <p>\begin{equation}
 \Sigma_k^{t+1} :=  \mathop{\arg\max}_{\Sigma_k}   Q(\Theta,\Theta^{t})
 \end{equation}</p>
 
-<p>Let $\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} =0$, we get</p>
+<p>让导数$\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} =0$, 得到</p>
 
 <script type="math/tex; mode=display">% <![CDATA[
 \begin{align}
@@ -636,28 +625,28 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega
  &= 0 \nonumber
 \end{align} %]]></script>
 
-<p>By employing $\frac{\partial \ln \det(X)}{\partial X^{-1}} =-X^T $ and $\frac{\partial a^TXa}{\partial X} = aa^T$(see section one) for the symmetric covariance matrix $\Sigma_k$, and find the maxima of $ Q(\Theta,\Theta^{t})$.</p>
+<p>协方差矩阵$\Sigma_k$是对称的,可以利用第一部分的矩阵求导公式 $\frac{\partial \ln \det(X)}{\partial X^{-1}} =-X^T $ and $\frac{\partial a^TXa}{\partial X} = aa^T$，求得极大值$ Q(\Theta,\Theta^{t})$.</p>
 
 <p>\begin{equation}
 \frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} =   \frac{1}{2}\sum_{i}\omega_{i,k}^t \left[\Sigma_k - (x_i-\mu_k)(x_i-\mu_k)^T\right] = 0<br />
 \end{equation}</p>
 
-<p>Similarly, we get the update equation for  $\Sigma_k$ at iteration $t+1$, and it depends on $\mu_k$. So again $\mu_k^{t+1}$ is calculated first and then applied to the update equation for $\Sigma_k$</p>
+<p>类似地, 我们可以得到$\Sigma_k$在第$t+1$次迭代的更新方程, 它依赖于$\mu_k$。所以我们需要先计算$\mu_k^{t+1}$，然后更新$\Sigma_k$</p>
 
 <p>\begin{equation}
 \Sigma_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t (x_i-\mu_k^{t+1})(x_i-\mu_k^{t+1})^T }{\sum_{i}\omega_{i,k}^t} 
 \end{equation}</p>
 
-<h2 id="5summary">5.Summary</h2>
+<h2 id="5总结">5.总结</h2>
 
 <table border="1" style="width: 90%;margin:auto">
     <tr>
         <th style="text-align:center"></th>
-        <th style="text-align:center">Univariate GMM</th>
-        <th style="text-align:center">Multivariate GMM</th>
+        <th style="text-align:center">单变量GMM</th>
+        <th style="text-align:center">多变量GMM</th>
     </tr>
     <tr> 
-	<th style="text-align:center">Init</th>
+	<th style="text-align:center">初始化</th>
         <td>\begin{equation*} 
 		\alpha_{k}^0, \mu_k^0, \sigma_k^0
 		\end{equation*}</td>
@@ -702,7 +691,7 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega
   <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
   <!-- Facebook -->
-  <div class="fb-share-button" data-href="http://localhost:4000/post/en/gmm-em-en.html" data-layout="button_count" style="position: relative; top: -8px; left: 3px;"></div>
+  <div class="fb-share-button" data-href="http://localhost:4000/post/cn/gmm-em-cn.html" data-layout="button_count" style="position: relative; top: -8px; left: 3px;"></div>
 </div>
 
 <div id="fb-root"></div>
@@ -743,10 +732,8 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega
 
 <div class="PageNavigation">
   
-    <a class="prev" href="/post/cn/monaural-speech-enhancement-statistical-cn.html">&laquo; 单通道语音增强之统计信号模型</a>
+    <a class="prev" href="/post/en/gmm-em-en.html">&laquo; Gaussian Mixture Model and  Expectation-Maximization Algorithm</a>
   
-  
-    <a class="next" href="/post/cn/gmm-em-cn.html">高斯混合模型与EM算法的推导 &raquo;</a>
   
 </div>
 
@@ -755,8 +742,8 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega
   <script type="text/javascript">
     /* <![CDATA[ */
     var disqus_shortname = "wjchen";
-    var disqus_identifier = "http://localhost:4000_Gaussian Mixture Model and  Expectation-Maximization Algorithm";
-    var disqus_title = "Gaussian Mixture Model and  Expectation-Maximization Algorithm";
+    var disqus_identifier = "http://localhost:4000_高斯混合模型与EM算法的推导";
+    var disqus_title = "高斯混合模型与EM算法的推导";
 
     /* * * DON'T EDIT BELOW THIS LINE * * */
     (function() {

@@ -78,6 +78,7 @@
     <link rel="stylesheet" href="/static/css/thickbox.css">
     <link rel="stylesheet" href="/static/css/projects.css">
     <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/katex/katex.min.css">
 
     
   </head>
@@ -216,15 +217,16 @@ Gain)进行估计，不同的估计准则称为抑制准则(Supression Rule)。<
 
 <h2 id="2-最大似然估计ml">2. 最大似然估计ML</h2>
 
-<p>基如果不考虑信号的先验分布，即认为信号值是确定信号，而不是随机信号，我们只需要分析含有信号$x$为参数的带噪信号$y$的概率分布$p(y;x)$，并使之最大。这种估计方法叫最大似然估计器（Maximum
+<p>如果不考虑信号的先验分布，即认为信号值是确定信号，而不是随机信号，我们只需要分析含有信号$x$为参数的带噪信号$y$的概率分布$p(y;x)$，并使之最大。这种估计方法叫最大似然估计器（Maximum
 Likelihood
 Estimation）。将$y$的带参概率分布$p(y;x)$称为似然函数（Likelihood
-Function）。对纯净信号$x$的估计，表达为求解合适的$x$值，使得似然函数$p(y;x)$最大。
-<script type="math/tex">\hat{x} = \mathop{\arg\max}_{x}p(y;x)</script></p>
+Function）。对纯净信号$x$的估计，表达为求解合适的$x$值，使得似然函数$p(y;x)$最大。</p>
+
+<script type="math/tex; mode=display">\hat{x} = \argmax_{x}p(y;x)</script>
 
 <p>文献[@mcaulay1980speech]最早将最大似然估计法用在语音增强领域。对于纯净语音，可以假设纯净语音幅度$X_{k}$和相位$\theta_{y}(k)$是未知但确定，无需考虑其先验概率分布。最大似然语音增强模型表达为：</p>
 
-<script type="math/tex; mode=display">\hat{X}_{k},\hat{\theta}_{k} = \mathop{\arg\max}_{X_{k},\theta_{k}} p\left[Y(\omega_{k});X_{k},\theta_{k}\right]</script>
+<script type="math/tex; mode=display">\hat{X}_{k},\hat{\theta}_{k} = \argmax_{X_{k},\theta_{k}} p\left[Y(\omega_{k});X_{k},\theta_{k}\right]</script>
 
 <p>把$D_{k}e^{\theta_{d}(k)}=Y_{k}e^{\theta_{y}(k)} - X_{k}e^{\theta_{x}(k)} $代入噪声零均值复高斯分布公式中，得到：</p>
 
@@ -236,11 +238,11 @@ Function）。对纯净信号$x$的估计，表达为求解合适的$x$值，使
 
 <p>如果比最大似然估计更进一步，考虑待估计量$x$也是随机变量，且$x$的先验分布为$p(x)$，这种假设下的估计方法叫做贝叶斯估计[@ZhangXianDa2002ModernSP]。定义估计值$\hat{x}$与实际值$x$之间的误差函数为$c(\hat{x},x)$，贝叶斯估计器的目标即为找出是平均误差$E[c(\hat{x},x)]$最小的估计值$x$。</p>
 
-<script type="math/tex; mode=display">\hat{x} = \mathop{\arg\min}_{\hat{x}} E[c(\hat{x}, x)]</script>
+<script type="math/tex; mode=display">\hat{x} = \argmin_{\hat{x}} E[c(\hat{x}, x)]</script>
 
 <p>对于待估计的纯净语音谱，贝叶斯估计器可以表达为：</p>
 
-<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = \mathop{\arg\min}_{\hat{X_{k}}} E[c(\hat{X}(\omega_{k}), X(\omega_{k}))]</script>
+<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = \argmin_{\hat{X_{k}}} E[c(\hat{X}(\omega_{k}), X(\omega_{k}))]</script>
 
 <p>误差$c(\hat{x},x)$的期望值取决于待测信号与测量信号的联合概率分布。</p>
 
@@ -252,7 +254,7 @@ Function）。对纯净信号$x$的估计，表达为求解合适的$x$值，使
 
 <p>因为估计值$\hat{x}$与$p(y)$相互独立，可以把外层对$y$的积分消除，也就是：</p>
 
-<script type="math/tex; mode=display">\hat{x} = \mathop{\arg\min}_{\hat{x}} E[c(\hat{x}, x)|y]</script>
+<script type="math/tex; mode=display">\hat{x} = \argmin_{\hat{x}} E[c(\hat{x}, x)|y]</script>
 
 <p>误差函数$c(\hat{x}, x)$的计算模型，会引出不同种类的估计器。典型的误差函数有几种类型[@ZhangXianDa2002ModernSP]：</p>
 
@@ -273,14 +275,14 @@ Function）。对纯净信号$x$的估计，表达为求解合适的$x$值，使
 </ol>
 
 <script type="math/tex; mode=display">% <![CDATA[
-\begin{equation}c(\hat{x}, x)   =
+c(\hat{x}, x)   =
             \left\{
             \begin{array}{lr}
             1 \quad (|\hat{x}-x|\geq\Delta/2) &  \\
             &\Delta>0\\
             0 \quad (|\hat{x}-x|<\Delta/2) & 
             \end{array}
-            \right.\end{equation} %]]></script>
+            \right. %]]></script>
 
 <h3 id="31-最小均方估计mmse">3.1 最小均方估计（MMSE）</h3>
 
@@ -299,10 +301,10 @@ Estimation)[@ephraim1985speech]使用平方误差函数，平均误差为：</p>
 
 <p>亦可以使用贝叶斯公式展开，得到：</p>
 
-<script type="math/tex; mode=display">\begin{align}
+<script type="math/tex; mode=display">\begin{aligned}
     \hat{x} = \int_{x}x \frac{p(y|x)p(x)}{p(y)} dx \\
-            = \frac{\int_{x}xp(y|x)p(x)dx}{\int_{x}p(y|x)p(x)dx} \nonumber
-\end{align}</script>
+            = \frac{\int_{x}xp(y|x)p(x)dx}{\int_{x}p(y|x)p(x)dx}
+\end{aligned}</script>
 
 <p>在语音增强的模型里，纯净语音谱的估计为其在带噪语音谱下的条件均值。</p>
 
@@ -393,20 +395,20 @@ Estimation)[@ephraim1985speech]使用平方误差函数，平均误差为：</p>
 <p>当贝叶斯估计器采用均匀误差函数时，平均误差为：</p>
 
 <script type="math/tex; mode=display">% <![CDATA[
-\begin{align}
+\begin{aligned}
     E[c(\hat{x}, x)|y] &= \int_{-\infty}^{\hat{x}-\Delta/2}  p(x|y)dx + \int_{\hat{x}+\Delta/2}^{\infty}  p(x|y)dx   \\
-                       &= 1-\int_{\hat{x}\Delta/2}^{\hat{x}+\Delta/2}  p(x|y)dx  \nonumber
-\end{align} %]]></script>
+                       &= 1-\int_{\hat{x}\Delta/2}^{\hat{x}+\Delta/2}  p(x|y)dx  
+\end{aligned} %]]></script>
 
 <p>显然要使得平均误差最小，就是要求目标估计$\hat{x}$，使得
 $p(x|y)$最大。这种估计模型称作最大后验估计(Maximum A Posteriori
 Estimation)。这个模型的意思是只有估计值$\hat{x}$与原始值$x$相等，误差才为0，其他时候误差均匀为1。估计值可以表达为：</p>
 
-<script type="math/tex; mode=display">\hat{x} =\mathop{\arg\min}_{x} p(x|y)</script>
+<script type="math/tex; mode=display">\hat{x} =\argmin_{x} p(x|y)</script>
 
 <p>在语音增强的模型里，纯净语音谱的估计为其在带噪语音谱下的条件均值。</p>
 
-<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = \mathop{\arg\min}_{ X(\omega_{k})}\quad p\left[X(\omega_{k})| Y(\omega_{k})\right]</script>
+<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = \argmin_{ X(\omega_{k})}\quad p\left[X(\omega_{k})| Y(\omega_{k})\right]</script>
 
 <p>文献[@wolfe2003efficient]提出了两种基于最大后验估计(Maximum A Posteriori
 Estimation)的语音增强算法。一种是同时求解幅度和相位的混合最大后验估计：
@@ -546,21 +548,24 @@ Estimation)的语音增强算法。一种是同时求解幅度和相位的混合
     <script src="/static/js/super-search.js"></script>
     <script src="/static/js/thickbox-compressed.js"></script>
     <script src="/static/js/projects.js"></script>
-	<script type="text/x-mathjax-config"> 
-   		MathJax.Hub.Config({ 
-			TeX: { equationNumbers: { autoNumber: "all" } },
-			CommonHTML: { scale: 80 }
-		 }); 
-   	</script>
-     <script type="text/x-mathjax-config">
-    	MathJax.Hub.Config({tex2jax: {
-             inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-             processEscapes: true
-           }
-         });
+    
+    <script src="/static/katex/katex.min.js"></script>
+    <script src="/static/katex/contrib/auto-render.min.js"></script>
+    <script src="/static/katex/contrib/mathtex-script-type.min.js"></script>
+    <script>
+      renderMathInElement(
+          document.body,
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
     </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
   </body>
 </html>
 

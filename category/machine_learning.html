@@ -73,6 +73,7 @@
     <link rel="stylesheet" href="/static/css/thickbox.css">
     <link rel="stylesheet" href="/static/css/projects.css">
     <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/katex/katex.min.css">
 
     
   </head>
@@ -185,21 +186,24 @@
     <script src="/static/js/super-search.js"></script>
     <script src="/static/js/thickbox-compressed.js"></script>
     <script src="/static/js/projects.js"></script>
-	<script type="text/x-mathjax-config"> 
-   		MathJax.Hub.Config({ 
-			TeX: { equationNumbers: { autoNumber: "all" } },
-			CommonHTML: { scale: 80 }
-		 }); 
-   	</script>
-     <script type="text/x-mathjax-config">
-    	MathJax.Hub.Config({tex2jax: {
-             inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-             processEscapes: true
-           }
-         });
+    
+    <script src="/static/katex/katex.min.js"></script>
+    <script src="/static/katex/contrib/auto-render.min.js"></script>
+    <script src="/static/katex/contrib/mathtex-script-type.min.js"></script>
+    <script>
+      renderMathInElement(
+          document.body,
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
     </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
   </body>
 </html>
 

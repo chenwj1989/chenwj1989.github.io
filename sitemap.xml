@@ -5,8 +5,8 @@
     <description>My Personal Thoughts</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/sitemap.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 22 Jun 2019 15:15:13 +0800</pubDate>
-    <lastBuildDate>Sat, 22 Jun 2019 15:15:13 +0800</lastBuildDate>
+    <pubDate>Fri, 05 Jul 2019 13:54:33 +0800</pubDate>
+    <lastBuildDate>Fri, 05 Jul 2019 13:54:33 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -43,9 +43,7 @@
 
 &lt;p&gt;高斯分布是拟合随机数据最常用的模型。单变量$x$的高斯分布概率密函数如下:&lt;/p&gt;
 
-&lt;p&gt;\begin{equation}
-\textit{N}(x; \mu, \sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\textit{N}(x; \mu, \sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]&lt;/script&gt;
 
 &lt;p&gt;其中&lt;/p&gt;
 &lt;ul&gt;
@@ -57,39 +55,36 @@
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;更一般的情况，如果数据集是d维的数据, 就可以用多变量高斯模型来拟合。概率密度是:
-\begin{equation}
-\textit{N}(x; \mu, \Sigma) = \frac{1}{\sqrt{(2\pi)^d\det(\Sigma)}}\exp\left[-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu)\right]
-\end{equation}&lt;/p&gt;
+&lt;p&gt;更一般的情况，如果数据集是d维的数据, 就可以用多变量高斯模型来拟合。概率密度是:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\textit{N}(x; \mu, \Sigma) = \frac{1}{\sqrt{(2\pi)^d\det(\Sigma)}}\exp\left[-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu)\right]&lt;/script&gt;
 
 &lt;p&gt;其中&lt;/p&gt;
 &lt;ul&gt;
-  &lt;li&gt;$x$是一个N*d的向量, 代表N组d维数据,&lt;/li&gt;
-  &lt;li&gt;$\mu$是一个1*d 的向量, 代表每维的数学期望,&lt;/li&gt;
-  &lt;li&gt;$\Sigma$是一个d*d的矩阵, 代表模型的协方差矩阵&lt;/li&gt;
+  &lt;li&gt;$x$是一个d×N的向量, 代表N组d维数据,&lt;/li&gt;
+  &lt;li&gt;$\mu$是一个d×1 的向量, 代表每维的数学期望,&lt;/li&gt;
+  &lt;li&gt;$\Sigma$是一个d×d的矩阵, 代表模型的协方差矩阵&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&quot;12-jensen不等式&quot;&gt;1.2 Jensen不等式&lt;/h3&gt;
 
 &lt;p&gt;这里给出随机分析里面Jensen’s不等式的结论。在EM算法的求解过程中，Jensen不等式可以简化目标函数。&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;定理.&lt;/strong&gt;  对一个凸函数$f$和随机变量$x$:
-\begin{equation}
-f\left[E(x)\right] \leq E\left[f(x)\right]
-\end{equation}&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;定理.&lt;/strong&gt;  对一个凸函数$f$和随机变量$x$:&lt;/p&gt;
 
-&lt;figure align=&quot;center&quot; style=&quot;width: 70%;margin:auto&quot;&gt;
-  &lt;img width=&quot;60%&quot; height=&quot;auto&quot; src=&quot;/static/posts/convex.png&quot; /&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f\left[E(x)\right] \leq E\left[f(x)\right]&lt;/script&gt;
+
+&lt;figure align=&quot;center&quot; style=&quot;width: 75%;margin:auto&quot;&gt;
+  &lt;img width=&quot;55%&quot; height=&quot;auto&quot; src=&quot;/static/posts/convex.png&quot; /&gt;
   &lt;figcaption&gt;Fig.1 - 凸函数例子，设定$x$在a和b间均匀分布，$f(x)$的期望总比$f[E(x)]$大。&lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;p&gt;&lt;br /&gt;
-&lt;strong&gt;定理.&lt;/strong&gt;  对一个凹函数$f$和随机变量$x$:
-\begin{equation}
-f\left[E(x)\right] \geq E\left[f(x)\right]
-\end{equation}&lt;/p&gt;
+&lt;strong&gt;定理.&lt;/strong&gt;  对一个凹函数$f$和随机变量$x$:&lt;/p&gt;
 
-&lt;figure align=&quot;center&quot; style=&quot;width: 70%;margin:auto&quot;&gt;
-  &lt;img width=&quot;60%&quot; height=&quot;auto&quot; src=&quot;/static/posts/concave.png&quot; /&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f\left[E(x)\right] \geq E\left[f(x)\right]&lt;/script&gt;
+
+&lt;figure align=&quot;center&quot; style=&quot;width: 75%;margin:auto&quot;&gt;
+  &lt;img width=&quot;55%&quot; height=&quot;auto&quot; src=&quot;/static/posts/concave.png&quot; /&gt;
   &lt;figcaption&gt;Fig.2 - 凹函数例子，设定$x$在a和b间均匀分布，$f(x)$的期望总比$f[E(x)]$小。&lt;/figcaption&gt;
 &lt;/figure&gt;
 
@@ -99,7 +94,7 @@ f\left[E(x)\right] \geq E\left[f(x)\right]
 下面是从 《The Matrix Cookbook》一书中摘录在推导过程中可能会用到的公式。&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
+\begin{aligned}
 \frac{\partial x^Ta}{\partial x} &amp;= \frac{\partial a^Tx}{\partial x} = a\\
 \frac{\partial x^TBx}{\partial x} &amp;=  (B + B^T )x\\
 \frac{\partial (x -s)^TW(x-s)}{\partial x} &amp;= -2W(x-s), \text{ (W是对称矩阵)} \\
@@ -108,12 +103,12 @@ f\left[E(x)\right] \geq E\left[f(x)\right]
 \frac{\partial \ln \det(X)}{\partial X} &amp;= (X^{-1})^T\\
 \frac{\partial \det(X^{-1})}{\partial X} &amp;= -\det(X^{-1})(X^{-1})^T\\
 \frac{\partial \ln \det(X)}{\partial X^{-1}} 
-&amp;= \frac{\partial \ln \det(X)}{\partial \det(X)}\frac{\partial \det(X)}{\partial X^{-1}} \nonumber\\
-&amp;= \frac{1}{\det(X)}\left[-\det(X)X^T\right]\nonumber\\
+&amp;= \frac{\partial \ln \det(X)}{\partial \det(X)}\frac{\partial \det(X)}{\partial X^{-1}} \\
+&amp;= \frac{1}{\det(X)}\left[-\det(X)X^T\right]\\
 &amp;= -X^T\\
 \frac{\partial Tr(AXB)}{\partial X} &amp;= A^TB^T\\
-\frac{\partial Tr(AX^-1B)}{\partial X} &amp;= -(X^{-1}BAX^{-1})^T\\
-\end{align} %]]&gt;&lt;/script&gt;
+\frac{\partial Tr(AX^-1B)}{\partial X} &amp;= -(X^{-1}BAX^{-1})^T
+\end{aligned} %]]&gt;&lt;/script&gt;
 
 &lt;h2 id=&quot;2高斯混合模型和em算法&quot;&gt;2.高斯混合模型和EM算法&lt;/h2&gt;
 
@@ -121,10 +116,9 @@ f\left[E(x)\right] \geq E\left[f(x)\right]
 
 &lt;p&gt;现实采集的数据是比较复杂的，通常无法只用一个高斯分布拟合，而是可以看作多个随机过程的混合。可定义高斯混合模型是$K$个高斯分布的组合，用以拟合复杂数据。&lt;/p&gt;
 
-&lt;p&gt;假设有一个数据集，包含了$N$个相互独立的数据：$x = {x_1, x_2 …x_i… x_N}$, 这些数据看起来有$K$个峰，这样的数据集可用以下定义的高斯混合模型拟合：
-\begin{equation}
-p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k) = \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\left[-\frac{(x-\mu_k)^2}{2\sigma_k^2}\right]
-\end{equation}&lt;/p&gt;
+&lt;p&gt;假设有一个数据集，包含了$N$个相互独立的数据：$x = {x_1, x_2 …x_i… x_N}$, 这些数据看起来有$K$个峰，这样的数据集可用以下定义的高斯混合模型拟合：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k) = \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\left[-\frac{(x-\mu_k)^2}{2\sigma_k^2}\right]&lt;/script&gt;
 
 &lt;table style=&quot;width: 600px; height: 200px; margin:auto&quot;&gt;
     &lt;tr&gt;
@@ -148,15 +142,14 @@ p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k) = \sum_{k}^{}\
 如果每一个数据点$x_i$都是d维的, 这些数据$x$如上图看起来分散在$K$个聚类，这种数据集可以用多变量高斯混合模型拟合。&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
-p(x|\Theta) &amp;= \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \Sigma_k) \nonumber \\
+\begin{aligned}
+p(x|\Theta) &amp;= \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \Sigma_k)  \\
 &amp;= \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x-\mu_k)^T\Sigma_{k}^{-1}(x-\mu_k)\right]
-\end{align} %]]&gt;&lt;/script&gt;
+\end{aligned} %]]&gt;&lt;/script&gt;
 
-&lt;p&gt;其中$\Theta$ 代表全体高斯模型参数, $\alpha_k$ 是第$k$个高斯模型的先验概率, 各个高斯模型的先验概率加起来等于1。
-\begin{equation}
-\sum_{k}\alpha_k = 1
-\end{equation}&lt;/p&gt;
+&lt;p&gt;其中$\Theta$ 代表全体高斯模型参数, $\alpha_k$ 是第$k$个高斯模型的先验概率, 各个高斯模型的先验概率加起来等于1。&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sum_{k}\alpha_k = 1&lt;/script&gt;
 
 &lt;h3 id=&quot;22-em算法&quot;&gt;2.2 EM算法&lt;/h3&gt;
 &lt;p&gt;EM 算法是一种迭代的算法，算法解决的问题可如下表述：&lt;/p&gt;
@@ -164,81 +157,75 @@ p(x|\Theta) &amp;= \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \Sigma_k) \nonumber
   &lt;li&gt;采集到一组包含$N$个独立数据的数据集$x$。&lt;/li&gt;
   &lt;li&gt;预先知道、或者根据数据特点估计可以用$K$个高斯分布混合进行数据拟合。&lt;/li&gt;
   &lt;li&gt;目标任务是估计出高斯混合模型的参数：$K$组($\alpha_{k}$,
-$\mu_k$, $\sigma_k$), or ($\alpha_{k}$, $\mu_k$, $\Sigma_{k}$).&lt;/li&gt;
+$\mu_k$, $\sigma_k$), 或 ($\alpha_{k}$, $\mu_k$, $\Sigma_{k}$).&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;strong&gt;似然函数:&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;对于相互独立的一组数据, 最大似然估计(MLE)是最直接的估计方法。$N$个数据点的总概率可以表述成每个数据点的概率之乘积，这被称作似然函数
-\begin{equation}
-p(x|\Theta) = \prod_{i}p(x_i|\Theta)
-\end{equation}&lt;/p&gt;
+&lt;p&gt;对于相互独立的一组数据, 最大似然估计(MLE)是最直接的估计方法。$N$个数据点的总概率可以表述成每个数据点的概率之乘积，这被称作似然函数&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(x|\Theta) = \prod_{i}p(x_i|\Theta)&lt;/script&gt;
 
 &lt;p&gt;最大似然估计通过求似然函数的极大值，来估计参数$\Theta$。&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Theta = \mathop{\arg\max}_{\Theta} \prod_{i}p(x_i|\Theta)&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Theta = \argmax_{\Theta} \prod_{i}p(x_i|\Theta)&lt;/script&gt;
 
-&lt;p&gt;对高斯混合模型使用最大似然估计，求得的似然函数是比较的复杂的，单变量和多变量GMM似然函数结果如下，可以看到多变量GMM似然函数涉及多个矩阵的求逆和乘积等运算。所以要准确估计出$K$组高斯模型的参数，是很难的。
-\begin{equation}
-p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{N}(x_i| \mu_k, \sigma_k) \right]
-\end{equation}
-\begin{equation}
-p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{N}(x_i| \mu_k, \Sigma_k)\right]
-\end{equation}&lt;/p&gt;
+&lt;p&gt;对高斯混合模型使用最大似然估计，求得的似然函数是比较的复杂的，单变量和多变量GMM似然函数结果如下，可以看到多变量GMM似然函数涉及多个矩阵的求逆和乘积等运算。所以要准确估计出$K$组高斯模型的参数，是很难的。&lt;/p&gt;
 
-&lt;p&gt;GMM 似然函数首先可以通过求对数进行简化，把乘积变成和。和的形式更方便求导和求极值。
-\begin{equation}
-L(x|\Theta) = \sum_{i}\ln\left[p(x_{i}|\mu_k, \sigma_k) \right] = \sum_{i}\ln\left[\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k) \right]
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{N}(x_i| \mu_k, \sigma_k) \right]&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{N}(x_i| \mu_k, \Sigma_k)\right]&lt;/script&gt;
+
+&lt;p&gt;GMM 似然函数首先可以通过求对数进行简化，把乘积变成和。和的形式更方便求导和求极值。&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;L(x|\Theta) = \sum_{i}\ln\left[p(x_{i}|\mu_k, \sigma_k) \right] = \sum_{i}\ln\left[\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k) \right]&lt;/script&gt;
 
 &lt;p&gt;&lt;strong&gt;隐参数:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;是否对前面的对数似然函数进行求极大值，就可以求出目标的$K$组高斯模型参数了呢？我看到公式里面有两重求和，其中一重是在对数函数里面，直接求极值并不可行。&lt;/p&gt;
 
 &lt;p&gt;EM算法提出了用迭代逼近的方法，来对最优的高斯混合模型进行逼近。为了帮助迭代算法的过程，EM算法提出了隐参数$z$, 每次迭代，先使用上一次的参数计算隐参数$z$的分布，然后使用$z$更新似然函数，对目标参数进行估计。
-在GMM估计问题中，EM算法所设定的隐参量$z$ 一般属于${1 ,2 … k … K}$. 用于描述&lt;strong&gt;计算出GMM中$K$组高斯模型的参数后，某个数据点$x_i$属于第$z$个高斯模型的概率&lt;/strong&gt;:
-\begin{equation}
-p(z|x_{i}, \mu_k, \sigma_k)
-\end{equation}&lt;/p&gt;
+在GMM估计问题中，EM算法所设定的隐参量$z$ 一般属于${1 ,2 … k … K}$. 用于描述&lt;strong&gt;计算出GMM中$K$组高斯模型的参数后，某个数据点$x_i$属于第$z$个高斯模型的概率&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(z|x_{i}, \mu_k, \sigma_k)&lt;/script&gt;
 
 &lt;p&gt;把隐参量$x$引入到第$i$个数据的概率估计中：&lt;/p&gt;
 
-&lt;p&gt;\begin{equation}
-p(x_{i}|\Theta) = \sum_{k} p(x_{i}|z=k,\mu_k, \sigma_k) p(z=k) &lt;br /&gt;
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(x_{i}|\Theta) = \sum_{k} p(x_{i}|z=k,\mu_k, \sigma_k) p(z=k) \\&lt;/script&gt;
 
-&lt;p&gt;跟高斯混合分布$p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k)$作对比, 发现$\alpha_k$就是$z$的先验分布$p(z=k)$.
-\begin{equation}
-p(z=k) = \alpha_k
-\end{equation}
-而在$z=k$条件下的$x$条件概率就是第$k$个高斯模型.
-\begin{equation}
-p(x_{i}|z=k,\mu_k, \sigma_k)  = \textit{N}(x_i; \mu_k, \sigma_k)
-\end{equation}&lt;/p&gt;
+&lt;p&gt;跟高斯混合分布 
+$p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k)$ 作对比, 
+发现$\alpha_k$就是$z$的先验分布$p(z=k)$.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(z=k) = \alpha_k&lt;/script&gt;
+
+&lt;p&gt;而在$z=k$条件下的$x$条件概率就是第$k$个高斯模型.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(x_{i}|z=k,\mu_k, \sigma_k)  = \textit{N}(x_i; \mu_k, \sigma_k)&lt;/script&gt;
 
 &lt;p&gt;现在可以把隐参量代入到对数似然函数中。可以加入冗余项：隐参数在数据$x_i$和高斯参数下的后验概率，从而引入Jensen不等式来简化似然函数。&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
-L(x|\Theta) &amp;= \sum_{i}\ln\left[p(x_{i}, z|\mu_k, \sigma_k) \right] \nonumber \\
-&amp;= \sum_{i}\ln \sum_{k}  p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)  \nonumber \\
+\begin{aligned}
+L(x|\Theta) &amp;= \sum_{i}\ln\left[p(x_{i}, z|\mu_k, \sigma_k) \right]  \\
+&amp;= \sum_{i}\ln \sum_{k}  p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)   \\
 &amp;= \sum_{i}\ln \sum_{k} p(z=k|x_{i},\mu_k, \sigma_k) \frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z=k|x_{i},\mu_k, \sigma_k)} \\
-\end{align} %]]&gt;&lt;/script&gt;
+\end{aligned} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;&lt;strong&gt;似然函数简化:&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;下面通过Jensen不等式简化对数似然函数。
-\begin{equation}
-f\left[E(x)\right] \geq E\left[f(x)\right]
-\end{equation}&lt;/p&gt;
+&lt;p&gt;下面通过Jensen不等式简化对数似然函数。&lt;/p&gt;
 
-&lt;p&gt;对照Jensen不等式，让$u = \frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z|x_{i},\mu_k, \sigma_k)}$。
-\begin{equation}
-f(u) = \ln u
-\end{equation}
-\begin{equation}
-E(u) = \sum_{k} p(z|x_{i},\mu_k, \sigma_k) u
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f\left[E(x)\right] \geq E\left[f(x)\right]&lt;/script&gt;
+
+&lt;p&gt;对照Jensen不等式，让$u$指代 
+$\frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z|x_{i},\mu_k, \sigma_k)}$。&lt;/p&gt;
+
+&lt;p&gt;可以得到&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f(u) = \ln u&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;E(u) = \sum_{k} p(z|x_{i},\mu_k, \sigma_k) u&lt;/script&gt;
 
 &lt;p&gt;得到&lt;/p&gt;
 
@@ -249,28 +236,26 @@ E(u) = \sum_{k} p(z|x_{i},\mu_k, \sigma_k) u
 &lt;p&gt;我们可以根据贝叶斯准则进行推导其中的后验概率&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
-p(z=k|x_{i},\mu_k, \sigma_k) &amp;= \frac{ p(x_{i}|z=k,\mu_k, \sigma_k)}{ \sum_{k} p(x_{i}|z=k, \mu_k, \sigma_k)} \nonumber \\
+\begin{aligned}
+p(z=k|x_{i},\mu_k, \sigma_k) &amp;= \frac{ p(x_{i}|z=k,\mu_k, \sigma_k)}{ \sum_{k} p(x_{i}|z=k, \mu_k, \sigma_k)}  \\
 &amp;=  \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)} 
-\end{align} %]]&gt;&lt;/script&gt;
+\end{aligned} %]]&gt;&lt;/script&gt;
 
-&lt;p&gt;定义
-\begin{equation}
-\omega_{i,k} = p(z=k|x_{i},\mu_k, \sigma_k) = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)} 
-\end{equation}&lt;/p&gt;
+&lt;p&gt;定义&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\omega_{i,k} = p(z=k|x_{i},\mu_k, \sigma_k) = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}&lt;/script&gt;
 
 &lt;p&gt;那么&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
+\begin{aligned}
 L(x|\Theta) &amp;= \sum_{i}\ln \sum_{k} \omega_{i,k} \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}}  \\
 &amp;\geq \sum_{i} \sum_{k} \omega_{i,k} \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}} 
-\end{align} %]]&gt;&lt;/script&gt;
+\end{aligned} %]]&gt;&lt;/script&gt;
 
-&lt;p&gt;不等式的右侧给似然函数提供了一个下界。EM算法提出迭代逼近的方法，不断提高下界，从而逼近似然函数。每次迭代都以下面这个目标函数作为优化目标：
-\begin{equation}
-Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t} 
-\end{equation}&lt;/p&gt;
+&lt;p&gt;不等式的右侧给似然函数提供了一个下界。EM算法提出迭代逼近的方法，不断提高下界，从而逼近似然函数。每次迭代都以下面这个目标函数作为优化目标：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}&lt;/script&gt;
 
 &lt;p&gt;这个式子表示，在第$t$次迭代后，获得参数$\Theta^t$，然后就可以计算隐参数概率$\omega_{i,k}^t$。 将隐参数代回$Q(\Theta,\Theta^{t})$, 进行最大似然优化，即可求出更优的参数$\Theta^{t+1}$。&lt;/p&gt;
 
@@ -282,168 +267,153 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit
     &lt;p&gt;经过$t$轮迭代,已获得一组目标参数$\Theta^t$临时的值。&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;基于当前的参数$\Theta^t$，用高斯混合模型计算隐参数概率 $\omega_{i,k}^t$ by applying $\Theta^t$。然后将隐参数概率代入对数似然函数，得到似然函数数学期望表达式。
+    &lt;p&gt;基于当前的参数$\Theta^t$，用高斯混合模型计算隐参数概率 $\omega_{i,k}^t$。然后将隐参数概率代入对数似然函数，得到似然函数数学期望表达式。
 这一步叫&lt;strong&gt;expectation step&lt;/strong&gt;.&lt;/p&gt;
 
     &lt;script type=&quot;math/tex; mode=display&quot;&gt;\omega_{i,k}^t = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}&lt;/script&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;如前文使用Jensen推导得出，得到每次更新了隐参数$\omega_{i,k}^t$后的目标函数是：
-\begin{equation}
-Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t} 
-\end{equation}&lt;/p&gt;
+    &lt;p&gt;如前文使用Jensen推导得出，得到每次更新了隐参数$\omega_{i,k}^t$后的目标函数是：&lt;/p&gt;
   &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}&lt;/script&gt;
+
+&lt;ul&gt;
   &lt;li&gt;
     &lt;p&gt;利用$\omega_{i,k}$当前值, 最大化目标函数，从而得出新一组GMM参数 $\Theta^{t+1}$.  这一步叫作&lt;strong&gt;maximization step&lt;/strong&gt;。&lt;/p&gt;
 
-    &lt;script type=&quot;math/tex; mode=display&quot;&gt;\Theta^{t+1} = \mathop{\arg\max}_{\Theta} \sum_{i}\sum_{k} \ln \omega_{i,k}^t \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}&lt;/script&gt;
+    &lt;script type=&quot;math/tex; mode=display&quot;&gt;\Theta^{t+1} = \argmax_{\Theta} \sum_{i}\sum_{k} \ln \omega_{i,k}^t \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}&lt;/script&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;3em算法解单变量gmm&quot;&gt;3.EM算法解单变量GMM&lt;/h2&gt;
 
-&lt;p&gt;单变量 GMM使用EM算法时，完整的目标函数为 
-\begin{equation}
-Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega_{i,k}^t\sqrt{2\pi\sigma_k^2}}\exp\left[-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right]
-\end{equation}&lt;/p&gt;
+&lt;p&gt;单变量 GMM使用EM算法时，完整的目标函数为&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega_{i,k}^t\sqrt{2\pi\sigma_k^2}}\exp\left[-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right]&lt;/script&gt;
 
 &lt;h3 id=&quot;31-e-step&quot;&gt;3.1 E-Step:&lt;/h3&gt;
 
-&lt;p&gt;E-step目标就是计算隐参数的值， 也就是对每一个数据点，分别计算其属于每一种高斯模型的概率。 所以隐参量$\omega$是一个N*K矩阵.&lt;/p&gt;
+&lt;p&gt;E-step目标就是计算隐参数的值， 也就是对每一个数据点，分别计算其属于每一种高斯模型的概率。 所以隐参量$\omega$是一个N×K矩阵.&lt;/p&gt;
 
 &lt;p&gt;每一次迭代后 $\omega_{i,k}$都可以用最新的高斯参数$(\alpha_k, \mu_k, \sigma_k)$进行更新。&lt;/p&gt;
 
-&lt;p&gt;\begin{equation}
-\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)} 
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}&lt;/script&gt;
 
-&lt;p&gt;E-step 就可以把更新的$\omega$代入似然函数，得到目标函数的最新表达。该目标函数展开如下：
-\begin{equation}
-Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)
-\end{equation}&lt;/p&gt;
+&lt;p&gt;E-step 就可以把更新的$\omega$代入似然函数，得到目标函数的最新表达。该目标函数展开如下：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)&lt;/script&gt;
 
 &lt;h3 id=&quot;32-m-step&quot;&gt;3.2 M-Step:&lt;/h3&gt;
 
 &lt;p&gt;M-step的任务就是最大化目标函数，从而求出高斯参数的估计。
-\begin{equation}
-\Theta := \mathop{\arg\max}_{\Theta} Q(\Theta,\Theta^{t}) 
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex&quot;&gt;\Theta := \argmax_{\Theta} Q(\Theta,\Theta^{t})&lt;/script&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;更新$\alpha_k:$&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;在高斯混合模型定义中，$\alpha_k$受限于$\sum_{k}\alpha_k =1$。所以$\alpha_k$的估计是一个受限优化问题。&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{align}
-\alpha_k^{t+1} := \mathop{\arg\max}_{\alpha_k}{ \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}\\
-\text{subject to}  \sum_{k}\alpha_k =1 \nonumber
-\end{align}&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{gathered}
+\alpha_k^{t+1} := \argmax_{\alpha_k}{ \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}\\
+\text{subject to}  \sum_{k}\alpha_k =1 
+\end{gathered}&lt;/script&gt;
 
-&lt;p&gt;这种问题通常用拉格朗日乘子法计算。下面构造拉格朗日乘子：
-\begin{equation}
-\mathcal{L}(\alpha_k, \lambda) = { \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}+ \lambda\left[\sum_{k}\alpha_k -1\right]
-\end{equation}&lt;/p&gt;
+&lt;p&gt;这种问题通常用拉格朗日乘子法计算。下面构造拉格朗日乘子：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathcal{L}(\alpha_k, \lambda) = { \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}+ \lambda\left[\sum_{k}\alpha_k -1\right]&lt;/script&gt;
 
 &lt;p&gt;对拉格朗日方程求极值，也就是对$\alpha_k$求导数为0处，该点就是我们要更新的$\alpha_{k}^{t+1}$值。&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
+\begin{aligned}
 \frac{\partial \mathcal{L}(\alpha_k, \lambda) }{\partial \alpha_k} &amp;= { \sum_{i}\omega_{i,k}^t\frac{1}{\alpha_k}}+ \lambda = 0 \\
 \Rightarrow  \alpha_k &amp;= -\frac{\sum_{i}\omega_{i,k}^t}{\lambda}
-\end{align} %]]&gt;&lt;/script&gt;
+\end{aligned} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;将所有$k$项累加, 就可以求得$\lambda$.&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
+\begin{aligned}
 \sum_{k}\alpha_k &amp;= -\frac{\sum_{i}\sum_{k}\omega_{i,k}^t}{\lambda} \\
 \Rightarrow 1 &amp;= -\sum_{i}\frac{1}{\lambda} = -\frac{N}{\lambda}  \\
 \Rightarrow \lambda &amp;= -N  
-\end{align} %]]&gt;&lt;/script&gt;
+\end{aligned} %]]&gt;&lt;/script&gt;
 
-&lt;p&gt;于是利用地$t$次迭代的隐参量，我们就得到了$\alpha_k$在$t+1$次迭代的更新方程：
-\begin{equation}
-\alpha_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t}{N} 
-\end{equation}&lt;/p&gt;
+&lt;p&gt;于是利用地$t$次迭代的隐参量，我们就得到了$\alpha_k$在$t+1$次迭代的更新方程：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\alpha_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t}{N}&lt;/script&gt;
 
 &lt;p&gt;&lt;strong&gt;更新$\mu_k:$&lt;/strong&gt; &lt;/p&gt;
 
-&lt;p&gt;$\mu_k$并没有类似$\alpha_k$的限制条件，可以直接把目标函数对$\mu_k$求导数：
-\begin{equation}
-\mu_k^{t+1} :=  \mathop{\arg\max}_{\mu_k}   Q(\Theta,\Theta^{t})
-\end{equation}&lt;/p&gt;
+&lt;p&gt;$\mu_k$并没有类似$\alpha_k$的限制条件，可以直接把目标函数对$\mu_k$求导数：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mu_k^{t+1} :=  \argmax_{\mu_k}   Q(\Theta,\Theta^{t})&lt;/script&gt;
 
 &lt;p&gt;让$\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k}=0$, 得到
-\begin{equation}
-\frac{\partial \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)}{\partial \mu_k} =  0
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex&quot;&gt;\frac{\partial \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)}{\partial \mu_k} =  0&lt;/script&gt;&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{align}
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{aligned}
 \sum_{i}\omega_{i,k}^t\frac{x_i-\mu_k}{\sigma_k^2} = 0\\
 \Rightarrow \sum_{i}\omega_{i,k}^t\mu_k = \sum_{i}\omega_{i,k}^tx_i \\
 \Rightarrow \mu_k\sum_{i}\omega_{i,k}^t = \sum_{i}\omega_{i,k}^tx_i 
-\end{align}&lt;/script&gt;
+\end{aligned}&lt;/script&gt;
 
-&lt;p&gt;所以在$t+1$次迭代， $\mu_k$就用全部$x$的加权平均来求得，权值正是$x_i$属于第$k$个模型产生的概率$\omega_{i,k}^t$。
-\begin{equation}
-\mu_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^tx_i}{\sum_{i}\omega_{i,k}^t} 
-\end{equation}&lt;/p&gt;
+&lt;p&gt;所以在$t+1$次迭代， $\mu_k$就用全部$x$的加权平均来求得，权值正是$x_i$属于第$k$个模型产生的概率$\omega_{i,k}^t$。&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mu_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^tx_i}{\sum_{i}\omega_{i,k}^t}&lt;/script&gt;
 
 &lt;p&gt;&lt;strong&gt;更新$\sigma_k:$&lt;/strong&gt; &lt;/p&gt;
 
-&lt;p&gt;类似地, 将目标函数对$\sigma_k$求极大值：
-\begin{equation}
-\sigma_k^{t+1} :=  \mathop{\arg\max}_{\sigma_k}   Q(\Theta,\Theta^{t})
-\end{equation}&lt;/p&gt;
+&lt;p&gt;类似地, 将目标函数对$\sigma_k$求极大值：&lt;/p&gt;
 
-&lt;p&gt;让导数为0：
-\begin{equation}
-\frac{\partial Q(\Theta,\Theta^{t})}{\partial \sigma_k} = \frac{\partial \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)}{\partial \sigma_k}=0
-\end{equation}.&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sigma_k^{t+1} :=  \argmax_{\sigma_k}   Q(\Theta,\Theta^{t})&lt;/script&gt;
+
+&lt;p&gt;让导数为0：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\partial Q(\Theta,\Theta^{t})}{\partial \sigma_k} = \frac{\partial \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)}{\partial \sigma_k}=0&lt;/script&gt;
 
 &lt;p&gt;得到&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
+\begin{aligned}
  \sum_{i}\omega_{i,k}\left[-\frac{1}{\sigma_k}+\frac{(x_i-\mu_k)^2}{\sigma_k^3}\right]&amp;= 0\\
 \Rightarrow \sum_{i}\omega_{i,k}\sigma_k^2 &amp;= \sum_{i}\omega_{i,k}(x_i-\mu_k)^2 \\
 \Rightarrow \sigma_k^2 \sum_{i}\omega_{i,k} &amp;= \sum_{i}\omega_{i,k}(x_i-\mu_k)^2 \\
-\end{align} %]]&gt;&lt;/script&gt;
+\end{aligned} %]]&gt;&lt;/script&gt;
 
-&lt;p&gt;高斯模型里面使用的都是$\sigma_k^2$,所以就不需要求平方根了。$\sigma_k^2$的更新方程如下，依赖于更新的$\mu_k$。 所以一般都是先把$\mu_k^{t+1}$算出来，然后再更新$\sigma_k^2$。
-\begin{equation}
-(\sigma_k^2)^{t+1} = \frac{\sum_{i}\omega_{i,k}(x_i-\mu_k^{t+1})^2 }{\sum_{i}\omega_{i,k}} 
-\end{equation}&lt;/p&gt;
+&lt;p&gt;高斯模型里面使用的都是$\sigma_k^2$,所以就不需要求平方根了。$\sigma_k^2$的更新方程如下，依赖于更新的$\mu_k$。 所以一般都是先把$\mu_k^{t+1}$算出来，然后再更新$\sigma_k^2$。&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;(\sigma_k^2)^{t+1} = \frac{\sum_{i}\omega_{i,k}(x_i-\mu_k^{t+1})^2 }{\sum_{i}\omega_{i,k}}&lt;/script&gt;
 
 &lt;h2 id=&quot;4em算法解多变量gmm&quot;&gt;4.EM算法解多变量GMM&lt;/h2&gt;
 
-&lt;p&gt;同样的，我们可以得到每次迭代的目标函数如下：
-\begin{equation}
-Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega_{i,k}^t\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]
-\end{equation}&lt;/p&gt;
+&lt;p&gt;同样的，我们可以得到每次迭代的目标函数如下：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega_{i,k}^t\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]&lt;/script&gt;
 
 &lt;p&gt;其中&lt;/p&gt;
 &lt;ul&gt;
-  &lt;li&gt;$x_i$是1*d的向量,&lt;/li&gt;
+  &lt;li&gt;$x_i$是d×1的向量,&lt;/li&gt;
   &lt;li&gt;$\alpha_k$ 一个0和1间的值,&lt;/li&gt;
-  &lt;li&gt;$\mu_k$是1*d的向量,&lt;/li&gt;
-  &lt;li&gt;$\Sigma_k$是d*d的矩阵,&lt;/li&gt;
-  &lt;li&gt;$\omega$是N*K的矩阵。&lt;/li&gt;
+  &lt;li&gt;$\mu_k$是d×1的向量,&lt;/li&gt;
+  &lt;li&gt;$\Sigma_k$是d×d的矩阵,&lt;/li&gt;
+  &lt;li&gt;$\omega$是N×K的矩阵。&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&quot;41-e-step&quot;&gt;4.1 E-Step:&lt;/h3&gt;
 
-&lt;p&gt;跟单变量GMM一样，E-step计算隐参数，但是需要用多维高斯分布，利用了多维矩阵乘法和矩阵求逆，计算复杂度要大很多。
-\begin{equation}
-\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)} 
-\end{equation}&lt;/p&gt;
+&lt;p&gt;跟单变量GMM一样，E-step计算隐参数，但是需要用多维高斯分布，利用了多维矩阵乘法和矩阵求逆，计算复杂度要大很多。&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}&lt;/script&gt;
 
 &lt;p&gt;目标函数更新如下：&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
-&amp;Q(\Theta,\Theta^{t})\nonumber \\
+\begin{aligned}
+&amp;Q(\Theta,\Theta^{t}) \\
 &amp;= \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \frac{d}{2}\ln \sqrt{(2\pi)^d} -\frac{1}{2}\ln\det(\Sigma_k)-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right) 
-\end{align} %]]&gt;&lt;/script&gt;
+\end{aligned} %]]&gt;&lt;/script&gt;
 
 &lt;h3 id=&quot;42-m-step&quot;&gt;4.2 M-Step:&lt;/h3&gt;
 
@@ -451,69 +421,53 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega
 
 &lt;p&gt;多变量GMM下，$\alpha_k$的更新跟单变量 GMM一样。&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{gather}
-\alpha_k^{t+1} := \mathop{\arg\max}_{\alpha_k}{ \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}\\
-\text{subject to}  \sum_{k}\alpha_k =1 \nonumber
-\end{gather}&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{gathered}
+\alpha_k^{t+1} := \argmax_{\alpha_k}{ \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}\\
+\text{subject to}  \sum_{k}\alpha_k =1 
+\end{gathered}&lt;/script&gt;
 
-&lt;p&gt;得到完全一样的更新方程：
-\begin{equation}
-\alpha_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t}{N} 
-\end{equation}&lt;/p&gt;
+&lt;p&gt;得到完全一样的更新方程：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\alpha_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t}{N}&lt;/script&gt;
 
 &lt;p&gt;&lt;strong&gt;更新$\mu_k:$&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;\begin{equation}
-\mu_k^{t+1} :=  \mathop{\arg\max}_{\mu_k}   Q(\Theta,\Theta^{t})
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mu_k^{t+1} :=  \argmax_{\mu_k}   Q(\Theta,\Theta^{t})&lt;/script&gt;
 
 &lt;p&gt;$Q(\Theta,\Theta^{t})$对$\mu_k$求导，得到&lt;/p&gt;
 
-&lt;p&gt;\begin{eqnarray}
-\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k} = \sum_{i}\omega_{i,k}^t\frac{\partial \left[-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]}{\partial \mu_k}  = 0&lt;br /&gt;
-\end{eqnarray}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k} = \sum_{i}\omega_{i,k}^t\frac{\partial \left[-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]}{\partial \mu_k}  = 0\\&lt;/script&gt;
 
 &lt;p&gt;实数协方差矩阵$\Sigma_{k}$对称的, 其逆矩阵也是对称的。 于是我们可以利用第一部分列出的公式$\frac{\partial (x -s)^TW(x-s)}{\partial x} = -2W(x-s)$求偏导数.&lt;/p&gt;
 
-&lt;p&gt;\begin{equation}
-\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k} = 
- \sum_{i}\omega_{i,k}^t \Sigma_{k}^{-1}\left(x_i - \mu_k\right) =0
-\end{equation}
-\begin{equation}
-\Rightarrow \sum_{i}\omega_{i,k}^t x_i= \mu_k\sum_{i}\omega_{i,k}^t&lt;br /&gt;
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k} = 
+ \sum_{i}\omega_{i,k}^t \Sigma_{k}^{-1}\left(x_i - \mu_k\right) =0&lt;/script&gt;
 
-&lt;p&gt;所以$\mu_k$的更新方程同样是$x$的加权平均，只是这时候$\mu_k$ is a 1*d 向量。
-\begin{equation}
- \mu_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t x_i}{\sum_{i}\omega_{i,k}^t} 
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Rightarrow \sum_{i}\omega_{i,k}^t x_i= \mu_k\sum_{i}\omega_{i,k}^t&lt;/script&gt;
+
+&lt;p&gt;所以$\mu_k$的更新方程同样是$x$的加权平均，只是这时候$\mu_k$ is a d×1 向量。
+&lt;script type=&quot;math/tex&quot;&gt;\mu_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t x_i}{\sum_{i}\omega_{i,k}^t}&lt;/script&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;更新$\Sigma_k:$&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;\begin{equation}
-\Sigma_k^{t+1} :=  \mathop{\arg\max}_{\Sigma_k}   Q(\Theta,\Theta^{t})
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Sigma_k^{t+1} :=  \argmax_{\Sigma_k}   Q(\Theta,\Theta^{t})&lt;/script&gt;
 
 &lt;p&gt;让导数$\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} =0$, 得到&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
-\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} &amp;= \sum_{i}\omega_{i,k}^t\frac{\partial \left[  -\frac{1}{2}\ln\det(\Sigma_k)-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]}{\partial  \Sigma_k^{-1}}  \nonumber\\
+\begin{aligned}
+\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} &amp;= \sum_{i}\omega_{i,k}^t\frac{\partial \left[  -\frac{1}{2}\ln\det(\Sigma_k)-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]}{\partial  \Sigma_k^{-1}}  \\
  &amp;= -\frac{1}{2} \sum_{i}\omega_{i,k}^t \left[\frac{\partial \ln\det(\Sigma_k)}{\partial  \Sigma_k^{-1}}+\frac{\partial (x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)}{\partial  \Sigma_k^{-1}} \right] \\
- &amp;= 0 \nonumber
-\end{align} %]]&gt;&lt;/script&gt;
+ &amp;= 0 
+\end{aligned} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;协方差矩阵$\Sigma_k$是对称的,可以利用第一部分的矩阵求导公式 $\frac{\partial \ln \det(X)}{\partial X^{-1}} =-X^T $ and $\frac{\partial a^TXa}{\partial X} = aa^T$，求得极大值$ Q(\Theta,\Theta^{t})$.&lt;/p&gt;
 
-&lt;p&gt;\begin{equation}
-\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} =   \frac{1}{2}\sum_{i}\omega_{i,k}^t \left[\Sigma_k - (x_i-\mu_k)(x_i-\mu_k)^T\right] = 0&lt;br /&gt;
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} =   \frac{1}{2}\sum_{i}\omega_{i,k}^t \left[\Sigma_k - (x_i-\mu_k)(x_i-\mu_k)^T\right] = 0&lt;/script&gt;
 
 &lt;p&gt;类似地, 我们可以得到$\Sigma_k$在第$t+1$次迭代的更新方程, 它依赖于$\mu_k$。所以我们需要先计算$\mu_k^{t+1}$，然后更新$\Sigma_k$&lt;/p&gt;
 
-&lt;p&gt;\begin{equation}
-\Sigma_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t (x_i-\mu_k^{t+1})(x_i-\mu_k^{t+1})^T }{\sum_{i}\omega_{i,k}^t} 
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Sigma_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t (x_i-\mu_k^{t+1})(x_i-\mu_k^{t+1})^T }{\sum_{i}\omega_{i,k}^t}&lt;/script&gt;
 
 &lt;h2 id=&quot;5总结&quot;&gt;5.总结&lt;/h2&gt;
 
@@ -525,38 +479,32 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega
     &lt;/tr&gt;
     &lt;tr&gt; 
 	&lt;th style=&quot;text-align:center&quot;&gt;初始化&lt;/th&gt;
-        &lt;td&gt;\begin{equation*} 
-		\alpha_{k}^0, \mu_k^0, \sigma_k^0
-		\end{equation*}&lt;/td&gt;
-        &lt;td&gt;\begin{equation*} 
-		\alpha_{k}^0, \mu_k^0, \Sigma_k^0 
-		\end{equation*} &lt;/td&gt;
+        &lt;td&gt;$$\alpha_{k}^0, \mu_k^0, \sigma_k^0$$&lt;/td&gt;
+        &lt;td&gt;$$\alpha_{k}^0, \mu_k^0, \Sigma_k^0$$&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
         &lt;th style=&quot;text-align:center&quot;&gt;E-Step&lt;/th&gt;
-        &lt;td&gt;\begin{equation*} 
+        &lt;td&gt;$$
 		\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)} 
-		\end{equation*} &lt;/td&gt;
-        &lt;td&gt;\begin{equation*} 
+		$$&lt;/td&gt;
+        &lt;td&gt;$$
 		\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)} 
-		\end{equation*} &lt;/td&gt;
+		$$&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
         &lt;th style=&quot;text-align:center&quot;&gt;M-Step&lt;/th&gt;
-        &lt;td&gt;\begin{equation*} 
+        &lt;td&gt;$$
 		\begin{aligned} 
 		\alpha_k^{t+1} &amp;amp;= \frac{\sum_{i}\omega_{i,k}^t}{N}\\ 
 		\mu_k^{t+1} &amp;amp;= \frac{\sum_{i}\omega_{i,k}^t x_i}{\sum_{i}\omega_{i,k}^t}\\
 		(\sigma_k^2)^{t+1} &amp;amp;= \frac{\sum_{i}\omega_{i,k}^t(x_i-\mu_k^{t+1})^2 }{\sum_{i}\omega_{i,k}^t}
 		\end{aligned} 
-		\end{equation*} &lt;/td&gt;
-        &lt;td&gt;\begin{equation*} 
-		\begin{aligned} 
+		$$&lt;/td&gt;
+        &lt;td&gt;$$\begin{aligned} 
 		\alpha_k^{t+1} &amp;amp;= \frac{\sum_{i}\omega_{i,k}^t}{N}\\ 
 		\mu_k^{t+1} &amp;amp;= \frac{\sum_{i}\omega_{i,k}^tx_i}{\sum_{i}\omega_{i,k}^t}\\
 		\Sigma_k^{t+1} &amp;amp;= \frac{\sum_{i}\omega_{i,k}^t (x_i-\mu_k^{t+1})(x_i-\mu_k^{t+1})^T }{\sum_{i}\omega_{i,k}^t} 
-		\end{aligned} 
-		\end{equation*} &lt;/td&gt;
+		\end{aligned}$$&lt;/td&gt;
     &lt;/tr&gt;
 &lt;/table&gt;
 
@@ -605,9 +553,7 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega
 &lt;p&gt;The Gaussian distribution is very widely used to fit random data. The
 probability density for a one-dimensional random variable $x$ follows:&lt;/p&gt;
 
-&lt;p&gt;\begin{equation}
-\textit{N}(x; \mu, \sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\textit{N}(x; \mu, \sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]&lt;/script&gt;
 
 &lt;p&gt;where&lt;/p&gt;
 &lt;ul&gt;
@@ -620,15 +566,14 @@ variance.&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;More generally, when the data set is a d-dimensional data, it can be fit by a multivariate Gaussian model. The probability density is:
-\begin{equation}
-\textit{N}(x; \mu, \Sigma) = \frac{1}{\sqrt{(2\pi)^d\det(\Sigma)}}\exp\left[-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu)\right]
-\end{equation}&lt;/p&gt;
+&lt;p&gt;More generally, when the data set is a d-dimensional data, it can be fit by a multivariate Gaussian model. The probability density is:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\textit{N}(x; \mu, \Sigma) = \frac{1}{\sqrt{(2\pi)^d\det(\Sigma)}}\exp\left[-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu)\right]&lt;/script&gt;
 
 &lt;p&gt;where&lt;/p&gt;
 &lt;ul&gt;
-  &lt;li&gt;$x$ is a N-by-d vector, representing N sets of d-dimensional random data,&lt;/li&gt;
-  &lt;li&gt;$\mu$ is a 1-by-d vector, representing the mean of each dimension,&lt;/li&gt;
+  &lt;li&gt;$x$ is a d-by-N vector, representing N sets of d-dimensional random data,&lt;/li&gt;
+  &lt;li&gt;$\mu$ is a d-by-1 vector, representing the mean of each dimension,&lt;/li&gt;
   &lt;li&gt;$\Sigma$ is a d-by-d matrix, representing the covariance matrix&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -636,10 +581,9 @@ variance.&lt;/p&gt;
 
 &lt;p&gt;Here statements of Jensen’s inequality in the context of probability theory. These would be used to simplify the target function in an EM process.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Theorem.&lt;/strong&gt;For convex function $f$ and a random variable $x$:
-\begin{equation}
-f\left[E(x)\right] \leq E\left[f(x)\right]
-\end{equation}&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Theorem.&lt;/strong&gt;For convex function $f$ and a random variable $x$:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f\left[E(x)\right] \leq E\left[f(x)\right]&lt;/script&gt;
 
 &lt;figure align=&quot;center&quot; style=&quot;width: 60%;margin:auto&quot;&gt;
   &lt;img width=&quot;70%&quot; height=&quot;70%&quot; src=&quot;/static/posts/convex.png&quot; /&gt;
@@ -647,10 +591,9 @@ f\left[E(x)\right] \leq E\left[f(x)\right]
 a and b. The expectation of $f(x)$ is always above $f[E(x)]$.&lt;/figcaption&gt;
 &lt;/figure&gt;
 &lt;p&gt;&lt;br /&gt;
-&lt;strong&gt;Theorem.&lt;/strong&gt; For concave function $f$ and a random variable $x$:
-\begin{equation}
-f\left[E(x)\right] \geq E\left[f(x)\right]
-\end{equation}&lt;/p&gt;
+&lt;strong&gt;Theorem.&lt;/strong&gt; For concave function $f$ and a random variable $x$:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f\left[E(x)\right] \geq E\left[f(x)\right]&lt;/script&gt;
 
 &lt;figure align=&quot;center&quot; style=&quot;width: 60%;margin:auto&quot;&gt;
   &lt;img width=&quot;70%&quot; height=&quot;70%&quot; src=&quot;/static/posts/concave.png&quot; /&gt;
@@ -665,7 +608,7 @@ some rules about derivatives of a matrix or a vector. Here are some
 useful equations cited from &lt;em&gt;The Matrix Cookbook&lt;/em&gt;.&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
+\begin{aligned}
 \frac{\partial x^Ta}{\partial x} &amp;= \frac{\partial a^Tx}{\partial x} = a\\
 \frac{\partial x^TBx}{\partial x} &amp;=  (B + B^T )x\\
 \frac{\partial (x -s)^TW(x-s)}{\partial x} &amp;= -2W(x-s), \text{ (W is symmetric)} \\
@@ -674,12 +617,12 @@ useful equations cited from &lt;em&gt;The Matrix Cookbook&lt;/em&gt;.&lt;/p&gt;
 \frac{\partial \ln \det(X)}{\partial X} &amp;= (X^{-1})^T\\
 \frac{\partial \det(X^{-1})}{\partial X} &amp;= -\det(X^{-1})(X^{-1})^T\\
 \frac{\partial \ln \det(X)}{\partial X^{-1}} 
-&amp;= \frac{\partial \ln \det(X)}{\partial \det(X)}\frac{\partial \det(X)}{\partial X^{-1}} \nonumber\\
-&amp;= \frac{1}{\det(X)}\left[-\det(X)X^T\right]\nonumber\\
+&amp;= \frac{\partial \ln \det(X)}{\partial \det(X)}\frac{\partial \det(X)}{\partial X^{-1}} \\
+&amp;= \frac{1}{\det(X)}\left[-\det(X)X^T\right]\\
 &amp;= -X^T\\
 \frac{\partial Tr(AXB)}{\partial X} &amp;= A^TB^T\\
 \frac{\partial Tr(AX^-1B)}{\partial X} &amp;= -(X^{-1}BAX^{-1})^T\\
-\end{align} %]]&gt;&lt;/script&gt;
+\end{aligned} %]]&gt;&lt;/script&gt;
 
 &lt;h2 id=&quot;2gaussian-mixture-model-gmm-and-expectation-maximizationem-algorithm&quot;&gt;2.Gaussian Mixture Model (GMM) and Expectation-Maximization(EM) Algorithm&lt;/h2&gt;
 
@@ -690,10 +633,9 @@ mixture of multiple stochastic processes. Therefore a single Gaussian
 distribution cannot fit such data set. Instead, a Gaussian mixture model
 is used to describe a combination of $K$ Gaussian distribution.&lt;/p&gt;
 
-&lt;p&gt;Suppose we have a training set of $N$ independent data points $x = {x_1, x_2 …x_i… x_N}$, and the values show multiple peaks. We can model this data set by a Gaussian mixture model
-\begin{equation}
-p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k) = \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\left[-\frac{(x-\mu_k)^2}{2\sigma_k^2}\right]
-\end{equation}&lt;/p&gt;
+&lt;p&gt;Suppose we have a training set of $N$ independent data points $x = {x_1, x_2 …x_i… x_N}$, and the values show multiple peaks. We can model this data set by a Gaussian mixture model&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k) = \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\left[-\frac{(x-\mu_k)^2}{2\sigma_k^2}\right]&lt;/script&gt;
 
 &lt;table style=&quot;width: 600px; height: 200px; margin:auto&quot;&gt;
     &lt;tr&gt;
@@ -717,15 +659,14 @@ p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k) = \sum_{k}^{}\
 When each data sample $x_i$ is d-dimensional, and the data set $x$ seem scattering to multiple clusters, the data can be modeled by a multivariate version Gaussian mixture model.&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
-p(x|\Theta) &amp;= \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \Sigma_k) \nonumber \\
+\begin{aligned}
+p(x|\Theta) &amp;= \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \Sigma_k)  \\
 &amp;= \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x-\mu_k)^T\Sigma_{k}^{-1}(x-\mu_k)\right]
-\end{align} %]]&gt;&lt;/script&gt;
+\end{aligned} %]]&gt;&lt;/script&gt;
 
-&lt;p&gt;In the models,  $\Theta$ means all parameters, and $\alpha_k$ is the prior probability of th $k^{th}$ Gaussian model, and
-\begin{equation}
-\sum_{k}\alpha_k = 1
-\end{equation}&lt;/p&gt;
+&lt;p&gt;In the models,  $\Theta$ means all parameters, and $\alpha_k$ is the prior probability of th $k^{th}$ Gaussian model, and&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sum_{k}\alpha_k = 1&lt;/script&gt;
 
 &lt;h3 id=&quot;22-em&quot;&gt;2.2 EM&lt;/h3&gt;
 &lt;p&gt;The expectation-maximization(EM) algorithm is an iterative supervised training algorithm. The task is formulated as:&lt;/p&gt;
@@ -741,77 +682,71 @@ $\mu_k$, $\sigma_k$), or ($\alpha_{k}$, $\mu_k$, $\Sigma_{k}$).&lt;/li&gt;
 
 &lt;p&gt;For estimation problems based on data set of independent samples, maximum-likelihood estimation (MLE) is a very widely used and straight forward method to perform estimation.&lt;/p&gt;
 
-&lt;p&gt;The probability of N independent tests is described as the product of probability of each test. This is called the likelihood function:
-\begin{equation}
-p(x|\Theta) = \prod_{i}p(x_i|\Theta)
-\end{equation}&lt;/p&gt;
+&lt;p&gt;The probability of N independent tests is described as the product of probability of each test. This is called the likelihood function:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(x|\Theta) = \prod_{i}p(x_i|\Theta)&lt;/script&gt;
 
 &lt;p&gt;MLE is to estimate the  parameters $\Theta$ by maximizing the likelihood function.&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Theta = \mathop{\arg\max}_{\Theta} \prod_{i}p(x_i|\Theta)&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Theta = \argmax_{\Theta} \prod_{i}p(x_i|\Theta)&lt;/script&gt;
 
-&lt;p&gt;By applying the MLE , the likelihood function for uni and multiple variate Gaussian mixture models are very complicated. 
-\begin{equation}
-p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{N}(x_i| \mu_k, \sigma_k) \right]
-\end{equation}
-\begin{equation}
-p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{N}(x_i| \mu_k, \Sigma_k)\right]
-\end{equation}&lt;/p&gt;
+&lt;p&gt;By applying the MLE , the likelihood function for uni and multiple variate Gaussian mixture models are very complicated.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{N}(x_i| \mu_k, \sigma_k) \right]&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{N}(x_i| \mu_k, \Sigma_k)\right]&lt;/script&gt;
 
 &lt;p&gt;To estimate K set of Gaussian parameters directly and explicitly is difficult. The EM algorithm simplifies the likelihood function of GMM, and provides an iterative way to optimize the estimation.Here we try to briefly describe the EM algorithm for GMM parameter estimation.&lt;/p&gt;
 
-&lt;p&gt;First, the likelihood function of a GMM model can be simplified by taking the log likelihood function. An formula with the form of summation is easier for separating independent data samples and taking derivatives of parameters.
-\begin{equation}
-L(x|\Theta) = \sum_{i}\ln\left[p(x_{i}|\mu_k, \sigma_k) \right] = \sum_{i}\ln\left[\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k) \right]
-\end{equation}&lt;/p&gt;
+&lt;p&gt;First, the likelihood function of a GMM model can be simplified by taking the log likelihood function. An formula with the form of summation is easier for separating independent data samples and taking derivatives of parameters.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;L(x|\Theta) = \sum_{i}\ln\left[p(x_{i}|\mu_k, \sigma_k) \right] = \sum_{i}\ln\left[\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k) \right]&lt;/script&gt;
 
 &lt;p&gt;&lt;strong&gt;Latent Parameters:&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;There is no efficient way to explicitly maximizing the log likelihood function for GMM above. The EM algorithm introduces a latent parameter $z$, that $z \in {1 ,2 … k … K}$. That is used to describe the &lt;strong&gt;probability of a given training sample $x_i$ belonging to cluster z, given full GMM parameters&lt;/strong&gt;:
-\begin{equation}
-p(z|x_{i}, \mu_k, \sigma_k)
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex&quot;&gt;p(z|x_{i}, \mu_k, \sigma_k)&lt;/script&gt;&lt;/p&gt;
 
 &lt;p&gt;Introduce the latent parameter $z$ in the  probability distribution of $x_i$.&lt;/p&gt;
 
-&lt;p&gt;\begin{equation}
-p(x_{i}|\Theta) = \sum_{k} p(x_{i}|z=k,\mu_k, \sigma_k) p(z=k) &lt;br /&gt;
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(x_{i}|\Theta) = \sum_{k} p(x_{i}|z=k,\mu_k, \sigma_k) p(z=k) \\&lt;/script&gt;
 
-&lt;p&gt;Compared with $p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k)$, we can conclude that $\alpha_k$ is the prior probability of $p(z=k)$.
-\begin{equation}
-p(z=k) = \alpha_k
-\end{equation}
-and the conditional probability of $x$ given $z=k$ is the $k^{th}$ Gaussian model.
-\begin{equation}
-p(x_{i}|z=k,\mu_k, \sigma_k)  = \textit{N}(x_i; \mu_k, \sigma_k)
-\end{equation}&lt;/p&gt;
+&lt;p&gt;Compared with 
+$p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x|\mu_k, \sigma_k)$,&lt;/p&gt;
+
+&lt;p&gt;we can conclude that $\alpha_k \text{ is the prior probability of } p(z=k)$.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(z=k) = \alpha_k&lt;/script&gt;
+
+&lt;p&gt;and the conditional probability of $x$ given $z=k$ is the $k^{th}$ Gaussian model.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(x_{i}|z=k,\mu_k, \sigma_k)  = \textit{N}(x_i; \mu_k, \sigma_k)&lt;/script&gt;
 
 &lt;p&gt;Now the latent parameter can be introduced into the log likelihood
 function. Be noted that an redundant term $p(z|x_{i},\mu_k, \sigma_k) $
 is added, in order to match the form of Jensen’s inequality.&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
-L(x|\Theta) &amp;= \sum_{i}\ln\left[p(x_{i}, z|\mu_k, \sigma_k) \right] \nonumber \\
-&amp;= \sum_{i}\ln \sum_{k}  p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)  \nonumber \\
+\begin{aligned}
+L(x|\Theta) &amp;= \sum_{i}\ln\left[p(x_{i}, z|\mu_k, \sigma_k) \right]  \\
+&amp;= \sum_{i}\ln \sum_{k}  p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)   \\
 &amp;= \sum_{i}\ln \sum_{k} p(z=k|x_{i},\mu_k, \sigma_k) \frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z=k|x_{i},\mu_k, \sigma_k)} \\
-\end{align} %]]&gt;&lt;/script&gt;
+\end{aligned} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;&lt;strong&gt;Simplify the Likelihood function:&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;However the summation inside a log function make it difficult to maximize. Here recall Jensen’s inequality:
-\begin{equation}
-f\left[E(x)\right] \geq E\left[f(x)\right]
-\end{equation}&lt;/p&gt;
+&lt;p&gt;However the summation inside a log function make it difficult to maximize. Here recall Jensen’s inequality:&lt;/p&gt;
 
-&lt;p&gt;Let $u = \frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z|x_{i},\mu_k, \sigma_k)}$ to match Jensen’s inequality.
-\begin{equation}
-f(u) = \ln u
-\end{equation}
-\begin{equation}
-E(u) = \sum_{k} p(z|x_{i},\mu_k, \sigma_k) u
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f\left[E(x)\right] \geq E\left[f(x)\right]&lt;/script&gt;
+
+&lt;p&gt;Let $u$ represent 
+$\frac{p(x_{i} | z=k, \mu_k, \sigma_k)p(z=k)}{p(z | x_{i},\mu_k, \sigma_k)}$ to match Jensen’s inequality.&lt;/p&gt;
+
+&lt;p&gt;We get&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;f(u) = \ln u&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;E(u) = \sum_{k} p(z|x_{i},\mu_k, \sigma_k) u&lt;/script&gt;
 
 &lt;p&gt;Therefore,&lt;/p&gt;
 
@@ -820,28 +755,25 @@ E(u) = \sum_{k} p(z|x_{i},\mu_k, \sigma_k) u
 &lt;p&gt;The posterior probability can be derived by the Bayes’ law.&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
-p(z=k|x_{i},\mu_k, \sigma_k) &amp;= \frac{ p(x_{i}|z=k,\mu_k, \sigma_k)}{ \sum_{k} p(x_{i}|z=k, \mu_k, \sigma_k)} \nonumber \\
+\begin{aligned}
+p(z=k|x_{i},\mu_k, \sigma_k) &amp;= \frac{ p(x_{i}|z=k,\mu_k, \sigma_k)}{ \sum_{k} p(x_{i}|z=k, \mu_k, \sigma_k)}  \\
 &amp;=  \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)} 
-\end{align} %]]&gt;&lt;/script&gt;
+\end{aligned} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;Define
-\begin{equation}
-\omega_{i,k} = p(z=k|x_{i},\mu_k, \sigma_k) = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)} 
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex&quot;&gt;\omega_{i,k} = p(z=k|x_{i},\mu_k, \sigma_k) = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}&lt;/script&gt;&lt;/p&gt;
 
 &lt;p&gt;Then&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
+\begin{aligned}
 L(x|\Theta) &amp;= \sum_{i}\ln \sum_{k} \omega_{i,k} \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}}  \\
 &amp;\geq \sum_{i} \sum_{k} \omega_{i,k} \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}} 
-\end{align} %]]&gt;&lt;/script&gt;
+\end{aligned} %]]&gt;&lt;/script&gt;
 
-&lt;p&gt;This equation defines a lower bound for the log likelihood function. Therefore, an iterative target function for the EM algorithm is defined:
-\begin{equation}
-Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t} 
-\end{equation}&lt;/p&gt;
+&lt;p&gt;This equation defines a lower bound for the log likelihood function. Therefore, an iterative target function for the EM algorithm is defined:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}&lt;/script&gt;
 
 &lt;p&gt;After $t$ iterations, we’ve got $\Theta^t$，and hence the latent $\omega_{i,k}^t$。 Apply the latest latent parameters in $Q(\Theta,\Theta^{t})$，and then we can update $\Theta^{t+1}$ by maiximization.&lt;/p&gt;
 
@@ -860,26 +792,24 @@ into the GMM. This step is called &lt;strong&gt;expectation step&lt;/strong&gt;.
     &lt;script type=&quot;math/tex; mode=display&quot;&gt;\omega_{i,k}^t = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}&lt;/script&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;Apply the latest latent parameters $\omega_{i,k}^t$ in the target function. The target function is derived by simplifying the log likelihood funciton by Jensen’s inequality.
-\begin{equation}
-Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t} 
-\end{equation}&lt;/p&gt;
+    &lt;p&gt;Apply the latest latent parameters $\omega_{i,k}^t$ in the target function. The target function is derived by simplifying the log likelihood funciton by Jensen’s inequality.&lt;/p&gt;
+
+    &lt;script type=&quot;math/tex; mode=display&quot;&gt;Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}&lt;/script&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;With $\omega_{i,k}$, maximize the target log likelihood function, to
 update GMM parameters $\Theta^{t+1}$. This step is called
 &lt;strong&gt;maximization step&lt;/strong&gt;.&lt;/p&gt;
 
-    &lt;script type=&quot;math/tex; mode=display&quot;&gt;\Theta^{t+1} = \mathop{\arg\max}_{\Theta} \sum_{i}\sum_{k} \ln \omega_{i,k}^t \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}&lt;/script&gt;
+    &lt;script type=&quot;math/tex; mode=display&quot;&gt;\Theta^{t+1} = \argmax_{\Theta} \sum_{i}\sum_{k} \ln \omega_{i,k}^t \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}&lt;/script&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;3em-algorithm-for-univariate-gmm&quot;&gt;3.EM Algorithm for Univariate GMM&lt;/h2&gt;
 
-&lt;p&gt;The complete form of the EM target function for a univariate GMM is 
-\begin{equation}
-Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega_{i,k}^t\sqrt{2\pi\sigma_k^2}}\exp\left[-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right]
-\end{equation}&lt;/p&gt;
+&lt;p&gt;The complete form of the EM target function for a univariate GMM is&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega_{i,k}^t\sqrt{2\pi\sigma_k^2}}\exp\left[-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right]&lt;/script&gt;
 
 &lt;h3 id=&quot;31-e-step&quot;&gt;3.1 E-Step:&lt;/h3&gt;
 
@@ -887,135 +817,121 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega
 
 &lt;p&gt;On every iteration, $\omega_{i,k}$ is calculated from the latest Gaussian parameters $(\alpha_k, \mu_k, \sigma_k)$&lt;/p&gt;
 
-&lt;p&gt;\begin{equation}
-\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)} 
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}&lt;/script&gt;
 
 &lt;h3 id=&quot;32-m-step&quot;&gt;3.2 M-Step:&lt;/h3&gt;
-&lt;p&gt;\begin{equation}
-\Theta := \mathop{\arg\max}_{\Theta} Q(\Theta,\Theta^{t}) 
-\end{equation}&lt;/p&gt;
 
-&lt;p&gt;The target likelihood function can be expanded to decouple items clearly.
-\begin{equation}
-Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Theta := \argmax_{\Theta} Q(\Theta,\Theta^{t})&lt;/script&gt;
+
+&lt;p&gt;The target likelihood function can be expanded to decouple items clearly.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)&lt;/script&gt;
 
 &lt;p&gt;&lt;strong&gt;Update $\alpha_k:$&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;As defined in GMM, $\alpha_k$ is constrained by $\sum_{k}\alpha_k =1$, so estimating $\alpha_k$ is a constrained optimization problem.&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{align}
-\alpha_k^{t+1} := \mathop{\arg\max}_{\alpha_k}{ \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}\\
-\text{subject to}  \sum_{k}\alpha_k =1 \nonumber
-\end{align}&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{gathered}
+\alpha_k^{t+1} := \argmax_{\alpha_k}{ \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}\\
+\text{subject to}  \sum_{k}\alpha_k =1 
+\end{gathered}&lt;/script&gt;
 
-&lt;p&gt;The method of Lagrange multipliers is used to find the local maxima of such constrained optimization problem. We can construct a Lagrangean function:
-\begin{equation}
-\mathcal{L}(\alpha_k, \lambda) = { \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}+ \lambda\left[\sum_{k}\alpha_k -1\right]
-\end{equation}&lt;/p&gt;
+&lt;p&gt;The method of Lagrange multipliers is used to find the local maxima of such constrained optimization problem. We can construct a Lagrangean function:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathcal{L}(\alpha_k, \lambda) = { \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}+ \lambda\left[\sum_{k}\alpha_k -1\right]&lt;/script&gt;
 
 &lt;p&gt;The local maxima $\alpha_{k}^{t+1}$ should make the derivative of the Lagrangean function equal to 0. Hence,&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
+\begin{aligned}
 \frac{\partial \mathcal{L}(\alpha_k, \lambda) }{\partial \alpha_k} &amp;= { \sum_{i}\omega_{i,k}^t\frac{1}{\alpha_k}}+ \lambda = 0 \\
 \Rightarrow  \alpha_k &amp;= -\frac{\sum_{i}\omega_{i,k}^t}{\lambda}
-\end{align} %]]&gt;&lt;/script&gt;
+\end{aligned} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;By summing the equation for all $k$, the value of $\lambda$ can be calculated.&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
+\begin{aligned}
 \sum_{k}\alpha_k &amp;= -\frac{\sum_{i}\sum_{k}\omega_{i,k}^t}{\lambda} \\
 \Rightarrow 1 &amp;= -\sum_{i}\frac{1}{\lambda} = -\frac{N}{\lambda}  \\
 \Rightarrow \lambda &amp;= -N  
-\end{align} %]]&gt;&lt;/script&gt;
+\end{aligned} %]]&gt;&lt;/script&gt;
 
-&lt;p&gt;Therefore, $\alpha_k$ on iteration $t+1$ based on latent parameters on iteration $t$ is updated by
-\begin{equation}
-\alpha_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t}{N} 
-\end{equation}&lt;/p&gt;
+&lt;p&gt;Therefore, $\alpha_k$ on iteration $t+1$ based on latent parameters on iteration $t$ is updated by&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\alpha_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t}{N}&lt;/script&gt;
 
 &lt;p&gt;&lt;strong&gt;Update $\mu_k:$&lt;/strong&gt; &lt;/p&gt;
 
-&lt;p&gt;$\mu_k$ is unconstrained, and can be derived by taking the derivative of the target likelihood function.
-\begin{equation}
-\mu_k^{t+1} :=  \mathop{\arg\max}_{\mu_k}   Q(\Theta,\Theta^{t})
-\end{equation}&lt;/p&gt;
+&lt;p&gt;$\mu_k$ is unconstrained, and can be derived by taking the derivative of the target likelihood function.&lt;/p&gt;
 
-&lt;p&gt;Let $\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k}=0$, hence
-\begin{equation}
-\frac{\partial \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)}{\partial \mu_k} =  0
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mu_k^{t+1} :=  \argmax_{\mu_k}   Q(\Theta,\Theta^{t})&lt;/script&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{align}
+&lt;p&gt;Let $\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k}=0$, hence&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\partial \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)}{\partial \mu_k} =  0&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{aligned}
 \sum_{i}\omega_{i,k}^t\frac{x_i-\mu_k}{\sigma_k^2} = 0\\
 \Rightarrow \sum_{i}\omega_{i,k}^t\mu_k = \sum_{i}\omega_{i,k}^tx_i \\
 \Rightarrow \mu_k\sum_{i}\omega_{i,k}^t = \sum_{i}\omega_{i,k}^tx_i 
-\end{align}&lt;/script&gt;
+\end{aligned}&lt;/script&gt;
 
-&lt;p&gt;Hence $\mu_k$ on iteration $t+1$ can be updated as a form of weighted mean of $x$.
-\begin{equation}
-\mu_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^tx_i}{\sum_{i}\omega_{i,k}^t} 
-\end{equation}&lt;/p&gt;
+&lt;p&gt;Hence $\mu_k$ on iteration $t+1$ can be updated as a form of weighted mean of $x$.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mu_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^tx_i}{\sum_{i}\omega_{i,k}^t}&lt;/script&gt;
 
 &lt;p&gt;&lt;strong&gt;Update $\sigma_k:$&lt;/strong&gt; &lt;/p&gt;
 
-&lt;p&gt;Similarly, updated $\sigma_k$ is derived by taking the derivative of the target likelihood function with respect to $\sigma_k$.
-\begin{equation}
-\sigma_k^{t+1} :=  \mathop{\arg\max}_{\sigma_k}   Q(\Theta,\Theta^{t})
-\end{equation}&lt;/p&gt;
+&lt;p&gt;Similarly, updated $\sigma_k$ is derived by taking the derivative of the target likelihood function with respect to $\sigma_k$.&lt;/p&gt;
 
-&lt;p&gt;Let
-\begin{equation}
-\frac{\partial Q(\Theta,\Theta^{t})}{\partial \sigma_k} = \frac{\partial \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)}{\partial \sigma_k}=0
-\end{equation}.&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sigma_k^{t+1} :=  \argmax_{\sigma_k}   Q(\Theta,\Theta^{t})&lt;/script&gt;
+
+&lt;p&gt;Let&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;\frac{\partial Q(\Theta,\Theta^{t})}{\partial \sigma_k} = \frac{\partial \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)}{\partial \sigma_k}=0&lt;/script&gt;.&lt;/p&gt;
 
 &lt;p&gt;We get&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
+\begin{aligned}
  \sum_{i}\omega_{i,k}\left[-\frac{1}{\sigma_k}+\frac{(x_i-\mu_k)^2}{\sigma_k^3}\right]&amp;= 0\\
 \Rightarrow \sum_{i}\omega_{i,k}\sigma_k^2 &amp;= \sum_{i}\omega_{i,k}(x_i-\mu_k)^2 \\
 \Rightarrow \sigma_k^2 \sum_{i}\omega_{i,k} &amp;= \sum_{i}\omega_{i,k}(x_i-\mu_k)^2 \\
-\end{align} %]]&gt;&lt;/script&gt;
+\end{aligned} %]]&gt;&lt;/script&gt;
 
-&lt;p&gt;For $\sigma_k$, we can update $\sigma_k^2$, which is enough for Gaussian model calculation. New $sigma_k^2$ depends on $\mu_k$, so normally $\mu_k^{t+1}$ is calculated first and then applied to the update equation for $\sigma_k^2$
-\begin{equation}
-(\sigma_k^2)^{t+1} = \frac{\sum_{i}\omega_{i,k}(x_i-\mu_k^{t+1})^2 }{\sum_{i}\omega_{i,k}} 
-\end{equation}&lt;/p&gt;
+&lt;p&gt;For $\sigma_k$, we can update $\sigma_k^2$, which is enough for Gaussian model calculation. New $sigma_k^2$ depends on $\mu_k$, so normally $\mu_k^{t+1}$ is calculated first and then applied to the update equation for $\sigma_k^2$&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;(\sigma_k^2)^{t+1} = \frac{\sum_{i}\omega_{i,k}(x_i-\mu_k^{t+1})^2 }{\sum_{i}\omega_{i,k}}&lt;/script&gt;
 
 &lt;h2 id=&quot;4em-algorithm-for-multivariate-gmm&quot;&gt;4.EM Algorithm for Multivariate GMM&lt;/h2&gt;
 
-&lt;p&gt;Similarlyt the target likelihood function for a multivariat GMM is
-\begin{equation}
-Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega_{i,k}^t\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]
-\end{equation}&lt;/p&gt;
+&lt;p&gt;Similarlyt the target likelihood function for a multivariat GMM is&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega_{i,k}^t\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]&lt;/script&gt;
 
 &lt;p&gt;Be aware that&lt;/p&gt;
 &lt;ul&gt;
-  &lt;li&gt;$x_i$ is a 1-by-d vecotr,&lt;/li&gt;
+  &lt;li&gt;$x_i$ is a d-by-1 vecotr,&lt;/li&gt;
   &lt;li&gt;$\alpha_k$ is a real number between [0,1],&lt;/li&gt;
-  &lt;li&gt;$\mu_k$ is a 1-by-d vector,&lt;/li&gt;
+  &lt;li&gt;$\mu_k$ is a d-by-1 vector,&lt;/li&gt;
   &lt;li&gt;$\Sigma_k$ is a d-by-d matrix.&lt;/li&gt;
   &lt;li&gt;$\omega$ is a N-by-K matrix.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&quot;41-e-step&quot;&gt;4.1 E-Step:&lt;/h3&gt;
 
-&lt;p&gt;The E-step to estimate the latent parameters is the same as univariate GMM, except that the Gaussian distribution is a multivariate one, which is more complicated. 
-\begin{equation}
-\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)} 
-\end{equation}&lt;/p&gt;
+&lt;p&gt;The E-step to estimate the latent parameters is the same as univariate GMM, except that the Gaussian distribution is a multivariate one, which is more complicated.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}&lt;/script&gt;
 
 &lt;p&gt;The target likelihood function can be expanded.&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
-&amp;Q(\Theta,\Theta^{t})\nonumber \\
+\begin{aligned}
+&amp;Q(\Theta,\Theta^{t}) \\
 &amp;= \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \frac{d}{2}\ln \sqrt{(2\pi)^d} -\frac{1}{2}\ln\det(\Sigma_k)-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right) 
-\end{align} %]]&gt;&lt;/script&gt;
+\end{aligned} %]]&gt;&lt;/script&gt;
 
 &lt;h3 id=&quot;42-m-step&quot;&gt;4.2 M-Step:&lt;/h3&gt;
 
@@ -1023,69 +939,54 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega
 
 &lt;p&gt;The formula to update $\alpha_k$ for multivariate GMMs is exactly the same as univariate GMMs.&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{gather}
-\alpha_k^{t+1} := \mathop{\arg\max}_{\alpha_k}{ \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}\\
-\text{subject to}  \sum_{k}\alpha_k =1 \nonumber
-\end{gather}&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{gathered}
+\alpha_k^{t+1} := \argmax_{\alpha_k}{ \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}\\
+\text{subject to}  \sum_{k}\alpha_k =1 
+\end{gathered}&lt;/script&gt;
 
-&lt;p&gt;Hence we get the same update equation.
-\begin{equation}
-\alpha_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t}{N} 
-\end{equation}&lt;/p&gt;
+&lt;p&gt;Hence we get the same update equation.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\alpha_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t}{N}&lt;/script&gt;
 
 &lt;p&gt;&lt;strong&gt;Update $\mu_k:$&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;\begin{equation}
-\mu_k^{t+1} :=  \mathop{\arg\max}_{\mu_k}   Q(\Theta,\Theta^{t})
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mu_k^{t+1} :=  \argmax_{\mu_k}   Q(\Theta,\Theta^{t})&lt;/script&gt;
 
 &lt;p&gt;Take the derivative of $Q(\Theta,\Theta^{t})$ with respec to $\mu_k$, we get&lt;/p&gt;
 
-&lt;p&gt;\begin{eqnarray}
-\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k} = \sum_{i}\omega_{i,k}^t\frac{\partial \left[-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]}{\partial \mu_k}  = 0&lt;br /&gt;
-\end{eqnarray}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k} = \sum_{i}\omega_{i,k}^t\frac{\partial \left[-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]}{\partial \mu_k}  = 0\\&lt;/script&gt;
 
 &lt;p&gt;As the covariance matrix $\Sigma_{k}$ is symmetric, the inverse of it is also symmetric.  We can apply $\frac{\partial (x -s)^TW(x-s)}{\partial x} = -2W(x-s)$ (see first section) to the partial derivative.&lt;/p&gt;
 
-&lt;p&gt;\begin{equation}
-\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k} = 
- \sum_{i}\omega_{i,k}^t \Sigma_{k}^{-1}\left(x_i - \mu_k\right) =0
-\end{equation}
-\begin{equation}
-\Rightarrow \sum_{i}\omega_{i,k}^t x_i= \mu_k\sum_{i}\omega_{i,k}^t&lt;br /&gt;
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k} = 
+ \sum_{i}\omega_{i,k}^t \Sigma_{k}^{-1}\left(x_i - \mu_k\right) =0&lt;/script&gt;
 
-&lt;p&gt;Hence $\mu_k$ on iteration $t+1$ is also updated as a form of weighted mean of $x$. However, in this scenario $\mu_k$ is a 1-by-d vector.
-\begin{equation}
- \mu_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t x_i}{\sum_{i}\omega_{i,k}^t} 
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Rightarrow \sum_{i}\omega_{i,k}^t x_i= \mu_k\sum_{i}\omega_{i,k}^t&lt;/script&gt;
+
+&lt;p&gt;Hence $\mu_k$ on iteration $t+1$ is also updated as a form of weighted mean of $x$. However, in this scenario $\mu_k$ is a d-by-1 vector.&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mu_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t x_i}{\sum_{i}\omega_{i,k}^t}&lt;/script&gt;
 
 &lt;p&gt;&lt;strong&gt;Update $\Sigma_k:$&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;\begin{equation}
-\Sigma_k^{t+1} :=  \mathop{\arg\max}_{\Sigma_k}   Q(\Theta,\Theta^{t})
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Sigma_k^{t+1} :=  \argmax_{\Sigma_k}   Q(\Theta,\Theta^{t})&lt;/script&gt;
 
 &lt;p&gt;Let $\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} =0$, we get&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
-\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} &amp;= \sum_{i}\omega_{i,k}^t\frac{\partial \left[  -\frac{1}{2}\ln\det(\Sigma_k)-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]}{\partial  \Sigma_k^{-1}}  \nonumber\\
+\begin{aligned}
+\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} &amp;= \sum_{i}\omega_{i,k}^t\frac{\partial \left[  -\frac{1}{2}\ln\det(\Sigma_k)-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]}{\partial  \Sigma_k^{-1}}  \\
  &amp;= -\frac{1}{2} \sum_{i}\omega_{i,k}^t \left[\frac{\partial \ln\det(\Sigma_k)}{\partial  \Sigma_k^{-1}}+\frac{\partial (x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)}{\partial  \Sigma_k^{-1}} \right] \\
- &amp;= 0 \nonumber
-\end{align} %]]&gt;&lt;/script&gt;
+ &amp;= 0 
+\end{aligned} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;By employing $\frac{\partial \ln \det(X)}{\partial X^{-1}} =-X^T $ and $\frac{\partial a^TXa}{\partial X} = aa^T$(see section one) for the symmetric covariance matrix $\Sigma_k$, and find the maxima of $ Q(\Theta,\Theta^{t})$.&lt;/p&gt;
 
-&lt;p&gt;\begin{equation}
-\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} =   \frac{1}{2}\sum_{i}\omega_{i,k}^t \left[\Sigma_k - (x_i-\mu_k)(x_i-\mu_k)^T\right] = 0&lt;br /&gt;
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} =   \frac{1}{2}\sum_{i}\omega_{i,k}^t \left[\Sigma_k - (x_i-\mu_k)(x_i-\mu_k)^T\right] = 0&lt;/script&gt;
 
 &lt;p&gt;Similarly, we get the update equation for  $\Sigma_k$ at iteration $t+1$, and it depends on $\mu_k$. So again $\mu_k^{t+1}$ is calculated first and then applied to the update equation for $\Sigma_k$&lt;/p&gt;
 
-&lt;p&gt;\begin{equation}
-\Sigma_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t (x_i-\mu_k^{t+1})(x_i-\mu_k^{t+1})^T }{\sum_{i}\omega_{i,k}^t} 
-\end{equation}&lt;/p&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\Sigma_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t (x_i-\mu_k^{t+1})(x_i-\mu_k^{t+1})^T }{\sum_{i}\omega_{i,k}^t}&lt;/script&gt;
 
 &lt;h2 id=&quot;5summary&quot;&gt;5.Summary&lt;/h2&gt;
 
@@ -1097,38 +998,30 @@ Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega
     &lt;/tr&gt;
     &lt;tr&gt; 
 	&lt;th style=&quot;text-align:center&quot;&gt;Init&lt;/th&gt;
-        &lt;td&gt;\begin{equation*} 
-		\alpha_{k}^0, \mu_k^0, \sigma_k^0
-		\end{equation*}&lt;/td&gt;
-        &lt;td&gt;\begin{equation*} 
-		\alpha_{k}^0, \mu_k^0, \Sigma_k^0 
-		\end{equation*} &lt;/td&gt;
+        &lt;td&gt;$$\alpha_{k}^0, \mu_k^0, \sigma_k^0$$&lt;/td&gt;
+        &lt;td&gt;$$\alpha_{k}^0, \mu_k^0, \Sigma_k^0$$&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
         &lt;th style=&quot;text-align:center&quot;&gt;E-Step&lt;/th&gt;
-        &lt;td&gt;\begin{equation*} 
-		\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)} 
-		\end{equation*} &lt;/td&gt;
-        &lt;td&gt;\begin{equation*} 
-		\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)} 
-		\end{equation*} &lt;/td&gt;
+        &lt;td&gt;$$\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}$$ &lt;/td&gt;
+        &lt;td&gt;$$\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}$$ &lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
         &lt;th style=&quot;text-align:center&quot;&gt;M-Step&lt;/th&gt;
-        &lt;td&gt;\begin{equation*} 
+        &lt;td&gt;$$
 		\begin{aligned} 
 		\alpha_k^{t+1} &amp;amp;= \frac{\sum_{i}\omega_{i,k}^t}{N}\\ 
 		\mu_k^{t+1} &amp;amp;= \frac{\sum_{i}\omega_{i,k}^t x_i}{\sum_{i}\omega_{i,k}^t}\\
 		(\sigma_k^2)^{t+1} &amp;amp;= \frac{\sum_{i}\omega_{i,k}^t(x_i-\mu_k^{t+1})^2 }{\sum_{i}\omega_{i,k}^t}
 		\end{aligned} 
-		\end{equation*} &lt;/td&gt;
-        &lt;td&gt;\begin{equation*} 
+		$$&lt;/td&gt;
+        &lt;td&gt;$$
 		\begin{aligned} 
 		\alpha_k^{t+1} &amp;amp;= \frac{\sum_{i}\omega_{i,k}^t}{N}\\ 
 		\mu_k^{t+1} &amp;amp;= \frac{\sum_{i}\omega_{i,k}^tx_i}{\sum_{i}\omega_{i,k}^t}\\
 		\Sigma_k^{t+1} &amp;amp;= \frac{\sum_{i}\omega_{i,k}^t (x_i-\mu_k^{t+1})(x_i-\mu_k^{t+1})^T }{\sum_{i}\omega_{i,k}^t} 
 		\end{aligned} 
-		\end{equation*} &lt;/td&gt;
+		$$&lt;/td&gt;
     &lt;/tr&gt;
 &lt;/table&gt;
 
@@ -1227,15 +1120,16 @@ Gain)进行估计，不同的估计准则称为抑制准则(Supression Rule)。&
 
 &lt;h2 id=&quot;2-最大似然估计ml&quot;&gt;2. 最大似然估计ML&lt;/h2&gt;
 
-&lt;p&gt;基如果不考虑信号的先验分布，即认为信号值是确定信号，而不是随机信号，我们只需要分析含有信号$x$为参数的带噪信号$y$的概率分布$p(y;x)$，并使之最大。这种估计方法叫最大似然估计器（Maximum
+&lt;p&gt;如果不考虑信号的先验分布，即认为信号值是确定信号，而不是随机信号，我们只需要分析含有信号$x$为参数的带噪信号$y$的概率分布$p(y;x)$，并使之最大。这种估计方法叫最大似然估计器（Maximum
 Likelihood
 Estimation）。将$y$的带参概率分布$p(y;x)$称为似然函数（Likelihood
-Function）。对纯净信号$x$的估计，表达为求解合适的$x$值，使得似然函数$p(y;x)$最大。
-&lt;script type=&quot;math/tex&quot;&gt;\hat{x} = \mathop{\arg\max}_{x}p(y;x)&lt;/script&gt;&lt;/p&gt;
+Function）。对纯净信号$x$的估计，表达为求解合适的$x$值，使得似然函数$p(y;x)$最大。&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{x} = \argmax_{x}p(y;x)&lt;/script&gt;
 
 &lt;p&gt;文献[@mcaulay1980speech]最早将最大似然估计法用在语音增强领域。对于纯净语音，可以假设纯净语音幅度$X_{k}$和相位$\theta_{y}(k)$是未知但确定，无需考虑其先验概率分布。最大似然语音增强模型表达为：&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{X}_{k},\hat{\theta}_{k} = \mathop{\arg\max}_{X_{k},\theta_{k}} p\left[Y(\omega_{k});X_{k},\theta_{k}\right]&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{X}_{k},\hat{\theta}_{k} = \argmax_{X_{k},\theta_{k}} p\left[Y(\omega_{k});X_{k},\theta_{k}\right]&lt;/script&gt;
 
 &lt;p&gt;把$D_{k}e^{\theta_{d}(k)}=Y_{k}e^{\theta_{y}(k)} - X_{k}e^{\theta_{x}(k)} $代入噪声零均值复高斯分布公式中，得到：&lt;/p&gt;
 
@@ -1247,11 +1141,11 @@ Function）。对纯净信号$x$的估计，表达为求解合适的$x$值，使
 
 &lt;p&gt;如果比最大似然估计更进一步，考虑待估计量$x$也是随机变量，且$x$的先验分布为$p(x)$，这种假设下的估计方法叫做贝叶斯估计[@ZhangXianDa2002ModernSP]。定义估计值$\hat{x}$与实际值$x$之间的误差函数为$c(\hat{x},x)$，贝叶斯估计器的目标即为找出是平均误差$E[c(\hat{x},x)]$最小的估计值$x$。&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{x} = \mathop{\arg\min}_{\hat{x}} E[c(\hat{x}, x)]&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{x} = \argmin_{\hat{x}} E[c(\hat{x}, x)]&lt;/script&gt;
 
 &lt;p&gt;对于待估计的纯净语音谱，贝叶斯估计器可以表达为：&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{X}(\omega_{k}) = \mathop{\arg\min}_{\hat{X_{k}}} E[c(\hat{X}(\omega_{k}), X(\omega_{k}))]&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{X}(\omega_{k}) = \argmin_{\hat{X_{k}}} E[c(\hat{X}(\omega_{k}), X(\omega_{k}))]&lt;/script&gt;
 
 &lt;p&gt;误差$c(\hat{x},x)$的期望值取决于待测信号与测量信号的联合概率分布。&lt;/p&gt;
 
@@ -1263,7 +1157,7 @@ Function）。对纯净信号$x$的估计，表达为求解合适的$x$值，使
 
 &lt;p&gt;因为估计值$\hat{x}$与$p(y)$相互独立，可以把外层对$y$的积分消除，也就是：&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{x} = \mathop{\arg\min}_{\hat{x}} E[c(\hat{x}, x)|y]&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{x} = \argmin_{\hat{x}} E[c(\hat{x}, x)|y]&lt;/script&gt;
 
 &lt;p&gt;误差函数$c(\hat{x}, x)$的计算模型，会引出不同种类的估计器。典型的误差函数有几种类型[@ZhangXianDa2002ModernSP]：&lt;/p&gt;
 
@@ -1284,14 +1178,14 @@ Function）。对纯净信号$x$的估计，表达为求解合适的$x$值，使
 &lt;/ol&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{equation}c(\hat{x}, x)   =
+c(\hat{x}, x)   =
             \left\{
             \begin{array}{lr}
             1 \quad (|\hat{x}-x|\geq\Delta/2) &amp;  \\
             &amp;\Delta&gt;0\\
             0 \quad (|\hat{x}-x|&lt;\Delta/2) &amp; 
             \end{array}
-            \right.\end{equation} %]]&gt;&lt;/script&gt;
+            \right. %]]&gt;&lt;/script&gt;
 
 &lt;h3 id=&quot;31-最小均方估计mmse&quot;&gt;3.1 最小均方估计（MMSE）&lt;/h3&gt;
 
@@ -1310,10 +1204,10 @@ Estimation)[@ephraim1985speech]使用平方误差函数，平均误差为：&lt;
 
 &lt;p&gt;亦可以使用贝叶斯公式展开，得到：&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{align}
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\begin{aligned}
     \hat{x} = \int_{x}x \frac{p(y|x)p(x)}{p(y)} dx \\
-            = \frac{\int_{x}xp(y|x)p(x)dx}{\int_{x}p(y|x)p(x)dx} \nonumber
-\end{align}&lt;/script&gt;
+            = \frac{\int_{x}xp(y|x)p(x)dx}{\int_{x}p(y|x)p(x)dx}
+\end{aligned}&lt;/script&gt;
 
 &lt;p&gt;在语音增强的模型里，纯净语音谱的估计为其在带噪语音谱下的条件均值。&lt;/p&gt;
 
@@ -1404,20 +1298,20 @@ Estimation)[@ephraim1985speech]使用平方误差函数，平均误差为：&lt;
 &lt;p&gt;当贝叶斯估计器采用均匀误差函数时，平均误差为：&lt;/p&gt;
 
 &lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
-\begin{align}
+\begin{aligned}
     E[c(\hat{x}, x)|y] &amp;= \int_{-\infty}^{\hat{x}-\Delta/2}  p(x|y)dx + \int_{\hat{x}+\Delta/2}^{\infty}  p(x|y)dx   \\
-                       &amp;= 1-\int_{\hat{x}\Delta/2}^{\hat{x}+\Delta/2}  p(x|y)dx  \nonumber
-\end{align} %]]&gt;&lt;/script&gt;
+                       &amp;= 1-\int_{\hat{x}\Delta/2}^{\hat{x}+\Delta/2}  p(x|y)dx  
+\end{aligned} %]]&gt;&lt;/script&gt;
 
 &lt;p&gt;显然要使得平均误差最小，就是要求目标估计$\hat{x}$，使得
 $p(x|y)$最大。这种估计模型称作最大后验估计(Maximum A Posteriori
 Estimation)。这个模型的意思是只有估计值$\hat{x}$与原始值$x$相等，误差才为0，其他时候误差均匀为1。估计值可以表达为：&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{x} =\mathop{\arg\min}_{x} p(x|y)&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{x} =\argmin_{x} p(x|y)&lt;/script&gt;
 
 &lt;p&gt;在语音增强的模型里，纯净语音谱的估计为其在带噪语音谱下的条件均值。&lt;/p&gt;
 
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{X}(\omega_{k}) = \mathop{\arg\min}_{ X(\omega_{k})}\quad p\left[X(\omega_{k})| Y(\omega_{k})\right]&lt;/script&gt;
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{X}(\omega_{k}) = \argmin_{ X(\omega_{k})}\quad p\left[X(\omega_{k})| Y(\omega_{k})\right]&lt;/script&gt;
 
 &lt;p&gt;文献[@wolfe2003efficient]提出了两种基于最大后验估计(Maximum A Posteriori
 Estimation)的语音增强算法。一种是同时求解幅度和相位的混合最大后验估计：

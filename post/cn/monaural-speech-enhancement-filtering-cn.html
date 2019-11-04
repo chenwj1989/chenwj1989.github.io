@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/favicon.ico" />
+    <title>单通道语音增强之谱减法与维纳滤波 - All Articles</title>
+    <meta name="author" content="wjchen" />
+    <meta name="description" content="单通道语音增强之谱减法与维纳滤波" />
+    <meta name="keywords" content="单通道语音增强之谱减法与维纳滤波, All Articles, 语音" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <meta content="" property="fb:app_id">
+    <meta content="All Articles" property="og:site_name">
+
+    
+
+    
+      <meta content="单通道语音增强之谱减法与维纳滤波" property="og:title">
+      <meta content="article" property="og:type">
+    
+
+    
+      <meta content="My Personal Thoughts" property="og:description">
+    
+
+    
+      <meta content="http://localhost:4000/post/cn/monaural-speech-enhancement-filtering-cn.html" property="og:url">
+    
+
+    
+      <meta content="2019-10-31T01:00:00+08:00" property="article:published_time">
+      <meta content="http://localhost:4000/about/" property="article:author">
+    
+
+    
+      <meta content="http://localhost:4000/static/img/avatar.jpg" property="og:image">
+    
+
+    
+      
+        <meta content="语音" property="article:section">
+      
+    
+
+    
+      
+    
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@">
+
+    
+      <meta name="twitter:title" content="单通道语音增强之谱减法与维纳滤波">
+    
+
+    
+      <meta name="twitter:url" content="http://localhost:4000/post/cn/monaural-speech-enhancement-filtering-cn.html">
+    
+
+    
+      <meta name="twitter:description" content="My Personal Thoughts">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="/static/css/fonts.css" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/katex/katex.min.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+          <div class="author" align="center">
+          <a href="/"><img class="profile-avatar" src="/static/img/avatar.jpg" height="100px" width="100px" /></a>
+          <h1 class="author-name">wjchen</h1>
+          
+            <div class="profile-about">
+              Never lose a holy curiosity.
+            </div>
+          
+           <div class="social">
+            <ul>
+              
+                <li><a href="https://github.com/chenwj1989" target="_blank"><i class="fab fa-github"></i></a></li>
+              
+                <li><a href="https://www.zhihu.com/people/wjchen-16/activities" target="_blank"><i class="fab fa-zhihu"></i></a></li>
+              
+            </ul>
+          </div>
+	  </div>
+          <div class="search" id="js-search">
+            <input type="text" placeholder="$ type to search" class="search__input form-control" id="js-search__input">
+            <ul class="search__results" id="js-search__results"></ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/projects/">My Projects</a></li>
+            
+              <li><a class="about" href="/about/">About Me</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-8 col-offset-1 main-layout">
+        <header class="post-header">
+  <h1 class="post-title">单通道语音增强之谱减法与维纳滤波</h1>
+</header>
+
+<span class="time">31 Oct 2019</span>
+
+  <span class="categories">
+    &raquo; <a href="/category/语音">语音</a>
+  </span>
+
+
+<div class="content">
+  <div class="post"><p><br /></p>
+<ul id="markdown-toc">
+  <li><a href="#1-概述" id="markdown-toc-1-概述">1. 概述</a></li>
+  <li><a href="#2-谱减法-spectral-subtraction" id="markdown-toc-2-谱减法-spectral-subtraction">2. 谱减法 Spectral Subtraction</a></li>
+  <li><a href="#31-维纳滤波-wiener-filtering" id="markdown-toc-31-维纳滤波-wiener-filtering">3.1 维纳滤波 Wiener Filtering</a></li>
+</ul>
+
+<p>本文代码位于<a href="https://github.com/chenwj1989/python-speech-enhancement">GitHub</a>。</p>
+
+<h2 id="1-概述">1. 概述</h2>
+<p>单通道语音增强比较传统的方法是谱减法和维纳滤波， 在平稳噪声的条件下，能够获得较理想的去噪效果。 《语音增强–理论与实践》[@loizou2007speech]里面各有一章详细分析了这两种模型。</p>
+
+<p>假设麦克风采集到的带噪语音序列为$y[n]$，并且噪声都是加性噪声。则带噪语音序列为无噪语音序列与噪声序列的和。 原始语音信号与噪声均可视为随机信号。</p>
+
+<script type="math/tex; mode=display">y[n] = x[n] + d[n]</script>
+
+<p>常用的语音增强方法都是在频域，需要对带噪信号$y[n]$进行分帧、加窗、短时傅里叶变换（STFT）后，得到每一帧的频域信号，其中X，Y，D分别是干净语音、带噪信号和噪声的频域信号。</p>
+
+<script type="math/tex; mode=display">Y(\omega_{k}) = X(\omega_{k}) + D(\omega_{k})</script>
+
+<p>语音增强的目标是对实际信号$X(\omega_{k})$的幅度和相位进行估计。但是因为相位不易估计、而且研究表明相位对去噪效果影响比较小[@wang1982unimportance]，所以大部分方法都只对幅度谱进行增强，而相位则沿用带噪信号的相位。</p>
+
+<p>换句话说，语音增强就是要找出一个频域的实函数$H_{\omega_{k}}$, 并且将这个函数与带噪信号相乘，得到干净语音的估计。这个实函数称作抑制增益(Suppression Gain)。</p>
+
+<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = H(\omega_{k})|Y(\omega_{k})|e^{j\theta_{y}(k)}</script>
+
+<p>下面是单通道语音增强系统主要步骤的示意图，系统目标就是估计抑制增益，而抑制增益依赖于两个核心步骤：语音检测VAD和噪声估计模块。只有准确估计噪声谱$D(\omega_{k})$，才有可能准确估计抑制增益。 详细的VAD和噪声估计方法不在这篇文章里面详述，具体可以看参考文献。 一种简单的想法是先估计出VAD，如过判断此帧没有语音，则更新噪声谱，否则就沿用上一帧的噪声谱。</p>
+
+<figure align="center" style="width: 90%;margin:auto">
+  <img width="100%" height="auto" src="/static/posts/ns_flow.png" />
+  <figcaption>Fig.1 - 单通道语音增强统计模型流程图</figcaption>
+</figure>
+<p><br /></p>
+
+<p>综上，语音增强的典型流程就是：</p>
+
+<ol>
+  <li>
+    <p>对带噪语音y[n]分帧， 每一帧进行DFT得到$Y(\omega_{k})$。</p>
+  </li>
+  <li>
+    <p>利用$Y(\omega_{k})$进行VAD检测和噪声估计。</p>
+  </li>
+  <li>
+    <p>计算抑制增益$H_{k}$。</p>
+  </li>
+  <li>
+    <p>抑制增益$H_{k}$与带噪信号谱相乘，得到纯净语音谱$\hat{X}(\omega_{k})$。</p>
+  </li>
+  <li>
+    <p>对$\hat{X}(\omega_{k})$进行IDFT,得到纯净语音序列的估计$x[n]$。</p>
+  </li>
+</ol>
+
+<p>噪声估计模块可以估计噪声功率，也可以估计信噪比，避免信号幅度变化带来的误差。
+定义后验信噪比：</p>
+
+<script type="math/tex; mode=display">\gamma_k = \frac{P_{yy}}{P_{dd}}</script>
+
+<p>定义先验信噪比：</p>
+
+<script type="math/tex; mode=display">\xi_k = \frac{P_{xx}}{P_{dd}}</script>
+
+<h2 id="2-谱减法-spectral-subtraction">2. 谱减法 Spectral Subtraction</h2>
+
+<p>谱减法是最直观的去噪声思想，就是带噪信号减去噪声的频谱，就等于干净信号的频谱。估计信号频谱的表达式如下，其中$\hat{D}(\omega_{k})$应是噪声估计模块得到的噪声频谱。</p>
+
+<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = Y(\omega_{k}) - \hat{D}(\omega_{k})</script>
+
+<p>传统的语音增强算法都不恢复准确的相位，而是沿用测量信号$Y(\omega_{k})$的相位，所以实际谱减法的公式为幅度谱相减：</p>
+
+<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = \left[|Y(\omega_{k})| - |\hat{D}(\omega_{k})|\right]e^{j\phi_y}</script>
+
+<p>其中$\hat{D}(\omega_{k})$是估计的噪声幅值。 最终增益函数为</p>
+
+<script type="math/tex; mode=display">H(\omega_{k}) = \frac{|Y(\omega_{k})| - |\hat{D}(\omega_{k})|}{|Y(\omega_{k})|}</script>
+
+<p>从幅度谱角度做谱减，是架设了测量信号和噪声的相位一样，引入了较大失真。 从功率谱角度做谱减，是更常用的方法。</p>
+
+<script type="math/tex; mode=display">|Y(\omega_{k})|^2 = |X(\omega_{k})|^2 + |D(\omega_{k})|^2 + X(\omega_{k})^*D(\omega_{k}) + X(\omega_{k})D(\omega_{k})^*</script>
+
+<p>假设语音信号与噪声不相关，于是得到估计的信号功率谱是测量信号功率谱减去估计的噪声功率谱。</p>
+
+<script type="math/tex; mode=display">|X(\omega_{k})|^2 =  |Y(\omega_{k})|^2 -  |D(\omega_{k})|^2
+P_{xx}(\omega_{k}) =  P_{yy}(\omega_{k}) -  P_{dd}(\omega_{k})</script>
+
+<p>因此抑制增益函数即为：</p>
+
+<script type="math/tex; mode=display">H(\omega_{k}) =  \sqrt{\frac{P_{yy}(\omega_{k}) -  P_{dd}(\omega_{k})}{P_{yy}(\omega_{k})}}</script>
+
+<p>用后验信噪比表示：</p>
+
+<script type="math/tex; mode=display">H(\omega_{k}) = \sqrt{\frac{\gamma_k - 1}{\gamma_k}}</script>
+
+<p>用先验信噪比表示：</p>
+
+<script type="math/tex; mode=display">H(\omega_{k}) = \sqrt{\frac{\xi_k}{\xi_k+1}}</script>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">def</span> <span class="nf">spec_sub_gain</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+		<span class="n">ksi</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'ksi'</span><span class="p">]</span>
+		<span class="n">gain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">ksi</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span> <span class="n">ksi</span><span class="p">))</span> <span class="c"># gain function</span>
+		<span class="k">return</span> <span class="n">gain</span>
+</code></pre></div></div>
+
+<h2 id="31-维纳滤波-wiener-filtering">3.1 维纳滤波 Wiener Filtering</h2>
+
+<p>维纳滤波的思想也很直接，就是将带噪信号经过线性滤波器变换来逼近原信号，并求均方误差最小时的线性滤波器参数。 维纳滤波可以是在时域推导，也可以在频域推导。如第一部分所介绍，语音增强系统通常在频域处理信号，所以下面只讨论频域维纳滤波。</p>
+
+<figure align="center" style="width: 90%;margin:auto">
+  <img width="60%" height="auto" src="/static/posts/h_omega.png" />
+  <figcaption>Fig.1 - 线性滤波器进行语音增强</figcaption>
+</figure>
+<p><br /></p>
+
+<p>频域上，估计信号即为线性滤波器与输入信号的乘积。可见这个滤波器$H(\omega_{k})$正是我们要求的抑制增益函数。维纳滤波语音增强的目标就是寻找系数为实数的线性滤波器，使得滤波偶信号与原干净语音信号之间的均方误差最小。</p>
+
+<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = H(\omega_{k})Y(\omega_{k})</script>
+
+<p>均方误差为：</p>
+
+<script type="math/tex; mode=display">E\left[|e(\omega_{k})|^2\right] = 
+E\left\{\left[X(\omega_{k}) - H(\omega_{k})Y(\omega_{k})\right]\left[X(\omega_{k}) - H(\omega_{k})Y(\omega_{k})\right]^*\right\}</script>
+
+<p>这是一个优化问题，目标是求使得均方误差最小的参数$H$</p>
+
+<script type="math/tex; mode=display">H(\omega_{k}) =\mathop{\arg\min}_{H(\omega_{k})} E\left[|e(\omega_{k})|^2\right]</script>
+
+<p>展开均方误差：</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{aligned}
+E\left[|E(\omega_{k})|^2\right] = &E\left[|X(\omega_{k})|^2\right] + |H(\omega_{k})|^2E\left[|Y(\omega_{k})|^2\right]\\& -  H(\omega_{k})E\left[Y(\omega_{k})X(\omega_{k})^*\right] - H(\omega_{k})^*E\left[X(\omega_{k})Y(\omega_{k})^*\right]
+\end{aligned} %]]></script>
+
+<p>对$H(\omega_{k})$求极值:</p>
+
+<script type="math/tex; mode=display">\frac{\partial E\left[|E(\omega_{k})|^2\right]}{\partial H(\omega_{k})} = H(\omega_{k})^*E\left[|Y(\omega_{k})|^2\right] -  E\left[Y(\omega_{k})X(\omega_{k})^*\right]</script>
+
+<p>得到极值点：</p>
+
+<script type="math/tex; mode=display">H(\omega_{k})^* = \frac{E\left[Y(\omega_{k})X(\omega_{k})^*\right]}{E\left[|Y(\omega_{k})|^2\right]}</script>
+
+<p>求共轭后得到$H(\omega_{k})$：</p>
+
+<script type="math/tex; mode=display">H(\omega_{k}) = \frac{E\left[X(\omega_{k})Y(\omega_{k})^*\right]}{E\left[|Y(\omega_{k})|^2\right]} 
+= \frac{P_{xy}}{P_{yy}}</script>
+
+<p>$P_{xy}$是互功率，X与D不相关， $E\left[X(\omega_{k})D(\omega_{k})^*\right]=0$， 那么</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{aligned}
+P_{xy} &= E\left\{X(\omega_{k})\left[X(\omega_{k})+D(\omega_{k})\right]^*\right\}\\
+&= E\left[|X(\omega_{k})|^2\right] + E\left[X(\omega_{k})D(\omega_{k})^*\right] \\
+&= P_{xx}
+\end{aligned} %]]></script>
+
+<p>带噪信号功率$P_{yy}$也可以展开为语音信号和噪声功率之和。</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{aligned}
+P_{yy} &= E\left\{\left[X(\omega_{k})+D(\omega_{k})\right]\left[X(\omega_{k})+D(\omega_{k})\right]^*\right\}\\
+&= E\left[|X(\omega_{k})|^2\right] +  E\left[|D(\omega_{k})|^2\right]  \\
+&= P_{xx} +  P_{dd}
+\end{aligned} %]]></script>
+
+<p>用先验信噪比表示</p>
+
+<script type="math/tex; mode=display">H(\omega_{k}) = \frac{P_{xx}}{P_{yy}} = \frac{P_{xx}}{P_{xx} +P_{dd} } = \frac{\xi_k}{\xi_k + 1 }</script>
+
+<p>用后验信噪比表示：</p>
+
+<script type="math/tex; mode=display">H(\omega_{k}) = \frac{P_{xx}}{P_{yy}} = \frac{P_{yy}-P_{dd}}{P_{yy} } = \frac{1-\gamma_k}{\gamma_k }</script>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">def</span> <span class="nf">wiener_gain</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+		<span class="n">ksi</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'ksi'</span><span class="p">]</span>
+		<span class="n">gain</span> <span class="o">=</span> <span class="n">ksi</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span> <span class="n">ksi</span><span class="p">)</span> <span class="c"># gain function</span>
+		<span class="k">return</span> <span class="n">gain</span>
+</code></pre></div></div>
+
+<p><strong>参考文献</strong></p>
+
+<p>[1]  P. C. Loizou, Speech enhancement: theory and practice. CRC press, 2007.</p>
+
+<p>[2]  D.Wang and J. Lim, The unimportance of phase in speech enhancement,” IEEE Transactions on Acoustics, Speech, and Signal Processing, vol. 30, no. 4, pp. 679-681, 1982.</p>
+</div>
+  <div class="share-page">
+  <span style="float: left;">Share this on &rarr;&nbsp;&nbsp;</span>
+
+  <!-- Twitter -->
+  <a href="https://twitter.com/share" class="twitter-share-button" data-via="">Tweet</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+  <!-- Facebook -->
+  <div class="fb-share-button" data-href="http://localhost:4000/post/cn/monaural-speech-enhancement-filtering-cn.html" data-layout="button_count" style="position: relative; top: -8px; left: 3px;"></div>
+</div>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</div>
+
+
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+            
+            <div class="panel-body">
+              <h4>Related Posts</h4>
+              <ul>
+            
+                <li class="relatedPost">
+                  <a href="http://localhost:4000/post/cn/monaural-speech-enhancement-statistical-cn.html">单通道语音增强之统计信号模型</a>
+                  
+                    (Categories: <a href="/category/语音">语音</a>)
+                  
+                </li>
+          
+          
+        
+      
+    
+  
+  
+  </ul>
+</div>
+
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/post/cn/gmm-em-cn.html">&laquo; 高斯混合模型与EM算法的推导</a>
+  
+  
+</div>
+
+<div class="disqus-comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var disqus_shortname = "wjchen";
+    var disqus_identifier = "http://localhost:4000_单通道语音增强之谱减法与维纳滤波";
+    var disqus_title = "单通道语音增强之谱减法与维纳滤波";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    /* ]]> */
+  </script>
+</div>
+
+        <footer>
+          &copy; wjchen
+          
+            - <a href="https://github.com/chenwj1989">https://github.com/chenwj1989</a> - Powered by Jekyll.
+          
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/jquery-1.11.0.min.js"></script>
+    <script src="/static/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+    
+    <script src="/static/katex/katex.min.js"></script>
+    <script src="/static/katex/contrib/auto-render.min.js"></script>
+    <script src="/static/katex/contrib/mathtex-script-type.min.js"></script>
+    <script>
+      renderMathInElement(
+          document.body,
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+    </script>
+
+  </body>
+</html>
+

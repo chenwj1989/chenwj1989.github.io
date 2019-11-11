@@ -5,9 +5,56 @@
     <description>My Personal Thoughts</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/sitemap.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 05 Nov 2019 01:10:53 +0800</pubDate>
-    <lastBuildDate>Tue, 05 Nov 2019 01:10:53 +0800</lastBuildDate>
+    <pubDate>Mon, 11 Nov 2019 08:20:34 +0800</pubDate>
+    <lastBuildDate>Mon, 11 Nov 2019 08:20:34 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>单通道语音增强之参考书</title>
+        <description>&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;推荐几本适合于学习单通道语音增强的参考书， 这几本书主要是针对传统信号处理方法，因为深度学习的方法是近几年才应用于语音增强，还在快速发展中，所以还没有成文的书籍。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;《Speech Enhancement: Theory and Practice》&lt;/em&gt;&lt;/strong&gt;，作者是Philips Loizou。如果说有哪本书是“学习传统单通道语音增强，看这一本就够了”，那就是这本了。 而且本书第一版有中文版，更是少有的语音增强中文资料。这本书覆盖了单通道语音增强传统方法的方方面面，包括谱减法、维纳滤波、子空间方法、统计信号分析、SPP估计、噪声估计、信噪比估计，该有的都有了。作者在第二版还探讨了传统方法的不足，作了一些Binary Gain方面的探索。可惜Loizou教授英年早逝，第二版已成为绝响了。&lt;/p&gt;
+
+&lt;figure align=&quot;center&quot; style=&quot;width: 30%;margin:auto&quot;&gt;
+  &lt;img width=&quot;100%&quot; height=&quot;auto&quot; src=&quot;/static/posts/2019/loizou.jpg&quot; /&gt;
+  &lt;figcaption&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;《Digital Speech Transmission: Enhancement, Coding and Error Concealment》&lt;/em&gt;&lt;/strong&gt;，作者是Peter Vary, Rainer Martin。这本书覆盖面更广些，除了单通道语音增强，还包括了音频编码、音频差错控制、多通道语音增强、回声消除，单通道语音增强方面也简单扼要地把各种信号处理方法介绍了一遍。这本书还是挺实用的，作为音频信号处理方面的参考书比较全面。&lt;/p&gt;
+
+&lt;figure align=&quot;center&quot; style=&quot;width: 30%;margin:auto&quot;&gt;
+  &lt;img width=&quot;100%&quot; height=&quot;auto&quot; src=&quot;/static/posts/2019/vary.jpg&quot; /&gt;
+  &lt;figcaption&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;《Sound Capture and Processing: Practical Approaches》&lt;/em&gt;&lt;/strong&gt;，作者Ivan J. Tashev现在是微软研究院做语音处理方向的专家。这本书大概是作者多年专业经验的总结，覆盖了音频采集、单通道去噪、麦克风阵列信号处理、声源定位、回声消除、去混响，所以特别适合研究语音前段信号处理的读者。另外在微软的官网可以看到作者项目组的研究方向，最新的的文章主要都是机器学习在语音信号处理方面的应用，也是很好的参考资料。&lt;/p&gt;
+
+&lt;figure align=&quot;center&quot; style=&quot;width: 30%;margin:auto&quot;&gt;
+  &lt;img width=&quot;100%&quot; height=&quot;auto&quot; src=&quot;/static/posts/2019/tashev.jpg&quot; /&gt;
+  &lt;figcaption&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;《Audio Source Separation and Speech Enhancement》&lt;/em&gt;&lt;/strong&gt;，由多位作者合编，是语音增强方面最新鲜的参考资料，2018年才刚刚出版。这本书涉及的话题很广，也有很多前沿的研究成果，主要都是围绕语音增强和语音源分离两个话题。 除了前面几本书所涉及到的单通道/多通道语音增强、声源定位、去混响之外， 这本书还介绍了大量的语音分离的信号处理和机器学习方法, 包括了聚类分析、独立成分分析（ICA）、非负矩阵分解（NMF）、高斯混合模型（GMM）等等。此书涉及的话题庞杂，而每章的篇幅有限，所以还需要和其他资料结合起来才能够理清细节。&lt;/p&gt;
+
+&lt;figure align=&quot;center&quot; style=&quot;width: 30%;margin:auto&quot;&gt;
+  &lt;img width=&quot;100%&quot; height=&quot;auto&quot; src=&quot;/static/posts/2019/gannot.jpg&quot; /&gt;
+  &lt;figcaption&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+</description>
+        <pubDate>Thu, 07 Nov 2019 01:00:00 +0800</pubDate>
+        <link>http://localhost:4000/post/cn/monaural-speech-enhancement-books-cn.html</link>
+        <guid isPermaLink="true">http://localhost:4000/post/cn/monaural-speech-enhancement-books-cn.html</guid>
+        
+        
+        <category>语音</category>
+        
+      </item>
     
       <item>
         <title>单通道语音增强之谱减法与维纳滤波</title>

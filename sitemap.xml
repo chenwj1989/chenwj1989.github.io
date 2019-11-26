@@ -3,10 +3,10 @@
   <channel>
     <title>All Articles</title>
     <description>My Personal Thoughts</description>
-    <link>http://localhost:4000/</link>
-    <atom:link href="http://localhost:4000/sitemap.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 25 Nov 2019 00:57:42 +0800</pubDate>
-    <lastBuildDate>Mon, 25 Nov 2019 00:57:42 +0800</lastBuildDate>
+    <link>https://chenwj1989.github.io/</link>
+    <atom:link href="https://chenwj1989.github.io/sitemap.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 26 Nov 2019 11:23:09 +0800</pubDate>
+    <lastBuildDate>Tue, 26 Nov 2019 11:23:09 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -28,8 +28,8 @@
 
 </description>
         <pubDate>Wed, 20 Nov 2019 01:00:00 +0800</pubDate>
-        <link>http://localhost:4000/post/cn/monaural-speech-enhancement-webrtc-cn.html</link>
-        <guid isPermaLink="true">http://localhost:4000/post/cn/monaural-speech-enhancement-webrtc-cn.html</guid>
+        <link>https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-webrtc-cn.html</link>
+        <guid isPermaLink="true">https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-webrtc-cn.html</guid>
         
         
         <category>语音</category>
@@ -190,8 +190,8 @@ P_{xx}(\omega_{k}) =  P_{yy}(\omega_{k}) -  P_{dd}(\omega_{k})&lt;/script&gt;
 &lt;p&gt;[1]  P. C. Loizou, Speech enhancement: theory and practice. CRC press, 2007.&lt;/p&gt;
 </description>
         <pubDate>Wed, 20 Nov 2019 01:00:00 +0800</pubDate>
-        <link>http://localhost:4000/post/cn/monaural-speech-enhancement-review-cn.html</link>
-        <guid isPermaLink="true">http://localhost:4000/post/cn/monaural-speech-enhancement-review-cn.html</guid>
+        <link>https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-review-cn.html</link>
+        <guid isPermaLink="true">https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-review-cn.html</guid>
         
         
         <category>语音</category>
@@ -237,8 +237,8 @@ P_{xx}(\omega_{k}) =  P_{yy}(\omega_{k}) -  P_{dd}(\omega_{k})&lt;/script&gt;
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 </description>
         <pubDate>Thu, 07 Nov 2019 01:00:00 +0800</pubDate>
-        <link>http://localhost:4000/post/cn/monaural-speech-enhancement-books-cn.html</link>
-        <guid isPermaLink="true">http://localhost:4000/post/cn/monaural-speech-enhancement-books-cn.html</guid>
+        <link>https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-books-cn.html</link>
+        <guid isPermaLink="true">https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-books-cn.html</guid>
         
         
         <category>语音</category>
@@ -433,8 +433,8 @@ P_{yy} &amp;= E\left\{\left[X(\omega_{k})+D(\omega_{k})\right]\left[X(\omega_{k}
 &lt;p&gt;[2]  D.Wang and J. Lim, The unimportance of phase in speech enhancement,” IEEE Transactions on Acoustics, Speech, and Signal Processing, vol. 30, no. 4, pp. 679-681, 1982.&lt;/p&gt;
 </description>
         <pubDate>Thu, 31 Oct 2019 01:00:00 +0800</pubDate>
-        <link>http://localhost:4000/post/cn/monaural-speech-enhancement-filtering-cn.html</link>
-        <guid isPermaLink="true">http://localhost:4000/post/cn/monaural-speech-enhancement-filtering-cn.html</guid>
+        <link>https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-filtering-cn.html</link>
+        <guid isPermaLink="true">https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-filtering-cn.html</guid>
         
         
         <category>语音</category>
@@ -942,8 +942,8 @@ L(x|\Theta) &amp;= \sum_{i}\ln \sum_{k} \omega_{i,k} \frac{\alpha_{k}\textit{N}(
 
 </description>
         <pubDate>Wed, 19 Jun 2019 14:32:04 +0800</pubDate>
-        <link>http://localhost:4000/post/cn/gmm-em-cn.html</link>
-        <guid isPermaLink="true">http://localhost:4000/post/cn/gmm-em-cn.html</guid>
+        <link>https://chenwj1989.github.io/post/cn/gmm-em-cn.html</link>
+        <guid isPermaLink="true">https://chenwj1989.github.io/post/cn/gmm-em-cn.html</guid>
         
         
         <category>机器学习</category>
@@ -1459,8 +1459,8 @@ update GMM parameters $\Theta^{t+1}$. This step is called
 
 </description>
         <pubDate>Tue, 18 Jun 2019 14:32:04 +0800</pubDate>
-        <link>http://localhost:4000/post/en/gmm-em-en.html</link>
-        <guid isPermaLink="true">http://localhost:4000/post/en/gmm-em-en.html</guid>
+        <link>https://chenwj1989.github.io/post/en/gmm-em-en.html</link>
+        <guid isPermaLink="true">https://chenwj1989.github.io/post/en/gmm-em-en.html</guid>
         
         
         <category>machine_learning</category>
@@ -1795,8 +1795,8 @@ Estimation)的语音增强算法。一种是同时求解幅度和相位的混合
 &lt;p&gt;[5] P. J. Wolfe and S. J. Godsill, Efficient alternatives to the ephraim and malah suppression rule for audio signal enhancement,” EURASIP Journal on Applied Signal Processing, vol. 2003, pp.1043-1051, 2003.&lt;/p&gt;
 </description>
         <pubDate>Tue, 28 May 2019 15:32:04 +0800</pubDate>
-        <link>http://localhost:4000/post/cn/monaural-speech-enhancement-statistical-cn.html</link>
-        <guid isPermaLink="true">http://localhost:4000/post/cn/monaural-speech-enhancement-statistical-cn.html</guid>
+        <link>https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-statistical-cn.html</link>
+        <guid isPermaLink="true">https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-statistical-cn.html</guid>
         
         
         <category>语音</category>

@@ -5,8 +5,8 @@
     <description>My Personal Thoughts</description>
     <link>https://chenwj1989.github.io/</link>
     <atom:link href="https://chenwj1989.github.io/sitemap.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 28 Nov 2019 00:19:48 +0800</pubDate>
-    <lastBuildDate>Thu, 28 Nov 2019 00:19:48 +0800</lastBuildDate>
+    <pubDate>Sun, 01 Dec 2019 23:04:18 +0800</pubDate>
+    <lastBuildDate>Sun, 01 Dec 2019 23:04:18 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -50,7 +50,14 @@
         &lt;/ul&gt;
       &lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#22-话音激活检测和语音存在概率&quot; id=&quot;markdown-toc-22-话音激活检测和语音存在概率&quot;&gt;2.2 话音激活检测和语音存在概率&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#23-噪声估计&quot; id=&quot;markdown-toc-23-噪声估计&quot;&gt;2.3 噪声估计&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#23-噪声估计&quot; id=&quot;markdown-toc-23-噪声估计&quot;&gt;2.3 噪声估计&lt;/a&gt;        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#231-最小值跟踪算法&quot; id=&quot;markdown-toc-231-最小值跟踪算法&quot;&gt;2.3.1 最小值跟踪算法&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#232-直方图噪声估计算法&quot; id=&quot;markdown-toc-232-直方图噪声估计算法&quot;&gt;2.3.2 直方图噪声估计算法&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#233-递归平均噪声算法&quot; id=&quot;markdown-toc-233-递归平均噪声算法&quot;&gt;2.3.3 递归平均噪声算法&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#234-基于语音概率的递归平均算法&quot; id=&quot;markdown-toc-234-基于语音概率的递归平均算法&quot;&gt;2.3.4 基于语音概率的递归平均算法&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#235-最小值控制的递归平均mcra算法&quot; id=&quot;markdown-toc-235-最小值控制的递归平均mcra算法&quot;&gt;2.3.5 最小值控制的递归平均（MCRA）算法&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#24-snr估计&quot; id=&quot;markdown-toc-24-snr估计&quot;&gt;2.4 SNR估计&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
@@ -186,7 +193,88 @@ P_{xx}(\omega_{k}) =  P_{yy}(\omega_{k}) -  P_{dd}(\omega_{k})&lt;/script&gt;
 
 &lt;h3 id=&quot;23-噪声估计&quot;&gt;2.3 噪声估计&lt;/h3&gt;
 
-&lt;p&gt;待补充。&lt;/p&gt;
+&lt;h4 id=&quot;231-最小值跟踪算法&quot;&gt;2.3.1 最小值跟踪算法&lt;/h4&gt;
+
+&lt;p&gt;最小值跟踪发的思想是，噪声能量比较平稳， 带语音的片段能量总是大于纯噪声段。 对于每个频点，跟踪一段时间内最低的功率，那就是纯噪声的功率。&lt;/p&gt;
+
+&lt;p&gt;为了使功率估计更稳定，通常要对功率谱进行平滑处理：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;P(\lambda, k) = \alpha P(\lambda-1,k) + (1-\alpha)|Y(\lambda, k)|^2&lt;/script&gt;
+
+&lt;p&gt;然后寻找当前第$\lambda$帧的最低功率$P_{min}$。简单的方法是直接比较前$D$帧的功率，得到最小值，计算速度较慢。
+还有一种方法是对$P_{min}$进行非线性平滑，公式如下。&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{aligned}
+\text{if    } &amp;P_{min}(\lambda-1, k) &lt; P(\lambda, k) \\
+&amp;P_{min}=\gamma P_{min}(\lambda-1, k) + \frac{1-\gamma}{1-\beta}\left[P(\lambda, k)-\beta P(\lambda-1, k)\right]\\
+\text{else}&amp;\\
+&amp;P_{min}=\gamma P_{min}(\lambda-1, k)\\
+\text{end}&amp;
+\end{aligned} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;参数需要调优，可以参考文献中提供的取值：$\alpha=0.7$、$\beta=0.96$、$\gamma=0.998$。&lt;/p&gt;
+
+&lt;h4 id=&quot;232-直方图噪声估计算法&quot;&gt;2.3.2 直方图噪声估计算法&lt;/h4&gt;
+&lt;p&gt;这种估计方法的思路是，噪声的能量变化比语音稳定，因此按频点统计一段时间内的能量直方图，每个频点出现频次最高的能量值就是噪声的能量。 主要包括以下几个步骤：&lt;/p&gt;
+
+&lt;p&gt;1.计算当前帧的功率谱
+&lt;script type=&quot;math/tex&quot;&gt;|Y(\lambda, k)^2|&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;2.计算当前帧前连续D帧功率谱密度直方图，选择每个频点k的频次最高的功率值$H_{max}(\lambda, k)$&lt;/p&gt;
+
+&lt;p&gt;3.滑动平均，更新噪声功率谱密度
+	&lt;script type=&quot;math/tex&quot;&gt;\hat{\sigma}_d^2(\lambda, k) = \alpha_m\hat{\sigma}_d^2(\lambda-1, k) + (1-\alpha_m)H_{max}(\lambda, k)&lt;/script&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;233-递归平均噪声算法&quot;&gt;2.3.3 递归平均噪声算法&lt;/h4&gt;
+&lt;p&gt;当前帧的SNR很低，或者语音出现概率很低时，意味着当前信号功率很接近噪声功率，我们可以用当前帧的功率谱与前一帧估计的噪声功率进行加权平均，从而更新噪声功率谱。这就是递归平均法，通用的公式是：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{\sigma}_d^2(\lambda, k) = \alpha(\lambda, k)\hat{\sigma}_d^2(\lambda-1, k) + \left[1-\alpha(\lambda,k)\right]|Y(\lambda, k)|^2&lt;/script&gt;
+
+&lt;p&gt;算法的核心变成了计算参数$\alpha(\lambda, k)$，研究者提出了不同的方法，比如可以根据后验信噪比$\gamma_k(\lambda)$计算参数：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\alpha(\lambda, k)=1-\text{min}\left\{1, \frac{1}{\gamma_k^p(\lambda)}\right\}&lt;/script&gt;
+
+&lt;h4 id=&quot;234-基于语音概率的递归平均算法&quot;&gt;2.3.4 基于语音概率的递归平均算法&lt;/h4&gt;
+&lt;p&gt;用$H_1^k$和$H_0^k$分别代表当前帧包含语音和不包含语音，从概率论的角度，当前帧的噪声功率期望值为：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{aligned}
+\hat{\sigma}_d^2(\lambda, k) &amp;= E\left[\sigma_d^2(\lambda, k)|Y(\lambda, k)\right] \\
+&amp;= E\left[\sigma_d^2(\lambda, k)|H_0^k\right]P(H_0^k|Y(\lambda, k)) + E\left[\sigma_d^2(\lambda, k)|H_1^k\right]P(H_1^k|Y(\lambda, k))
+\end{aligned} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;其中，当前帧不存在语音时，噪声功率就是信号功率，所以
+&lt;script type=&quot;math/tex&quot;&gt;E\left[\sigma_d^2(\lambda, k)|H_0^k\right]= |Y(\lambda, k)|^2&lt;/script&gt;。当前帧存在语音时，可以用前一帧估计的噪声功率来近似,
+&lt;script type=&quot;math/tex&quot;&gt;E\left[\sigma_d^2(\lambda, k)|H_1^k\right]=\hat{\sigma}_d^2(\lambda-1, k)&lt;/script&gt;。噪声的递归平均算法转化为求当前帧每个频点的语音存在/不存在概率问题：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{\sigma}_d^2(\lambda, k) = |Y(\lambda, k)|^2P(H_0^k|Y(\lambda, k)) + \hat{\sigma}_d^2(\lambda-1, k)P(H_1^k|Y(\lambda, k))&lt;/script&gt;
+
+&lt;p&gt;比照递归平均的通用公式，也就是
+&lt;script type=&quot;math/tex&quot;&gt;\alpha(\lambda, k) =P(H_1^k|Y(\lambda, k))&lt;/script&gt;。 使用前一节介绍的语音存在概率SPP计算方法求
+&lt;script type=&quot;math/tex&quot;&gt;P(H_1^k|Y(\lambda, k))&lt;/script&gt;即可。&lt;/p&gt;
+
+&lt;h4 id=&quot;235-最小值控制的递归平均mcra算法&quot;&gt;2.3.5 最小值控制的递归平均（MCRA）算法&lt;/h4&gt;
+&lt;p&gt;MCRA是一种将最小值跟踪与基于语音概率的递归平均结合起来的算法,核心思想是用当前帧功率谱平滑后与局部最小功率谱密度之比来估计语音概率。&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;S_r(\lambda, k) = \frac{S(\lambda, k)}{S_{min}(\lambda, k)}&lt;/script&gt;
+
+&lt;p&gt;以某阈值$\delta$对语音概率$p(\lambda, k)$进行二元估计&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;p(\lambda, k) = \left(S_r(\lambda, k)&gt;\delta\right)?1:0&lt;/script&gt;
+
+&lt;p&gt;语音概率也可以进行平滑：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{p}(\lambda, k) = \alpha_p\hat{p}(\lambda-1, k) + (1-\alpha_p)p(\lambda, k)&lt;/script&gt;
+
+&lt;p&gt;另外，如果将语音不存在是的噪声估计也做滑动平均，也就是&lt;/p&gt;
+
+&lt;p&gt;&lt;script type=&quot;math/tex&quot;&gt;\hat{\sigma}_d^2(\lambda, k) = \alpha\hat{\sigma}_d^2(\lambda-1, k)+(1-\alpha)|Y(\lambda, k)|^2&lt;/script&gt;
+可以得到最终的噪声概率估计公式：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\hat{\sigma}_d^2(\lambda, k) = \alpha_d(\lambda, k)\hat{\sigma}_d^2(\lambda-1, k) + \left[1-\alpha_d(\lambda,k)\right]|Y(\lambda, k)|^2&lt;/script&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\alpha_d(\lambda, k) = \alpha + (1-\alpha)\hat{p}(\lambda, k)&lt;/script&gt;
 
 &lt;h3 id=&quot;24-snr估计&quot;&gt;2.4 SNR估计&lt;/h3&gt;
 

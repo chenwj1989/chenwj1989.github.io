@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/favicon.ico" />
+    <title>频域LMS自适应滤波 - All Articles</title>
+    <meta name="author" content="wjchen" />
+    <meta name="description" content="频域LMS自适应滤波" />
+    <meta name="keywords" content="频域LMS自适应滤波, All Articles, 机器学习, 信号处理" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <meta content="" property="fb:app_id">
+    <meta content="All Articles" property="og:site_name">
+
+    
+
+    
+      <meta content="频域LMS自适应滤波" property="og:title">
+      <meta content="article" property="og:type">
+    
+
+    
+      <meta content="My Personal Thoughts" property="og:description">
+    
+
+    
+      <meta content="https://chenwj1989.github.io/post/cn/freq-domain-lms-cn.html" property="og:url">
+    
+
+    
+      <meta content="2020-02-29T01:00:00+08:00" property="article:published_time">
+      <meta content="https://chenwj1989.github.io/about/" property="article:author">
+    
+
+    
+      <meta content="https://chenwj1989.github.io/static/img/avatar.jpg" property="og:image">
+    
+
+    
+      
+        <meta content="机器学习" property="article:section">
+      
+    
+
+    
+      
+    
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@">
+
+    
+      <meta name="twitter:title" content="频域LMS自适应滤波">
+    
+
+    
+      <meta name="twitter:url" content="https://chenwj1989.github.io/post/cn/freq-domain-lms-cn.html">
+    
+
+    
+      <meta name="twitter:description" content="My Personal Thoughts">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="/static/css/fonts.css" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/katex/katex.min.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+          <div class="author" align="center">
+          <a href="/"><img class="profile-avatar" src="/static/img/avatar.jpg" height="100px" width="100px" /></a>
+          <h1 class="author-name">wjchen</h1>
+          
+            <div class="profile-about">
+              Never lose a holy curiosity.
+            </div>
+          
+           <div class="social">
+            <ul>
+              
+                <li><a href="https://github.com/chenwj1989" target="_blank"><i class="fab fa-github"></i></a></li>
+              
+                <li><a href="https://www.zhihu.com/people/wjchen-16/activities" target="_blank"><i class="fab fa-zhihu"></i></a></li>
+              
+            </ul>
+          </div>
+	  </div>
+          <div class="search" id="js-search">
+            <input type="text" placeholder="$ type to search" class="search__input form-control" id="js-search__input">
+            <ul class="search__results" id="js-search__results"></ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/projects/">My Projects</a></li>
+            
+              <li><a class="about" href="/about/">About Me</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-8 col-offset-1 main-layout">
+        <header class="post-header">
+  <h1 class="post-title">频域LMS自适应滤波</h1>
+</header>
+
+<span class="time">29 Feb 2020</span>
+
+  <span class="categories">
+    &raquo; <a href="/category/机器学习">机器学习</a>, <a href="/category/信号处理">信号处理</a>
+  </span>
+
+
+<div class="content">
+  <div class="post"><p>本文代码位于<a href="https://github.com/chenwj1989/MLSP/tree/master/adaptive_filtering">GitHub</a>。</p>
+
+<p><br /></p>
+<ul id="markdown-toc">
+  <li><a href="#1-概述" id="markdown-toc-1-概述">1. 概述</a></li>
+  <li><a href="#2-lms和nlms算法" id="markdown-toc-2-lms和nlms算法">2. LMS和NLMS算法</a></li>
+  <li><a href="#3-block-lms算法" id="markdown-toc-3-block-lms算法">3. Block LMS算法</a></li>
+  <li><a href="#4-快速卷积" id="markdown-toc-4-快速卷积">4. 快速卷积</a></li>
+  <li><a href="#5-lms算法的快速计算频域自适应滤波" id="markdown-toc-5-lms算法的快速计算频域自适应滤波">5. LMS算法的快速计算：频域自适应滤波</a></li>
+  <li><a href="#6-减少时延滤波器分割的频域自适应滤波" id="markdown-toc-6-减少时延滤波器分割的频域自适应滤波">6. 减少时延：滤波器分割的频域自适应滤波</a></li>
+</ul>
+
+<h2 id="1-概述">1. 概述</h2>
+
+<p>下图是一个典型的自适应滤波场景， 输入信号$x(n)$经过一个位置的系统变换$h(z)$后得到参考信号$d(n)$。 自适应滤波器的目标是找出一组滤波器系数$w(z)$来逼近系统$h(z)$， 使输入信号经过$w(z)$变换后，与参考信号误差最小。</p>
+
+<figure align="center" style="width: 40%;margin:auto">
+  <img width="auto" height="auto" src="/static/posts/2020/02/adaptive_filter.png" />
+  <figcaption></figcaption>
+</figure>
+
+<p>若使用FIR滤波器设计$w(z)$, 自适应滤波器的输出就是输入信号与滤波器权值的卷积：</p>
+
+<script type="math/tex; mode=display">y(n)=\sum_{i=0}^{N-1}w_ix(n-i)</script>
+
+<p>自适应滤波器的算法就是以误差$e(n)$为最小化目标，迭代求出最优的滤波器系数$w(z)$。</p>
+
+<script type="math/tex; mode=display">e(n)=d(n)-y(n)</script>
+
+<h2 id="2-lms和nlms算法">2. LMS和NLMS算法</h2>
+
+<p>LMS是最广泛应用的自适应滤波算法，以MSE误差为目标函数，以梯度下降为优化算法。并且通常情况下，LMS以最新的输入计算的瞬时梯度替代实际梯度计算，类似于机器学习的随机梯度下降法。</p>
+
+<p>NLMS是使用输入的功率对步长进行归一化的方法，可以取得更好的收敛性能。</p>
+
+<p>时域上实现LMS和NLMS算法的参考资料很多，这里不赘述，下面列出算法迭代步骤。</p>
+
+<p><strong>输入:</strong></p>
+
+<p>　输入向量最新样本$\bm{x}(n)$</p>
+
+<p>　期望输出最新样本$\bm{d}(n)$</p>
+
+<p><strong>输出:</strong></p>
+
+<p>　滤波器系数$\bm{w}$,长度为M的FIR滤波器</p>
+
+<p>　滤波器输出$\bm{y}(n)$</p>
+
+<p>　滤波器输出与期望间的误差$e$</p>
+
+<p><strong>初始化:</strong></p>
+
+<p>　滤波器系数$\bm{w}(0)=zeros(1, M)$</p>
+
+<p><strong>迭代过程:</strong></p>
+
+<p>　for n = 0, 1, 2…</p>
+
+<p>　1.读取输入样本$\bm{x}(n)$ 和期望输出样本$\bm{d}(n)$</p>
+
+<p>　2.滤波：</p>
+
+<script type="math/tex; mode=display">\bm{y}(n)=\bm{w}^T(n)\bm{x}(n)</script>
+
+<p>　3.计算误差：</p>
+
+<script type="math/tex; mode=display">e(n)=\bm{d}(n) - \bm{y}(n)</script>
+
+<p>　4.更新系数：</p>
+
+<p>　　LMS:</p>
+
+<script type="math/tex; mode=display">\bm{w}(n+1)=\bm{w}(n) + 2\mu e(n)\bm{x}(n)</script>
+
+<p>　　NLMS:</p>
+
+<script type="math/tex; mode=display">\bm{w}(n+1)=\bm{w}(n) + \frac{\mu_0}{\bm{x}^T(n)\bm{x}(n)+\phi} e(n)\bm{x}(n)</script>
+
+<p><strong>算法复杂度:</strong></p>
+
+<p>　LMS:  $2M+1$次乘法和$2M$次加法</p>
+
+<p>　NLMS: $3M+1$次乘法和$3M$次加法</p>
+
+<h2 id="3-block-lms算法">3. Block LMS算法</h2>
+
+<p>LMS算法对输入数据是串行处理的，每输入一个样本，都需要进行$2M+1$次乘法和$2M$次加法，对于长度为$N$的信号，计算时间复杂度为$O(NM)$。可以通过将输入数据分段并行处理，并且利用频域FFT来做快速卷积，大大减少计算复杂度。</p>
+
+<p>首先需要将串行的LMS算法转变为分块处理，也就是Block LMS(BLMS)。 每次迭代，输入数据被分成长度为$L$的块进行处理。和LMS使用瞬时梯度来进行滤波器参数更新不同，BLMS使用L点的平均梯度来进行参数更新。 也就是机器学习里面Stochastic Gradient Descent 和 Mini-Batch Gradient Descent的区别。 对第$k$块数据，BLMS算法递推公式为：</p>
+
+<script type="math/tex; mode=display">\bm{w}(k+1)=\bm{w}(k) + 2\mu_B \frac{\sum_{i=0}^{L-1}e(kL+i)\bm{x}(kL+i)}{L}</script>
+
+<p><strong>输入:</strong></p>
+
+<p>　输入向量$\bm{x}$</p>
+
+<p>　期望输出$\bm{d}$</p>
+
+<p><strong>输出:</strong></p>
+
+<p>　滤波器系数$\bm{w}$,长度为M的FIR滤波器</p>
+
+<p>　滤波器输出$\bm{y}$</p>
+
+<p>　滤波器输出与期望间的误差$\bm{e}$</p>
+
+<p><strong>初始化:</strong></p>
+
+<p>　滤波器系数$\bm{w}(0)=zeros(1, M)$</p>
+
+<p><strong>迭代过程:</strong></p>
+
+<p>　for k = 0, 1, 2 … N/L，读入第k块数据$\bm{x}$, $\bm{d}$</p>
+
+<p>　1. $\phi = zeros(1,L)$</p>
+
+<p>　2. for i = 0, 1, 2 … L-1</p>
+
+<p>　　2.1 滤波：</p>
+
+<script type="math/tex; mode=display">\bm{y}(kL+i)=\bm{w}^T(k)\bm{x}(kL+i)</script>
+
+<p>　　2.2 计算误差：</p>
+
+<script type="math/tex; mode=display">\bm{e}(kL+i)=\bm{d}(kL+i) - \bm{y}(kL+i)</script>
+
+<p>　　2.3 累计梯度：</p>
+
+<script type="math/tex; mode=display">\phi=\phi+ \mu \bm{e}(kL+i)\bm{x}(kL+i)</script>
+
+<p>　3 更新系数：</p>
+
+<script type="math/tex; mode=display">\bm{w}(k+1)=\bm{w}(k) + \phi</script>
+
+<p><strong>算法复杂度:</strong></p>
+
+<p>　$2M+1$次乘法和$2M+M/L$次加法</p>
+
+<h2 id="4-快速卷积">4. 快速卷积</h2>
+
+<p>前面一节描述的BLMS算法跟LMS算法相比，除了用块平均梯度代替瞬时梯度外，并没有不同。 为了提升卷积计算的复杂度，我们需要引入快速卷积。 也就是用FFT计算循环卷积，实现线性卷积的快速分块计算。</p>
+
+<p>长度为L的$x$和长度为M的$w$，线性卷积的结果是长度为$L+M-1$的$y$。 时域卷积，频域是相乘，因此有</p>
+
+<script type="math/tex; mode=display">y(n)=x(n)*w(n)</script>
+
+<script type="math/tex; mode=display">\mathcal{FT}\left[y(n)\right]= \mathcal{FT}\left[x(n)\right] \mathcal{FT}\left[w(n)\right]</script>
+
+<p>傅立叶变换在频域上是连续的，计算机做傅立叶运算会将频域离散化采样，转化成$N$点离散傅立叶变换(DFT)，并且用FFT算法做快速计算。 将卷积的输入$x$和$w$都补零成$N$点，做一个$N$点的DFT，其逆变换就是循环卷积的结果，时域上是周期为$N$的重复信号。</p>
+
+<figure align="center" style="width: 70%;margin:auto">
+  <img width="auto" height="auto" src="/static/posts/2020/02/linear_conv_with_circular_conv.png" />
+  <figcaption></figcaption>
+</figure>
+
+<p>如上图所示，只有取DFT点数$N&gt;L+M-1$，才能防止卷积结果在时域上面混叠。IDFT结果的前$M+L-1$个值就是所需的卷积结果。</p>
+
+<p>于是两组有限长信号的卷积，则转换成3次DFT计算。</p>
+
+<script type="math/tex; mode=display">y(n)= \mathcal{IDFT}\left\{\mathcal{DFT}\left[x(n)\right] \mathcal{DFT}\left[w(n)\right]\right\}</script>
+
+<p>直接计算卷积， 大约需要$N^2$次乘法和$N^2$次加法。</p>
+
+<p>采用FFT算法，3次DFT计算需要$N+\frac{3N}{2}\log_2N$次复数乘法和$3N\log_2N$次复数加法，相对直接计算算法复杂度从$O(N^2)$降到了$O(N\log_2N)$。</p>
+
+<p>前面说的是两段有限长信号作一次卷积的流程。回到BLMS，对信号$x$进行分段处理。每段输入长度是$B$， 滤波器长度是$M$。</p>
+
+<p>如果在$w$后面补$K-B$个零，而在$x$当前块前部保留前一块的最后$K-B$个点，做$K$点快速卷积，结果中最后$B$点是有效输出，而前$K-B$点可丢弃。这种分块处理长卷积的方法，叫Overlap-and-Save方法。用FFT快速卷积+Overlap-and-Save方法，就可以高效处理BLMS滤波。</p>
+
+<figure align="center" style="width: 100%;margin:auto">
+  <img width="auto" height="auto" src="/static/posts/2020/02/fast_conv_ols.png" />
+  <figcaption></figcaption>
+</figure>
+
+<p><br /></p>
+
+<h2 id="5-lms算法的快速计算频域自适应滤波">5. LMS算法的快速计算：频域自适应滤波</h2>
+
+<p>使用快速卷积的方法实现BLMS，就是频域实现的LMS自适应滤波器。称作Fast Block LMS (FBLMS) 或者 Frequency Domain Adaptive Filter (FDAF)。</p>
+
+<p>对于长度为$M$的滤波器，FBLMS一般采用$2M$点FFT，且使用Overlap-and-Savee的快速卷积方法。也就是说，滤波器向量$w$做FFT前须补$M$个零值。</p>
+
+<script type="math/tex; mode=display">W=FFT\left[ \begin{matrix} w\\ 0 \end{matrix} \right]</script>
+
+<p>输入向量的分块长度也设为$M$，则FFT的输入前$M$点是保存前一块的数据，后$M$点是当前块数据。</p>
+
+<script type="math/tex; mode=display">X=FFT\left[ \begin{matrix} x_{k-1}\\ x_k \end{matrix} \right]</script>
+
+<p>使用overlap-save快速卷积方法实现BLMS中的卷积部分，当前块输出向量$y$为IFFT的后$M$点。</p>
+
+<script type="math/tex; mode=display">\left[ \begin{matrix} C\\ y_k \end{matrix} \right]=IFFT\left[ 
+FFT\left[ \begin{matrix} w\\ 0 \end{matrix} \right] 
+FFT\left[ \begin{matrix} x_{k-1}\\ x_k \end{matrix} \right]\right]</script>
+
+<p>梯度的计算，可以将误差与输入信号放到频域来做，具体推导参考<a href="http://www.cs.tut.fi/~tabus/course/ASP/SGN2206LectureNew6.pdf">Block Adaptive Filters and Frequency Domain Adaptive Filters</a></p>
+
+<script type="math/tex; mode=display">\left[ \begin{matrix} \phi\\ D \end{matrix} \right]=IFFT\left[ 
+FFT\left[ \begin{matrix} 0\\ e \end{matrix} \right] 
+FFT\left[ \begin{matrix} x_{k-1}\\ x_k \end{matrix} \right]'\right]</script>
+
+<figure align="center" style="width: 100%;margin:auto">
+  <img width="auto" height="auto" src="/static/posts/2020/02/fblms.png" />
+  <figcaption>文献[1]中提供的FBLMS框图</figcaption>
+</figure>
+
+<p><strong>输入:</strong></p>
+
+<p>　分块输入信号$\bm{x_k}$, 块长度为M</p>
+
+<p>　分块参考信号$\bm{d_k}$, 块长度为M</p>
+
+<p><strong>输出:</strong></p>
+
+<p>　更新的滤波器系数$\bm{w_k}$,长度为M的FIR滤波器</p>
+
+<p>　分块输出信号$\bm{y_k}$, 块长度为M</p>
+
+<p>　滤波器输出与参考信号间的误差$\bm{e}$</p>
+
+<p><strong>初始化:</strong></p>
+
+<p>　滤波器系数$\bm{w}_0=zeros(M,1)$</p>
+
+<p>　初始数据块$\bm{x}_0=zeros(M,1)$</p>
+
+<p><strong>迭代过程:</strong></p>
+
+<p>　for $k = 1, 2 … N/L$，读入第$k$块数据$\bm{w_k}$, $\bm{d_k}$</p>
+
+<p>　1. $\bm{\phi} = zeros(M,1)$</p>
+
+<p>　2. 计算块输出</p>
+
+<script type="math/tex; mode=display">\left[ \begin{matrix} C\\ y_k \end{matrix} \right]=IFFT\left[ 
+FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] 
+FFT\left[ \begin{matrix} x_{k-1}\\ x_k \end{matrix} \right]\right]</script>
+
+<p>　3. 计算误差： $\bm{e} = \bm{y}_k - \bm{d}_k$</p>
+
+<p>　4. 计算梯度：</p>
+
+<script type="math/tex; mode=display">\left[ \begin{matrix} \phi\\ D \end{matrix} \right]=IFFT\left[ 
+FFT\left[ \begin{matrix} 0\\ e \end{matrix} \right] 
+\overline{FFT\left[ \begin{matrix} x_{k-1}\\ x_k \end{matrix} \right]}\right]</script>
+
+<p>　5. 更新滤波器：</p>
+
+<script type="math/tex; mode=display">FFT\left[ \begin{matrix} w_{k+1}\\ 0 \end{matrix} \right]= 
+FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] +
+\mu FFT\left[ \begin{matrix} \phi\\ 0 \end{matrix} \right]</script>
+
+<p><strong>算法复杂度:</strong></p>
+
+<p>　$10M\log M+26M$</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_b</span><span class="p">,</span> <span class="n">d_b</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span> 
+	<span class="s">'''
+	Process a block data, and updates the adaptive filter (optional)
+	
+	Parameters
+	----------
+	x_b: float
+	the new input block signal
+	d_b: float
+	the new reference block signal
+	update: bool, optional
+	whether or not to update the filter coefficients
+	'''</span>  
+	<span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">:],</span> <span class="n">x_b</span><span class="p">])</span>
+	
+	<span class="c"># block-update parameters</span>
+	<span class="n">X</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+	<span class="n">y_2B</span> <span class="o">=</span> <span class="n">ifft</span><span class="p">(</span> <span class="n">X</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
+	<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">y_2B</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">:])</span>
+	
+	<span class="n">e</span> <span class="o">=</span> <span class="n">d_b</span> <span class="o">-</span> <span class="n">y</span>
+	
+	<span class="c"># Update the parameters of the filter</span>
+	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">:</span>
+	<span class="n">E</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">),</span> <span class="n">e</span><span class="p">]))</span> <span class="c"># (2B)</span>
+	
+	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlms</span><span class="p">:</span>
+	<span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1e-10</span>
+	<span class="n">E</span> <span class="o">=</span> <span class="n">E</span><span class="o">/</span><span class="n">norm</span>
+	<span class="c"># Set the upper bound of E, to prevent divergence</span>
+	<span class="n">m_errThreshold</span> <span class="o">=</span> <span class="mf">0.2</span>
+	<span class="n">Enorm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">E</span><span class="p">)</span> <span class="c"># (2B)</span>
+	<span class="c"># print(E)</span>
+	<span class="k">for</span> <span class="n">eidx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">):</span>
+	<span class="k">if</span> <span class="n">Enorm</span><span class="p">[</span><span class="n">eidx</span><span class="p">]</span><span class="o">&gt;</span><span class="n">m_errThreshold</span><span class="p">:</span>
+	<span class="n">E</span><span class="p">[</span><span class="n">eidx</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_errThreshold</span><span class="o">*</span><span class="n">E</span><span class="p">[</span><span class="n">eidx</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">Enorm</span><span class="p">[</span><span class="n">eidx</span><span class="p">]</span><span class="o">+</span><span class="mf">1e-10</span><span class="p">)</span> 
+	
+	<span class="c"># Compute the correlation vector (gradient constraint)</span>
+	<span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">'i,i-&gt;i'</span><span class="p">,</span><span class="n">X</span><span class="o">.</span><span class="n">conj</span><span class="p">(),</span><span class="n">E</span><span class="p">)</span> <span class="c"># (2B)</span>
+	<span class="n">phi</span> <span class="o">=</span> <span class="n">ifft</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+	<span class="n">phi</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+	<span class="n">phi</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+	
+	<span class="bp">self</span><span class="o">.</span><span class="n">W</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="o">*</span><span class="n">phi</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">ifft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="p">)[:</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">])</span> 
+	
+<span class="k">return</span> <span class="n">y</span><span class="p">,</span> <span class="n">e</span>
+
+</code></pre></div></div>
+
+<p><br /></p>
+
+<h2 id="6-减少时延滤波器分割的频域自适应滤波">6. 减少时延：滤波器分割的频域自适应滤波</h2>
+
+<p>前面是将输入信号分块处理，提高算法效率。当FIR滤波器抽头数量很大时，FBLMS每M点计算一次输出和更新滤波器，造成比较大的延时。</p>
+
+<p>一种想法是将滤波器也进行分割，这种改进延时的滤波器有几种名字：
+Partitioned Fast Block LMS (PFBLMS)，Frequency Domain Adaptive Filter (PBFDAF)， Multi-DelayBlock Filter(MDF)， 都是一回事。</p>
+
+<figure align="center" style="width: 70%;margin:auto">
+  <img width="auto" height="auto" src="/static/posts/2020/02/conv.png" />
+  <figcaption></figcaption>
+</figure>
+
+<p>如果将长度为$M$的滤波器$w$等分为长度为$B$的小段，$M=P*B$。则卷积的结果可以分解为$P$个卷积之叠加。</p>
+
+<script type="math/tex; mode=display">y(n)=\sum_{l=0}^{P} y_l(n)</script>
+
+<script type="math/tex; mode=display">y_l(n)=\sum_{i=0}^{B-1} w_{i+lB}x(n-lB-i)</script>
+
+<figure align="center" style="width: 70%;margin:auto">
+  <img width="auto" height="auto" src="/static/posts/2020/02/partitioned_conv.png" />
+  <figcaption></figcaption>
+</figure>
+
+<p>于是一段线性卷积被分解成$P$个线性卷积，并且可以用FFT+OLS分别计算这$P$个卷积。 这样做好处是，每次迭代只需要输入长度为$B$的信号块，保留原buffer中的后$P-1$段，与最新的一段作为新的输入，就可以重复以上的$P$段卷积叠加。每次迭代，可以更新$B$点输出信号。</p>
+
+<p>PFBLMS算法的时延就只有FBLMS的$1/P$，极大地改善了滤波器的可用性。Speex和WebRTC的回声消除代码都使用了这种结构的滤波器。</p>
+
+<figure align="center" style="width: 100%;margin:auto">
+  <img width="auto" height="auto" src="/static/posts/2020/02/pfblms.png" />
+  <figcaption>文献[1]中提供的PFBLMS框图，其中M是我文中的B</figcaption>
+</figure>
+
+<p><strong>输入:</strong></p>
+
+<p>　分块输入信号$\bm{x_k}$, 块长度为B</p>
+
+<p>　分块参考信号$\bm{d_k}$, 块长度为B</p>
+
+<p><strong>输出:</strong></p>
+
+<p>　滤波器系数$\bm{w}$,长度为M=PB的FIR滤波器</p>
+
+<p>　分块输出信号$\bm{y_k}$, 块长度为B</p>
+
+<p>　滤波器输出与期望间的误差$\bm{e}$</p>
+
+<p><strong>初始化:</strong></p>
+
+<p>　滤波器系数$\bm{w}_0=zeros(B,P)$</p>
+
+<p>　初始数据块$\bm{x}_0=zeros(B,P)$</p>
+
+<p><strong>迭代过程:</strong></p>
+
+<p>　for k = 0, 1, 2 … N/B，读入第k块数据$x_k$, $d_k$</p>
+
+<p>　1. $\bm{\phi} = zeros(B,1)$</p>
+
+<p>　2. 滑动重组输入信号，并且计算FFT。</p>
+
+<p>　（实际只需计算最后一列，前P-1列可以使用上一次迭代保留结果）</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+Xf_k =
+FFT\left[ \begin{matrix} x_{k-P}&...& x_{k-2} & x_{k-1}\\x_{k-P+1}&...& x_{k-1} & x_k \end{matrix} \right] %]]></script>
+
+<p>　2. 计算块输出</p>
+
+<script type="math/tex; mode=display">\left[ \begin{matrix} C\\ y_k \end{matrix} \right]=IFFT\left[ 
+FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] Xf_k\right]</script>
+
+<p>　3. 计算误差： $e = y_k - d_k$</p>
+
+<p>　4. 计算梯度：</p>
+
+<script type="math/tex; mode=display">\left[ \begin{matrix} \phi\\ D \end{matrix} \right]=IFFT\left[ 
+FFT\left[ \begin{matrix} 0\\ e \end{matrix} \right] 
+\overline{Xf_k}\right]</script>
+
+<p>　5. 更新滤波器：</p>
+
+<script type="math/tex; mode=display">FFT\left[ \begin{matrix} w_{k+1}\\ 0 \end{matrix} \right]= 
+FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] +
+\mu FFT\left[ \begin{matrix} \phi\\ 0 \end{matrix} \right]</script>
+
+<p><strong>算法复杂度:</strong></p>
+
+<p>　与FBLMS相仿</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_b</span><span class="p">,</span> <span class="n">d_b</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span> 
+    <span class="s">'''
+	Process a block data, and updates the adaptive filter (optional)
+	
+	Parameters
+	----------
+	x_b: float
+	the new input block signal
+	d_b: float
+	the new reference block signal
+	update: bool, optional
+	whether or not to update the filter coefficients
+	'''</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">:],</span> <span class="n">x_b</span><span class="p">])</span>
+	<span class="n">Xf_b</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+	
+	<span class="c"># block-update parameters</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">Xf</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Xf</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c"># Xf : Mx2B  sliding window</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">Xf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">Xf_b</span> <span class="c"># Xf : Mx2B  sliding window</span>
+	<span class="n">y_2B</span> <span class="o">=</span> <span class="n">ifft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Xf</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="c"># [Px2B] element multiply [Px2B] , then ifft</span>
+	<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">y_2B</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">:])</span>
+	
+	<span class="n">e</span> <span class="o">=</span> <span class="n">d_b</span> <span class="o">-</span> <span class="n">y</span>
+	
+	<span class="k">if</span> <span class="n">update</span><span class="p">:</span>
+	<span class="n">E</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">),</span> <span class="n">e</span><span class="p">]))</span> <span class="c"># (2B)</span>
+	
+	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlms</span><span class="p">:</span>
+	<span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">Xf_b</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1e-6</span>
+	<span class="n">E</span> <span class="o">=</span> <span class="n">E</span><span class="o">/</span><span class="n">norm</span>
+	
+	<span class="c"># Set the upper bound of E, to prevent divergence</span>
+	<span class="n">m_errThreshold</span> <span class="o">=</span> <span class="mf">0.2</span>
+	<span class="n">Enorm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">E</span><span class="p">)</span> <span class="c"># (2B)</span>
+	<span class="c"># print(E)</span>
+	<span class="k">for</span> <span class="n">eidx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">):</span>
+	<span class="k">if</span> <span class="n">Enorm</span><span class="p">[</span><span class="n">eidx</span><span class="p">]</span><span class="o">&gt;</span><span class="n">m_errThreshold</span><span class="p">:</span>
+	<span class="n">E</span><span class="p">[</span><span class="n">eidx</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_errThreshold</span><span class="o">*</span><span class="n">E</span><span class="p">[</span><span class="n">eidx</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">Enorm</span><span class="p">[</span><span class="n">eidx</span><span class="p">]</span><span class="o">+</span><span class="mf">1e-10</span><span class="p">)</span>    
+	
+	
+	<span class="c"># Update the parameters of the filter</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">Wf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wf</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Xf</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span>
+	
+	<span class="c"># Compute the correlation vector (gradient constraint)</span>
+	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">constrained</span><span class="p">:</span>
+	<span class="n">waux</span> <span class="o">=</span> <span class="n">ifft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Wf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+	<span class="n">waux</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">Wf</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="n">waux</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+	
+	<span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">ifft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Wf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+<span class="k">return</span> <span class="n">y</span><span class="p">,</span> <span class="n">e</span>
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><strong>参考文献</strong></p>
+
+<p>[1] B. Farhang-Boroujeny, Adaptive Filters: theory and applications. John Wiley &amp; Sons, 2013.</p>
+
+<p>[2] <a href="http://www.cs.tut.fi/~tabus/course/ASP/SGN2206LectureNew6.pdf">Block Adaptive Filters and Frequency Domain Adaptive Filters</a></p>
+
+</div>
+  <div class="share-page">
+  <span style="float: left;">Share this on &rarr;&nbsp;&nbsp;</span>
+
+  <!-- Twitter -->
+  <a href="https://twitter.com/share" class="twitter-share-button" data-via="">Tweet</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+  <!-- Facebook -->
+  <div class="fb-share-button" data-href="https://chenwj1989.github.io/post/cn/freq-domain-lms-cn.html" data-layout="button_count" style="position: relative; top: -8px; left: 3px;"></div>
+</div>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</div>
+
+
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+            
+            <div class="panel-body">
+              <h4>Related Posts</h4>
+              <ul>
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/gmm-em-cn.html">高斯混合模型与EM算法的推导</a>
+                  
+                    (Categories: <a href="/category/机器学习">机器学习</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+  
+  </ul>
+</div>
+
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/post/cn/monaural-speech-enhancement-webrtc-cn.html">&laquo; 单通道语音增强之WebRTC去噪算法</a>
+  
+  
+</div>
+
+<div class="disqus-comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var disqus_shortname = "wjchen";
+    var disqus_identifier = "https://chenwj1989.github.io_频域LMS自适应滤波";
+    var disqus_title = "频域LMS自适应滤波";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    /* ]]> */
+  </script>
+</div>
+
+        <footer>
+          &copy; wjchen
+          
+            - <a href="https://github.com/chenwj1989">https://github.com/chenwj1989</a> - Powered by Jekyll.
+          
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/jquery-1.11.0.min.js"></script>
+    <script src="/static/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+    
+    <script src="/static/katex/katex.min.js"></script>
+    <script src="/static/katex/contrib/auto-render.min.js"></script>
+    <script src="/static/katex/contrib/mathtex-script-type.min.js"></script>
+    <script>
+      renderMathInElement(
+          document.body,
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+    </script>
+
+  </body>
+</html>
+

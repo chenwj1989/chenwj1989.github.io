@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/favicon.ico" />
+    <title>Speex回声消除 - All Articles</title>
+    <meta name="author" content="wjchen" />
+    <meta name="description" content="Speex回声消除" />
+    <meta name="keywords" content="Speex回声消除, All Articles, 语音, 信号处理" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <meta content="" property="fb:app_id">
+    <meta content="All Articles" property="og:site_name">
+
+    
+
+    
+      <meta content="Speex回声消除" property="og:title">
+      <meta content="article" property="og:type">
+    
+
+    
+      <meta content="My Personal Thoughts" property="og:description">
+    
+
+    
+      <meta content="https://chenwj1989.github.io/post/cn/speex-aec-cn.html" property="og:url">
+    
+
+    
+      <meta content="2020-03-09T01:00:00+08:00" property="article:published_time">
+      <meta content="https://chenwj1989.github.io/about/" property="article:author">
+    
+
+    
+      <meta content="https://chenwj1989.github.io/static/img/avatar.jpg" property="og:image">
+    
+
+    
+      
+        <meta content="语音" property="article:section">
+      
+    
+
+    
+      
+    
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@">
+
+    
+      <meta name="twitter:title" content="Speex回声消除">
+    
+
+    
+      <meta name="twitter:url" content="https://chenwj1989.github.io/post/cn/speex-aec-cn.html">
+    
+
+    
+      <meta name="twitter:description" content="My Personal Thoughts">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="/static/css/fonts.css" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/katex/katex.min.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+          <div class="author" align="center">
+          <a href="/"><img class="profile-avatar" src="/static/img/avatar.jpg" height="100px" width="100px" /></a>
+          <h1 class="author-name">wjchen</h1>
+          
+            <div class="profile-about">
+              Never lose a holy curiosity.
+            </div>
+          
+           <div class="social">
+            <ul>
+              
+                <li><a href="https://github.com/chenwj1989" target="_blank"><i class="fab fa-github"></i></a></li>
+              
+                <li><a href="https://www.zhihu.com/people/wjchen-16/activities" target="_blank"><i class="fab fa-zhihu"></i></a></li>
+              
+            </ul>
+          </div>
+	  </div>
+          <div class="search" id="js-search">
+            <input type="text" placeholder="$ type to search" class="search__input form-control" id="js-search__input">
+            <ul class="search__results" id="js-search__results"></ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/projects/">My Projects</a></li>
+            
+              <li><a class="about" href="/about/">About Me</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-8 col-offset-1 main-layout">
+        <header class="post-header">
+  <h1 class="post-title">Speex回声消除</h1>
+</header>
+
+<span class="time">09 Mar 2020</span>
+
+  <span class="categories">
+    &raquo; <a href="/category/语音">语音</a>, <a href="/category/信号处理">信号处理</a>
+  </span>
+
+
+<div class="content">
+  <div class="post"><p><br /></p>
+<ul id="markdown-toc">
+  <li><a href="#1-概述" id="markdown-toc-1-概述">1. 概述</a></li>
+  <li><a href="#2-mdf滤波器" id="markdown-toc-2-mdf滤波器">2. MDF滤波器</a></li>
+  <li><a href="#2-双滤波器结构与双讲检测" id="markdown-toc-2-双滤波器结构与双讲检测">2. 双滤波器结构与双讲检测</a></li>
+  <li><a href="#3-自适应滤波器步长优化" id="markdown-toc-3-自适应滤波器步长优化">3. 自适应滤波器步长优化</a></li>
+  <li><a href="#4-残留回声消除-residue-echo-cancellation" id="markdown-toc-4-残留回声消除-residue-echo-cancellation">4. 残留回声消除 Residue Echo Cancellation</a></li>
+</ul>
+
+<h2 id="1-概述">1. 概述</h2>
+
+<p>Speex AEC是开源的回声消除代码。 回声消除框架图如下</p>
+
+<figure align="center" style="width: 80%;margin:auto">
+  <img width="auto" height="auto" src="/static/posts/2020/03/aec.png" />
+  <figcaption></figcaption>
+</figure>
+
+<p>AEC一般的方法使用自适应FIR滤波器设计$w(z)$：</p>
+
+<script type="math/tex; mode=display">y(n)=\sum_{i=0}^{N-1}w_ix(n-i)</script>
+
+<p>自适应滤波器的算法的的目标误差$e(n)$，也是回声消除后的近端输出信号。</p>
+
+<script type="math/tex; mode=display">e(n)=d(n)-y(n)</script>
+
+<p>Speex的信号处理部分单独分成一个项目SpeexDSP, 在以下地址：<a href="https://github.com/xiph/speexdsp">https://github.com/xiph/speexdsp</a></p>
+
+<p>SpexxDSP包括了回声消除、语音去噪、AGC等，其中回声消除代码在mdf.c。而Github上有mdf.c的MATLAB实现版本，分析算法时使用MATLAB分析更直接些，地址在
+<a href="https://github.com/xiph/speexdsp">https://github.com/wavesaudio/Speex-AEC-matlab</a></p>
+
+<p>Speex AEC算法特点包括几个方面：</p>
+
+<ol>
+  <li>
+    <p>自适应滤波器使用MDF滤波器</p>
+  </li>
+  <li>
+    <p>双滤波器结构</p>
+  </li>
+  <li>
+    <p>自适应滤波器步长优化</p>
+  </li>
+  <li>
+    <p>残留回声消除</p>
+  </li>
+</ol>
+
+<h2 id="2-mdf滤波器">2. MDF滤波器</h2>
+
+<p>Speex AEC 的滤波部分主要是基于[1] Multidelayblock frequency domain adaptive filter所提出的MDF结构。我的另外一篇博文<a href="http://localhost:4000/post/cn/freq-domain-lms-cn.html">《频域LMS自适应滤波》</a>说过， MDF和PBFDAF、PFBLMS是一回事，也就是将FIR滤波器分割的频域LMS滤波。</p>
+
+<figure align="center" style="width: 90%;margin:auto">
+  <img width="auto" height="auto" src="/static/posts/2020/02/pfblms.png" />
+  <figcaption>[2]</figcaption>
+</figure>
+
+<p>MDF主要包括三个方面：</p>
+
+<p>1 将输入信号分块处理，使用Overlap-and-Save方法计算卷积的分块结果。
+2 分块卷积转入频域计算，使用FFT将计算复杂度从$O(N^2）$降到$O(N\log_2 N)$。
+3 进一步将FIR滤波器系数进行分段，一组卷积分解为多组卷积之和。输入和输出的分块长度变短，大大减小滤波器时延。</p>
+
+<p>论文[1]中MDF步骤总结为以下7条公式。</p>
+
+<figure align="center" style="width: 60%;margin:auto">
+  <img width="auto" height="auto" src="/static/posts/2020/03/mdf_steps.png" />
+  <figcaption></figcaption>
+</figure>
+
+<p>这七条公式跟我之前的博文总结的迭代过程可一一对应：</p>
+
+<p>公式1、2对应迭代过程步骤2，计算块输入的FFT，并且滑动保存P块结果。</p>
+
+<p>公式3对应迭代步骤2。</p>
+
+<p>公式4、5、6对应迭代步骤3、4。</p>
+
+<p>公式7对应迭代步骤5。</p>
+
+<p><strong>迭代过程:</strong></p>
+
+<p>　for k = 0, 1, 2 … N/B，读入第k块数据$x_k$, $d_k$</p>
+
+<p>　1. $\bm{\phi} = zeros(B,1)$</p>
+
+<p>　2. 滑动重组输入信号，并且计算FFT。</p>
+
+<p>　（实际只需计算最后一列，前P-1列可以使用上一次迭代保留结果）</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+Xf_k =
+FFT\left[ \begin{matrix} x_{k-P}&...& x_{k-2} & x_{k-1}\\x_{k-P+1}&...& x_{k-1} & x_k \end{matrix} \right] %]]></script>
+
+<p>　2. 计算块输出</p>
+
+<script type="math/tex; mode=display">\left[ \begin{matrix} C\\ y_k \end{matrix} \right]=IFFT\left[ 
+FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] Xf_k\right]</script>
+
+<p>　3. 计算误差： $e = y_k - d_k$</p>
+
+<p>　4. 计算梯度：</p>
+
+<script type="math/tex; mode=display">\left[ \begin{matrix} \phi\\ D \end{matrix} \right]=IFFT\left[ 
+FFT\left[ \begin{matrix} 0\\ e \end{matrix} \right] 
+\overline{Xf_k}\right]</script>
+
+<p>　5. 更新滤波器：</p>
+
+<script type="math/tex; mode=display">FFT\left[ \begin{matrix} w_{k+1}\\ 0 \end{matrix} \right]= 
+FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] +
+\mu FFT\left[ \begin{matrix} \phi\\ 0 \end{matrix} \right]</script>
+
+<h2 id="2-双滤波器结构与双讲检测">2. 双滤波器结构与双讲检测</h2>
+
+<p>Speex 除了使用MDF作自适应滤波，还是用了双滤波器结构(Two-Path Method)[3][4]。 双滤波器结构包括一个迭代更新的自适应Background Filter, 和一个非自适应的Foreground Filter。在自适应滤波器性能变坏、甚至发散时， AEC使用Foreground Filter的结果，并且重置Background Filter。 在Background Filter 性能变好时，将其参数下载到Foregound Filter。</p>
+
+<p>这种双滤波器结构，可以实现隐式的双讲检测。 在双讲的情况下，Background Filter无法收敛，其更新结果不会保存下来，也就实现了区分双讲和非双讲的目标。</p>
+
+<figure align="center" style="width: 80%;margin:auto">
+  <img width="auto" height="auto" src="/static/posts/2020/03/two-path.png" />
+  <figcaption></figcaption>
+</figure>
+
+<p>上图就是典型的双滤波器AEC结构，其核心就是将Background Filter下载到Foregound Filter的判决标准。一般而言，可以有着几方面的考虑：</p>
+<ol>
+  <li>$\sigma_{x}^2&gt;T_{1}$: 远端信号是否足够大，如果远端信号功率很小，就可以认为不会产生回声，无需更新滤波器。</li>
+  <li>$\sigma_{m}^2&gt;T_{1}$: 近端麦克风信号是否足够大，如果近端信号功率很小，则认为既没有采集到回声和近端语音，无需更新滤波器。</li>
+  <li>$\frac{\sigma_{ef}^2}{\sigma_{eb}^2}&gt;T_3$, Background Filter 误差比Foreground Filter误差小，性能更优。</li>
+  <li>$\frac{\sigma_{m}^2}{\sigma_{eb}^2}&gt;T_4$, 保证Background Filter ERLE大于一定值才使用。</li>
+  <li>$\xi_{DTD}&gt;T_5$, 衡量双讲的可能性，双讲会导致自适应滤波器发散，只有非双讲情况下才更新Foreground Filter.</li>
+</ol>
+
+<p>Speex AEC使用的判决准则，可以从代码里面提炼出来，跟以上提到的几点不完全一样，是用Foreground Filter和Background Filter输出的残留功率之差来进行判别，</p>
+
+<script type="math/tex; mode=display">(Sff-See)*abs(Sff-See) > (Sff*Dbf)</script>
+
+<p>其中$Sff$是Foreground Filter与麦克风信号之差的功率，$See$是Background Filter与麦克风信号之差的功率, Dbf是两个Filter输出信号之差的平方。 于是判别公式可以写成</p>
+
+<script type="math/tex; mode=display">(e_f^2-e_b^2)|e_f^2-e_b^2|> e_f^2|e_f - e_b|^2</script>
+
+<p>这个判决准则的数学原理暂没有深究，其代码如下。</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">% Logic for updating the foreground filter */</span>
+	
+<span class="c1">% For two time windows, compute the mean of the energy difference, </span>
+<span class="n">as</span> <span class="n">well</span> <span class="n">as</span> <span class="n">the</span> <span class="n">variance</span> <span class="o">*</span><span class="p">/</span>
+<span class="n">VAR1_UPDATE</span> <span class="o">=</span> <span class="o">.</span><span class="mi">5</span><span class="p">;</span>
+<span class="n">VAR2_UPDATE</span> <span class="o">=</span> <span class="o">.</span><span class="mi">25</span><span class="p">;</span>
+<span class="n">VAR_BACKTRACK</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="n">MIN_LEAK</span> <span class="o">=</span> <span class="o">.</span><span class="mi">005</span><span class="p">;</span>
+
+<span class="n">st</span><span class="o">.</span><span class="n">Davg1</span> <span class="o">=</span> <span class="o">.</span><span class="mi">6</span><span class="o">*</span><span class="n">st</span><span class="o">.</span><span class="n">Davg1</span> <span class="o">+</span> <span class="o">.</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">Sff</span><span class="o">-</span><span class="n">See</span><span class="p">);</span>
+<span class="n">st</span><span class="o">.</span><span class="n">Davg2</span> <span class="o">=</span> <span class="o">.</span><span class="mi">85</span><span class="o">*</span><span class="n">st</span><span class="o">.</span><span class="n">Davg2</span> <span class="o">+</span> <span class="o">.</span><span class="mi">15</span><span class="o">*</span><span class="p">(</span><span class="n">Sff</span><span class="o">-</span><span class="n">See</span><span class="p">);</span>
+<span class="n">st</span><span class="o">.</span><span class="n">Dvar1</span> <span class="o">=</span> <span class="o">.</span><span class="mi">36</span><span class="o">*</span><span class="n">st</span><span class="o">.</span><span class="n">Dvar1</span> <span class="o">+</span> <span class="o">.</span><span class="mi">16</span><span class="o">*</span><span class="n">Sff</span><span class="o">*</span><span class="n">Dbf</span><span class="p">;</span>
+<span class="n">st</span><span class="o">.</span><span class="n">Dvar2</span> <span class="o">=</span> <span class="o">.</span><span class="mi">7225</span><span class="o">*</span><span class="n">st</span><span class="o">.</span><span class="n">Dvar2</span> <span class="o">+</span> <span class="o">.</span><span class="mi">0225</span><span class="o">*</span><span class="n">Sff</span><span class="o">*</span><span class="n">Dbf</span><span class="p">;</span>
+
+<span class="n">update_foreground</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">% Check if we have a statistically significant reduction in the residual echo */</span>
+<span class="c1">% Note that this is *not* Gaussian, so we need to be careful about the longer tail */</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">Sff</span><span class="o">-</span><span class="n">See</span><span class="p">)</span><span class="o">*</span><span class="nb">abs</span><span class="p">(</span><span class="n">Sff</span><span class="o">-</span><span class="n">See</span><span class="p">)</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">Sff</span><span class="o">*</span><span class="n">Dbf</span><span class="p">)</span>
+<span class="n">update_foreground</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">elseif</span> <span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">Davg1</span><span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">Davg1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">VAR1_UPDATE</span><span class="o">*</span><span class="n">st</span><span class="o">.</span><span class="n">Dvar1</span><span class="p">))</span>
+<span class="n">update_foreground</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">elseif</span> <span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">Davg2</span><span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">Davg2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">VAR2_UPDATE</span><span class="o">*</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">Dvar2</span><span class="p">)))</span>
+<span class="n">update_foreground</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>如果Background Filter过于发散，则应该重置，可将其重置为Foreground Filter。 其MATLAB代码如下：</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c1">% Do we update? */</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">update_foreground</span><span class="p">)</span>
+
+<span class="n">st</span><span class="o">.</span><span class="n">Davg1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">st</span><span class="o">.</span><span class="n">Davg2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">st</span><span class="o">.</span><span class="n">Dvar1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">st</span><span class="o">.</span><span class="n">Dvar2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">st</span><span class="o">.</span><span class="n">foreground</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">W</span><span class="p">;</span>
+<span class="c1">% Apply a smooth transition so as to not introduce blocking artifacts */</span>
+<span class="k">for</span> <span class="n">chan</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">C</span>
+<span class="n">st</span><span class="o">.</span><span class="n">e</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">frame_size</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="p">,</span> <span class="n">chan</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">window</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">frame_size</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="p">)</span> <span class="o">.*</span> <span class="n">st</span><span class="o">.</span><span class="n">e</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">frame_size</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="p">,</span> <span class="n">chan</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">window</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">st</span><span class="o">.</span><span class="n">frame_size</span><span class="p">)</span> <span class="o">.*</span> <span class="n">st</span><span class="o">.</span><span class="n">y</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">frame_size</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="p">,</span> <span class="n">chan</span><span class="p">));</span>
+<span class="k">end</span>
+<span class="k">else</span>
+<span class="n">reset_background</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+<span class="c1">% Otherwise, check if the background filter is significantly worse */</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">Sff</span><span class="o">-</span><span class="n">See</span><span class="p">)</span><span class="o">*</span><span class="nb">abs</span><span class="p">(</span><span class="n">Sff</span><span class="o">-</span><span class="n">See</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">VAR_BACKTRACK</span><span class="o">*</span><span class="p">(</span><span class="n">Sff</span><span class="o">*</span><span class="n">Dbf</span><span class="p">))</span>
+<span class="n">reset_background</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">end</span>
+<span class="k">if</span> <span class="p">((</span><span class="o">-</span><span class="n">st</span><span class="o">.</span><span class="n">Davg1</span> <span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">Davg1</span><span class="p">))</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">VAR_BACKTRACK</span><span class="o">*</span><span class="n">st</span><span class="o">.</span><span class="n">Dvar1</span><span class="p">))</span>
+<span class="n">reset_background</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">end</span>
+<span class="k">if</span> <span class="p">((</span><span class="o">-</span><span class="n">st</span><span class="o">.</span><span class="n">Davg2</span><span class="o">*</span> <span class="nb">abs</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">Davg2</span><span class="p">))</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">VAR_BACKTRACK</span><span class="o">*</span><span class="n">st</span><span class="o">.</span><span class="n">Dvar2</span><span class="p">))</span>
+<span class="n">reset_background</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">end</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">reset_background</span><span class="p">)</span>
+
+<span class="c1">% Copy foreground filter to background filter */</span>
+<span class="n">st</span><span class="o">.</span><span class="n">W</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">foreground</span><span class="p">;</span>
+
+<span class="c1">% We also need to copy the output so as to get correct adaptation */</span>
+<span class="k">for</span> <span class="n">chan</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">C</span>
+<span class="n">st</span><span class="o">.</span><span class="n">y</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">frame_size</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="p">,</span> <span class="n">chan</span><span class="p">)</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">e</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">frame_size</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="p">,</span> <span class="n">chan</span><span class="p">);</span>
+<span class="n">st</span><span class="o">.</span><span class="n">e</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">st</span><span class="o">.</span><span class="n">frame_size</span><span class="p">,</span> <span class="n">chan</span><span class="p">)</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="nb">input</span><span class="p">(:,</span> <span class="n">chan</span><span class="p">)</span> <span class="o">-</span> <span class="n">st</span><span class="o">.</span><span class="n">y</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">frame_size</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">N</span><span class="p">,</span> <span class="n">chan</span><span class="p">);</span>
+<span class="k">end</span>
+
+<span class="n">See</span> <span class="o">=</span> <span class="n">Sff</span><span class="p">;</span>
+<span class="n">st</span><span class="o">.</span><span class="n">Davg1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">st</span><span class="o">.</span><span class="n">Davg2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">st</span><span class="o">.</span><span class="n">Dvar1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">st</span><span class="o">.</span><span class="n">Dvar2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="3-自适应滤波器步长优化">3. 自适应滤波器步长优化</h2>
+<p>待补充</p>
+
+<h2 id="4-残留回声消除-residue-echo-cancellation">4. 残留回声消除 Residue Echo Cancellation</h2>
+<p>待补充</p>
+
+<p><br /></p>
+
+<p><strong>参考文献</strong></p>
+
+<p>[1] J.-S. Soo and K. K. Pang, “Multidelay block frequency domain adaptive filter,” IEEE Transactions on Acoustics, Speech, and Signal Processing, vol. 38, no. 2, pp. 373–376, 1990.</p>
+
+<p>[2] B. Farhang-Boroujeny, Adaptive filters: theory and applications. John Wiley &amp; Sons, 2013.</p>
+
+<p>[3] M. A. Iqbal and S. L. Grant, “Novel and efficient download test for two path echo canceller,”in 2007 IEEE Workshop on Applications of Signal Processing to Audio and Acoustics. IEEE,2007, pp. 167–170.</p>
+
+<p>[4] F. Lindstrom, C. Schuldt, and I. Claesson, “An improvement of the two-path algorithm transfer logic for acoustic echo cancellation,” IEEE transactions on audio, speech, and language processing, vol. 15, no. 4, pp. 1320–1326, 2007.</p>
+
+</div>
+  <div class="share-page">
+  <span style="float: left;">Share this on &rarr;&nbsp;&nbsp;</span>
+
+  <!-- Twitter -->
+  <a href="https://twitter.com/share" class="twitter-share-button" data-via="">Tweet</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+  <!-- Facebook -->
+  <div class="fb-share-button" data-href="https://chenwj1989.github.io/post/cn/speex-aec-cn.html" data-layout="button_count" style="position: relative; top: -8px; left: 3px;"></div>
+</div>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</div>
+
+
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+            
+            <div class="panel-body">
+              <h4>Related Posts</h4>
+              <ul>
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/freq-domain-lms-cn.html">频域LMS自适应滤波</a>
+                  
+                    (Categories: <a href="/category/机器学习">机器学习</a>, <a href="/category/信号处理">信号处理</a>)
+                  
+                </li>
+          
+          
+        
+      
+    
+  
+    
+      
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-webrtc-cn.html">单通道语音增强之WebRTC去噪算法</a>
+                  
+                    (Categories: <a href="/category/语音">语音</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+  
+    
+      
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-review-cn.html">单通道语音增强之综述</a>
+                  
+                    (Categories: <a href="/category/语音">语音</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+  
+    
+      
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-books-cn.html">单通道语音增强之参考书</a>
+                  
+                    (Categories: <a href="/category/语音">语音</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+  
+    
+      
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-filtering-cn.html">单通道语音增强之谱减法与维纳滤波</a>
+                  
+                    (Categories: <a href="/category/语音">语音</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-statistical-cn.html">单通道语音增强之统计信号模型</a>
+                  
+                    (Categories: <a href="/category/语音">语音</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+  
+  
+  </ul>
+</div>
+
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/post/cn/freq-domain-lms-cn.html">&laquo; 频域LMS自适应滤波</a>
+  
+  
+</div>
+
+<div class="disqus-comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var disqus_shortname = "wjchen";
+    var disqus_identifier = "https://chenwj1989.github.io_Speex回声消除";
+    var disqus_title = "Speex回声消除";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    /* ]]> */
+  </script>
+</div>
+
+        <footer>
+          &copy; wjchen
+          
+            - <a href="https://github.com/chenwj1989">https://github.com/chenwj1989</a> - Powered by Jekyll.
+          
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/jquery-1.11.0.min.js"></script>
+    <script src="/static/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+    
+    <script src="/static/katex/katex.min.js"></script>
+    <script src="/static/katex/contrib/auto-render.min.js"></script>
+    <script src="/static/katex/contrib/mathtex-script-type.min.js"></script>
+    <script>
+      renderMathInElement(
+          document.body,
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+    </script>
+
+  </body>
+</html>
+

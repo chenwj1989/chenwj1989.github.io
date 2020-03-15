@@ -5,8 +5,8 @@
     <description>My Personal Thoughts</description>
     <link>https://chenwj1989.github.io/</link>
     <atom:link href="https://chenwj1989.github.io/sitemap.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 10 Mar 2020 23:26:42 +0800</pubDate>
-    <lastBuildDate>Tue, 10 Mar 2020 23:26:42 +0800</lastBuildDate>
+    <pubDate>Sun, 15 Mar 2020 15:57:01 +0800</pubDate>
+    <lastBuildDate>Sun, 15 Mar 2020 15:57:01 +0800</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
     
       <item>
@@ -17,7 +17,7 @@
   &lt;li&gt;&lt;a href=&quot;#2-mdf滤波器&quot; id=&quot;markdown-toc-2-mdf滤波器&quot;&gt;2. MDF滤波器&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#2-双滤波器结构与双讲检测&quot; id=&quot;markdown-toc-2-双滤波器结构与双讲检测&quot;&gt;2. 双滤波器结构与双讲检测&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#3-自适应滤波器步长优化&quot; id=&quot;markdown-toc-3-自适应滤波器步长优化&quot;&gt;3. 自适应滤波器步长优化&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#4-残留回声消除-residue-echo-cancellation&quot; id=&quot;markdown-toc-4-残留回声消除-residue-echo-cancellation&quot;&gt;4. 残留回声消除 Residue Echo Cancellation&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#4-残留回声消除-residual-echo-cancellation&quot; id=&quot;markdown-toc-4-残留回声消除-residual-echo-cancellation&quot;&gt;4. 残留回声消除 Residual Echo Cancellation&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;1-概述&quot;&gt;1. 概述&lt;/h2&gt;
@@ -230,10 +230,54 @@ FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] +
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;3-自适应滤波器步长优化&quot;&gt;3. 自适应滤波器步长优化&lt;/h2&gt;
-&lt;p&gt;待补充&lt;/p&gt;
 
-&lt;h2 id=&quot;4-残留回声消除-residue-echo-cancellation&quot;&gt;4. 残留回声消除 Residue Echo Cancellation&lt;/h2&gt;
-&lt;p&gt;待补充&lt;/p&gt;
+&lt;p&gt;自适应滤波器优化的一种思路是吧固定步长优化成可变步长，并且通过当前的各段信号，推导出最优步长。&lt;/p&gt;
+
+&lt;p&gt;网上有博文&lt;a href=&quot;https://www.cnblogs.com/icoolmedia/p/speex_aec_analyze.html&quot;&gt; 爱酷媒: Speex回声消除原理深度解析&lt;/a&gt; 很好地对此进行了推导，主要是基于论文
+On Adjusting the Learning Rate in Frequency Domain Echo Cancellation With Double-Talk [5].&lt;/p&gt;
+
+&lt;p&gt;下面摘录其中的主要结论。 最优步长等于残余回声方差与误差信号方差之比&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mu_{opt} = \frac{\sigma_r^2}{\sigma_e^2}&lt;/script&gt;
+
+&lt;p&gt;为了计算残留回声的功率，定义泄漏因子$\eta$， 取值在0～1之间
+&lt;script type=&quot;math/tex&quot;&gt;\sigma_r^2 = \eta \sigma_Y^2&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;泄漏因子通过递归平均更新：&lt;/p&gt;
+
+&lt;figure align=&quot;center&quot; style=&quot;width: 90%;margin:auto&quot;&gt;
+  &lt;img width=&quot;auto&quot; height=&quot;auto&quot; src=&quot;/static/posts/2020/03/leak.png&quot; /&gt;
+  &lt;figcaption&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;h2 id=&quot;4-残留回声消除-residual-echo-cancellation&quot;&gt;4. 残留回声消除 Residual Echo Cancellation&lt;/h2&gt;
+
+&lt;p&gt;自适应滤波器不能百分百消除回声，AEC的输出信号含有残留的回声信号，这个时候就需要一个Post-Filter，进行残留回声消除（Residual Echo Cancellation）。 Speex是将残留回声消除和噪声消除放在同一个模块中处理，代码在preprocessor.c。&lt;/p&gt;
+
+&lt;figure align=&quot;center&quot; style=&quot;width: 90%;margin:auto&quot;&gt;
+  &lt;img width=&quot;auto&quot; height=&quot;auto&quot; src=&quot;/static/posts/2020/03/residual.png&quot; /&gt;
+  &lt;figcaption&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;如上图所示，麦克风输入信号通常包括几部分，近端语音$s$, 近端噪声$n$, 自适应滤波的目标回声$d$。 于是AEC的输出误差信号为&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;e = (d-y) + s + n&lt;/script&gt;
+
+&lt;p&gt;其中$d-y$就是残留回声信号。残留回声的功率通过泄漏因子计算：&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;\sigma_r^2 = \eta \sigma_Y^2&lt;/script&gt;
+
+&lt;p&gt;Speex在preprocessor.c中，将Post Filter实现为一个统计信号处理估计的噪声抑制器，近端噪声、残留回声、混响均视作噪声，将其功率求和，得到总噪声功率。&lt;/p&gt;
+
+&lt;div class=&quot;language-c highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/* Total noise estimate including residual echo and reverberation */&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;spx_word32_t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tot_noise&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ADD32&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ADD32&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ADD32&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EXTEND32&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PSHR32&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;st&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;noise&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NOISE_SHIFT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;st&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;echo_noise&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;st&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reverb_estimate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;后面就是语音增强的内容，利用当前帧的噪声功率、，估算后验信噪比和先验信噪比，最后通过统计方法求得抑制增益Gain。 Gain和Post-Filter的收入信号相乘，就得到去噪后的信号，是对近端语音的一种估计。&lt;/p&gt;
+
+&lt;p&gt;Speex使用MCRA法更新噪声功率、判决引导法计算噪声概率、MMSE-LSA法计算噪声抑制增益。原理可以参考我前面两篇博文。
+&lt;a href=&quot;https://www.jianshu.com/p/26e24bbc2358&quot;&gt;单通道语音增强之综述&lt;/a&gt;
+&lt;a href=&quot;https://www.jianshu.com/p/b25b3e78dc34&quot;&gt;单通道语音增强之统计信号模型&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -247,6 +291,13 @@ FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] +
 
 &lt;p&gt;[4] F. Lindstrom, C. Schuldt, and I. Claesson, “An improvement of the two-path algorithm transfer logic for acoustic echo cancellation,” IEEE transactions on audio, speech, and language processing, vol. 15, no. 4, pp. 1320–1326, 2007.&lt;/p&gt;
 
+&lt;p&gt;[5] Valin J M. On adjusting the learning rate in frequency domain echo cancellation with double-talk[J]. IEEE Transactions on Audio, Speech, and Language Processing, 2007, 15(3): 1030-1034.&lt;/p&gt;
+
+&lt;p&gt;[6] &lt;a href=&quot;https://www.cnblogs.com/icoolmedia/p/speex_aec_analyze.html&quot;&gt;爱酷媒: Speex回声消除原理深度解析&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;[7] &lt;a href=&quot;https://www.jianshu.com/p/26e24bbc2358&quot;&gt;单通道语音增强之综述&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;[8]&lt;a href=&quot;https://www.jianshu.com/p/b25b3e78dc34&quot;&gt;单通道语音增强之统计信号模型&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Mon, 09 Mar 2020 01:00:00 +0800</pubDate>
         <link>https://chenwj1989.github.io/post/cn/speex-aec-cn.html</link>

@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/favicon.ico" />
+    <title>啸叫抑制之陷波法 - All Articles</title>
+    <meta name="author" content="wjchen" />
+    <meta name="description" content="啸叫抑制之陷波法" />
+    <meta name="keywords" content="啸叫抑制之陷波法, All Articles, 语音, 信号处理" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <meta content="" property="fb:app_id">
+    <meta content="All Articles" property="og:site_name">
+
+    
+
+    
+      <meta content="啸叫抑制之陷波法" property="og:title">
+      <meta content="article" property="og:type">
+    
+
+    
+      <meta content="My Personal Thoughts" property="og:description">
+    
+
+    
+      <meta content="https://chenwj1989.github.io/post/cn/howling-suppression-cn.html" property="og:url">
+    
+
+    
+      <meta content="2020-07-10T01:00:00+08:00" property="article:published_time">
+      <meta content="https://chenwj1989.github.io/about/" property="article:author">
+    
+
+    
+      <meta content="https://chenwj1989.github.io/static/img/avatar.jpg" property="og:image">
+    
+
+    
+      
+        <meta content="语音" property="article:section">
+      
+    
+
+    
+      
+    
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@">
+
+    
+      <meta name="twitter:title" content="啸叫抑制之陷波法">
+    
+
+    
+      <meta name="twitter:url" content="https://chenwj1989.github.io/post/cn/howling-suppression-cn.html">
+    
+
+    
+      <meta name="twitter:description" content="My Personal Thoughts">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="/static/css/fonts.css" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/katex/katex.min.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+          <div class="author" align="center">
+          <a href="/"><img class="profile-avatar" src="/static/img/avatar.jpg" height="100px" width="100px" /></a>
+          <h1 class="author-name">wjchen</h1>
+          
+            <div class="profile-about">
+              Never lose a holy curiosity.
+            </div>
+          
+           <div class="social">
+            <ul>
+              
+                <li><a href="https://github.com/chenwj1989" target="_blank"><i class="fab fa-github"></i></a></li>
+              
+                <li><a href="https://www.zhihu.com/people/wjchen-16/activities" target="_blank"><i class="fab fa-zhihu"></i></a></li>
+              
+            </ul>
+          </div>
+	  </div>
+          <div class="search" id="js-search">
+            <input type="text" placeholder="$ type to search" class="search__input form-control" id="js-search__input">
+            <ul class="search__results" id="js-search__results"></ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/projects/">My Projects</a></li>
+            
+              <li><a class="about" href="/about/">About Me</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-8 col-offset-1 main-layout">
+        <header class="post-header">
+  <h1 class="post-title">啸叫抑制之陷波法</h1>
+</header>
+
+<span class="time">10 Jul 2020</span>
+
+  <span class="categories">
+    &raquo; <a href="/category/语音">语音</a>, <a href="/category/信号处理">信号处理</a>
+  </span>
+
+
+<div class="content">
+  <div class="post"><p><br /> 
+本文代码位于<a href="https://github.com/chenwj1989/python_howling_suppression">GitHub</a>。
+<br /></p>
+<ul id="markdown-toc">
+  <li><a href="#1-啸叫的产生" id="markdown-toc-1-啸叫的产生">1. 啸叫的产生</a>    <ul>
+      <li><a href="#11-啸叫产生的原理" id="markdown-toc-11-啸叫产生的原理">1.1 啸叫产生的原理</a></li>
+      <li><a href="#12-啸叫仿真" id="markdown-toc-12-啸叫仿真">1.2 啸叫仿真</a></li>
+    </ul>
+  </li>
+  <li><a href="#2-啸叫抑制的方法" id="markdown-toc-2-啸叫抑制的方法">2. 啸叫抑制的方法</a>    <ul>
+      <li><a href="#21-啸叫检测" id="markdown-toc-21-啸叫检测">2.1 啸叫检测</a>        <ul>
+          <li><a href="#211-峰值阈值功率比peak-to-threshold-power-raio-ptpr" id="markdown-toc-211-峰值阈值功率比peak-to-threshold-power-raio-ptpr">2.1.1 峰值阈值功率比(Peak-to-Threshold Power Raio, PTPR)</a></li>
+          <li><a href="#212-峰值均值功率比peak-to-average-power-raio-papr" id="markdown-toc-212-峰值均值功率比peak-to-average-power-raio-papr">2.1.2 峰值均值功率比(Peak-to-Average Power Raio, PAPR)</a></li>
+          <li><a href="#213-峰值邻近功率比peak-to-neighboring-power-raio-pnpr" id="markdown-toc-213-峰值邻近功率比peak-to-neighboring-power-raio-pnpr">2.1.3 峰值邻近功率比(Peak-to-Neighboring Power Raio, PNPR)</a></li>
+          <li><a href="#214-峰值谐波功率比peak-to-harmonics-power-raio-phpr" id="markdown-toc-214-峰值谐波功率比peak-to-harmonics-power-raio-phpr">2.1.4 峰值谐波功率比(Peak-to-Harmonics Power Raio, PHPR)</a></li>
+          <li><a href="#215-帧间峰值保持度interframe-peak-magnitude-persistence-ipmp" id="markdown-toc-215-帧间峰值保持度interframe-peak-magnitude-persistence-ipmp">2.1.5 帧间峰值保持度(Interframe Peak Magnitude Persistence, IPMP)</a></li>
+          <li><a href="#216-帧间幅度斜率偏差度interframe--magnitude-slope-deviation-imsd" id="markdown-toc-216-帧间幅度斜率偏差度interframe--magnitude-slope-deviation-imsd">2.1.6 帧间幅度斜率偏差度(Interframe  Magnitude Slope Deviation, IMSD)</a></li>
+        </ul>
+      </li>
+      <li><a href="#22-陷波法抑制啸叫" id="markdown-toc-22-陷波法抑制啸叫">2.2 陷波法抑制啸叫</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="1-啸叫的产生">1. 啸叫的产生</h2>
+
+<h3 id="11-啸叫产生的原理">1.1 啸叫产生的原理</h3>
+
+<p>啸叫常见于扩音系统，比如多媒体会议厅、多媒体教室。 当麦克风和扬声器在同一个会场时，声音从扬声器扩音后又从被麦克风拾取，形成了声音反馈回路。当扩音的增益足够大，在某些频率就会产生自激振荡，形成刺耳的啸叫， 那就无法正常讲话了。</p>
+
+<p>在扩音系统中使用硬件或者软件方法去除这种啸叫，就是声反馈控制(Acoustic Feedback Control)，或者叫啸叫抑制(Howling Suppression)。</p>
+
+<figure align="center" style="width: 70%;margin:auto">
+  <img width="auto" height="auto" src="/static/posts/2020/07/outline.png" />
+  <figcaption></figcaption>
+</figure>
+
+<script type="math/tex; mode=display">\frac{Y(\omega)}{S(\omega)} = \frac{G(\omega)}{1-G(\omega)F(\omega)}</script>
+
+<p>根据奈奎斯特稳定判据，在某些频点，增益和相位满足以下条件，将产生自激振荡：</p>
+
+<script type="math/tex; mode=display">G(\omega)F(\omega)>1</script>
+
+<script type="math/tex; mode=display">\angle{G(\omega)F(\omega)} = 2k\pi</script>
+
+<p>自激振荡导致了系统的不稳定，信号幅度不断增大，最终形成刺耳的啸叫。在频谱上看到一条连续的谱峰。</p>
+
+<p>除了扩音系统，平常使用手机/电脑进行音视频通话，如果两个终端在同一个房间的话，也是可能产生啸叫的。 一般的商用软件和开源算法认为，通常通话的参与者不在一个房间的，所以很少遇到啸叫的问题，只需要解决噪声抑制和回声消除问题就可以了， 比如SpeexDsp和WebRTC。 但是从我个人经验而言，有两种情况是需要啸叫抑制的：</p>
+
+<p><strong>-在实验室做多终端通话测试</strong></p>
+
+<p>因资源限制，几台终端可能放在一个房间里面测试通话情况，这样一旦有人开始讲话，一台终端拾音后从另外一台终端上外放出来。 这样就形成了反馈回路，常常产生啸叫，测试就无法进行了。</p>
+
+<p><strong>-视频会议时多终端在同一个房间</strong></p>
+
+<p>开视频会议时，有部分参与者是同一个单位的，可能会在一个房间里面参加会议，如果房间里面一个人讲话，从同一个房间里面其他终端外放出来，就会产生啸叫。 这个情况如果让房间里面其他终端静音，是可以解决啸叫问题的。但是根据往常参加视频会议的经验，一般用户并不一定知道怎么操作。</p>
+
+<p>Skype、微信、WebRTC之类应用，应该都没有对上面两种情况作优化。如果可以增加啸叫抑制的算法，语音通话或者视频会议遇到异常的机会就可以减少。</p>
+
+<h3 id="12-啸叫仿真">1.2 啸叫仿真</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#simulate acoustic feekback, point-by-point</span>
+<span class="c">#                                    _______________                          </span>
+<span class="c">#   clean speech: x --&gt; mic: x1 --&gt; | Internal Gain | --&gt; x2 -- &gt; speaker : y </span>
+<span class="c">#                        ^          |______G________|                       |</span>
+<span class="c">#                        |                                                  |</span>
+<span class="c">#                        |                      _______________             |</span>
+<span class="c">#                        &lt;-----------------y1--| Room Impulse  |___________ v</span>
+<span class="c">#                                              |____Response___|       </span>
+<span class="c">#</span>
+<span class="n">N</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rir</span><span class="p">))</span> <span class="c">#limit room impulse response length</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>   <span class="c">#buffer N samples of speaker output to generate acoustic feedback</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>  <span class="c">#save speaker output to y </span>
+<span class="n">y1</span> <span class="o">=</span> <span class="mf">0.0</span>           <span class="c">#init as 0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>       
+<span class="n">x1</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">y1</span>   
+<span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">G</span><span class="o">*</span><span class="n">x1</span>
+<span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>   <span class="c">#amplitude clipping</span>
+<span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>         
+<span class="n">x2</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">x2</span><span class="p">[:</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> 
+<span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">rir</span><span class="p">[:</span><span class="n">N</span><span class="p">])</span>
+</code></pre></div></div>
+
+<table border="1" style="width: 100%;margin:auto">
+
+    <tr> 
+	<th style="text-align:center">Clean Speeh</th>
+        <td>
+<audio src="/static/posts/2020/07/LDC93S6A.wav" controls="controls" style="width: 200px;"></audio>
+</td>
+        <td><figure align="center" style="width: 100%;margin:auto">
+  <img width="auto" height="auto" src="/static/posts/2020/07/clean.png" />
+  <figcaption></figcaption>
+</figure> </td>
+    </tr>
+    <tr>
+        <th style="text-align:center">Added Howling</th>
+        <td>
+<audio src="/static/posts/2020/07/added_howling.wav" controls="controls" style="width: 200px;"></audio>
+</td>
+        <td><figure align="center" style="width:100%;margin:auto">
+  <img width="auto" height="auto" src="/static/posts/2020/07/howling.png" />
+  <figcaption></figcaption>
+</figure></td>
+    </tr>
+
+</table>
+
+<h2 id="2-啸叫抑制的方法">2. 啸叫抑制的方法</h2>
+
+<p>啸叫抑制的方法，主要有三种：频移/相移法、陷波法、和自适应方法。本文只实现第二种，陷波滤波器法。</p>
+
+<p>顾名思义，陷波法就是要在声反馈系统的极点频率插入一个陷波滤波器，抑制极点的增益，使之无法达到啸叫的增益条件。因此陷波法需要分成两步：第一步，啸叫检测，将产生啸叫的频率找出来； 第二步，啸叫抑制，在找出来的啸叫频率设计陷波滤波器，并对麦克风信号进行滤波。</p>
+
+<figure align="center" style="width: 70%;margin:auto">
+  	<img width="auto" height="auto" src="/static/posts/2020/07/Howling_Suppression.png" />
+ <figcaption></figcaption>
+</figure>
+
+<table border="1" style="width: 100%;margin:auto">
+
+    <tr> 
+	<td><figure align="center" style="width: 100%;margin:auto">
+  	<img width="auto" height="auto" src="/static/posts/2020/07/howling_spec.png" />
+  	<figcaption></figcaption>
+	</figure> 
+	</td>
+        <td><figure align="center" style="width: 100%;margin:auto">
+  	<img width="auto" height="auto" src="/static/posts/2020/07/notch.png" />
+  	<figcaption></figcaption>
+	</figure> 
+	</td>
+    </tr>
+
+</table>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#==============================Notch Filtering ==================================</span>
+<span class="c">#                                 _______________         ______________                     </span>
+<span class="c">#clean speech: x --&gt; mic: x1 --&gt; | Internal Gain |-x2--&gt; | Notch Filter |--&gt; speaker: y </span>
+<span class="c">#                     ^          |______G________|       |_____IIR______|         |          </span>
+<span class="c">#                     |                                                           |</span>
+<span class="c">#                     |                      _______________                      |</span>
+<span class="c">#                     &lt;-----------------y1--| Room Impulse  |____________________ v</span>
+<span class="c">#                                           |____Response___|            </span>
+<span class="c">#                      </span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rir</span><span class="p">))</span> <span class="c">#limit room impulse response length</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>   <span class="c">#</span>
+<span class="n">x3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>   <span class="c">#buffer N samples of speaker output to generate acoustic feedback</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>  <span class="c">#save speaker output to y </span>
+<span class="n">y1</span> <span class="o">=</span> <span class="mf">0.0</span>           <span class="c">#init as 0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>       
+<span class="n">x1</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">y1</span>   
+<span class="n">x2</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">x2</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> 
+<span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">G</span><span class="o">*</span><span class="n">x1</span>
+<span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c">#amplitude clipping</span>
+<span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>      
+<span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x3</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>  <span class="c">#IIR filter</span>
+<span class="n">x3</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">x3</span><span class="p">[:</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> 
+<span class="n">x3</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span>  <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x3</span><span class="p">,</span> <span class="n">rir</span><span class="p">[:</span><span class="n">N</span><span class="p">])</span>
+</code></pre></div></div>
+
+<table border="1" style="width: 100%;margin:auto">
+
+    <tr> 
+	<th style="text-align:center">Fixed Notch Filters</th>
+        <td>
+<audio src="/static/posts/2020/07/removed_howling.wav" controls="controls" style="width: 200px;"></audio>
+</td>
+        <td><figure align="center" style="width: 100%;margin:auto">
+  <img width="auto" height="auto" src="/static/posts/2020/07/processed_no_detection.png" />
+  <figcaption></figcaption>
+</figure> </td>
+    </tr>
+</table>
+
+<h3 id="21-啸叫检测">2.1 啸叫检测</h3>
+
+<p>啸叫频点的检测，必须结合啸叫的时域和频域特征来进行分析。</p>
+
+<p>频域上，啸叫频点功率很高，是一个峰值，远超其他语音或噪声频率的功率。</p>
+
+<p>时域上，啸叫频点的功率有一个迅速增大的过程，达到饱和幅度后一直保持。</p>
+
+<p>根据啸叫的时频特征，参考资料[1]总结了以下检测特征。</p>
+
+<h4 id="211-峰值阈值功率比peak-to-threshold-power-raio-ptpr">2.1.1 峰值阈值功率比(Peak-to-Threshold Power Raio, PTPR)</h4>
+<p>啸叫的功率远大于正常播放的音频。故设定一个阈值，只有功率超过阈值的频点，才会进行啸叫检测，减少无意义的检测判决。</p>
+
+<script type="math/tex; mode=display">PTPR(\omega_i, t)[dB] = 10\log_{10} \frac{|Y(\omega_i, t)|^2}{P_0}</script>
+
+<h4 id="212-峰值均值功率比peak-to-average-power-raio-papr">2.1.2 峰值均值功率比(Peak-to-Average Power Raio, PAPR)</h4>
+
+<p>产生啸叫的频点功率远大于其他频点的功率，故可以先计算出整个频谱的平均功率，然后计算每个频点功率与平均功率之比。比值大于预设阈值的频点，记为候选啸叫频率。</p>
+
+<script type="math/tex; mode=display">PAPR(\omega_i, t)[dB] = 10\log_{10} \frac{|Y(\omega_i, t)|^2}{P_y(t)}</script>
+
+<h4 id="213-峰值邻近功率比peak-to-neighboring-power-raio-pnpr">2.1.3 峰值邻近功率比(Peak-to-Neighboring Power Raio, PNPR)</h4>
+
+<p>PNPR寻找功率谱的峰值点，加入候选啸叫频率。可以选取左右各M个相邻频点进行比较，当前频点功率比邻值都高时，记为候选啸叫频率。M选取5点左右</p>
+
+<script type="math/tex; mode=display">PNPR(\omega_i, t)[dB] = 10\log_{10} \frac{|Y(\omega_i, t)|^2}{|Y(\omega_i+2\pi m/M, t)|^2}</script>
+
+<h4 id="214-峰值谐波功率比peak-to-harmonics-power-raio-phpr">2.1.4 峰值谐波功率比(Peak-to-Harmonics Power Raio, PHPR)</h4>
+<p>语音谱有谐波峰，而啸叫频率是不含谐波峰的，故可以根据一个峰值点的谐波频率功率是不是也很大，来判断该峰值是否啸叫点。</p>
+
+<script type="math/tex; mode=display">PHPR(\omega_i, t)[dB] = 10\log_{10} \frac{|Y(\omega_i, t)|^2}{|Y(m\omega_i, t)|^2}</script>
+
+<script type="math/tex; mode=display">\bigcap\limits_{m\in{0.5,1.5,2,3,4}} \left[PHPR(\omega_i, t)>T_{PHPR}\right]=1</script>
+
+<h4 id="215-帧间峰值保持度interframe-peak-magnitude-persistence-ipmp">2.1.5 帧间峰值保持度(Interframe Peak Magnitude Persistence, IPMP)</h4>
+<p>IPMP是时域特征，如果一个频点，连续几帧都是检测出来的候选啸叫峰值，那就认为这个点确实发生了啸叫。实现时可以选定5帧，超过3帧是候选啸叫频点的位置，判定为啸叫点。</p>
+
+<script type="math/tex; mode=display">IPMP(\omega_i, t)[dB] = \frac{\sum_{j=0}^{Q_M-1}\omega_i \in D(i-j)}{Q_M}</script>
+
+<h4 id="216-帧间幅度斜率偏差度interframe--magnitude-slope-deviation-imsd">2.1.6 帧间幅度斜率偏差度(Interframe  Magnitude Slope Deviation, IMSD)</h4>
+<p>IMSD也是时域特征，是从啸叫开始发生时判断，这是啸叫频点幅度线性增长，那么帧间斜率就会保持不变。取$Q_M$帧进行区间观察，计算$Q_M$帧平均斜率，与区间内更短区间的斜率之间的差值，如果差值在设定阈值以下，就认为该区间斜率保持不变，可能是发生了啸叫。</p>
+
+<figure align="center" style="width: 40%;margin:auto">
+  <img width="auto" height="auto" src="/static/posts/2020/07/imsd.png" />
+  <figcaption></figcaption>
+</figure>
+
+<p>频域特征PTPR PAPR PNPR PHPR都是对一帧内频点进行分析，而时域特征是对多帧间的特征进行分析。所以在进行判决时，一般先对每帧频谱进行频域特征分析，然后对累计的时域特许证进行分析。</p>
+
+<p>为了不影响原音频的频谱、以及限制滤波器计算量考虑，最后还需要限制啸叫频点的数量。一般系统可以选择五六个频点，简单的系统也可以尝试只选择啸叫程度最严重的一个或者两个频点。</p>
+
+<figure align="center" style="width: 100%;margin:auto">
+  <img width="auto" height="auto" src="/static/posts/2020/07/howling_detection.png" />
+  <figcaption></figcaption>
+</figure>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">howling_detect</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">win</span><span class="p">,</span> <span class="n">nFFT</span><span class="p">,</span> <span class="n">Slen</span><span class="p">,</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">frame_id</span><span class="p">):</span>
+	<span class="n">insign</span> <span class="o">=</span> <span class="n">win</span> <span class="o">*</span> <span class="n">frame</span>
+	<span class="n">spec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">insign</span><span class="p">,</span> <span class="n">nFFT</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+	
+	<span class="c">#==========  Howling Detection Stage =====================#   </span>
+	<span class="n">ptpr_idx</span> <span class="o">=</span> <span class="n">pyHowling</span><span class="o">.</span><span class="n">ptpr</span><span class="p">(</span><span class="n">spec</span><span class="p">[:</span><span class="n">Slen</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span>
+	<span class="n">papr_idx</span><span class="p">,</span> <span class="n">papr</span> <span class="o">=</span> <span class="n">pyHowling</span><span class="o">.</span><span class="n">papr</span><span class="p">(</span><span class="n">spec</span><span class="p">[:</span><span class="n">Slen</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span>
+	<span class="n">pnpr_idx</span> <span class="o">=</span> <span class="n">pyHowling</span><span class="o">.</span><span class="n">pnpr</span><span class="p">(</span><span class="n">spec</span><span class="p">[:</span><span class="n">Slen</span><span class="p">],</span> <span class="mi">15</span><span class="p">)</span>
+	<span class="n">intersec_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">ptpr_idx</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">papr_idx</span><span class="p">,</span><span class="n">pnpr_idx</span><span class="p">))</span>
+	
+	<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">intersec_idx</span><span class="p">:</span>
+	<span class="n">candidates</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">frame_id</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+	<span class="n">ipmp</span> <span class="o">=</span> <span class="n">pyHowling</span><span class="o">.</span><span class="n">ipmp</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">frame_id</span><span class="p">)</span>
+	
+	<span class="n">result</span> <span class="o">=</span> <span class="n">pyHowling</span><span class="o">.</span><span class="n">screening</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">ipmp</span><span class="p">)</span>
+	
+	<span class="k">return</span> <span class="n">result</span>
+
+</code></pre></div></div>
+
+<h3 id="22-陷波法抑制啸叫">2.2 陷波法抑制啸叫</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#=============================Notch Filtering =======================================================     </span>
+<span class="c">#                                    ___________________       </span>
+<span class="c">#                          -------&gt; | Howling Detection | ______</span>
+<span class="c">#                         |         |___________________|       |</span>
+<span class="c">#                         |                                     |</span>
+<span class="c">#                         |      _______________         _______V______                     </span>
+<span class="c">#clean speech: x --&gt; mic: x1 --&gt; | Internal Gain |-x2--&gt; | Notch Filter | --&gt;speaker:y </span>
+<span class="c">#                     ^          |______G________|       |_____IIR______|         |          </span>
+<span class="c">#                     |                                                           |</span>
+<span class="c">#                     |                      _______________                      |</span>
+<span class="c">#                     &lt;-----------------y1--| Room Impulse  |____________________ v</span>
+<span class="c">#                                           |____Response___|            </span>
+<span class="c">#                         </span>
+<span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">N</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rir</span><span class="p">))</span> <span class="c">#limit room impulse response length</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>   <span class="c">#</span>
+<span class="n">x3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>   <span class="c">#buffer N samples of speaker output to generate acoustic feedback</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>  <span class="c">#save speaker output to y </span>
+<span class="n">y1</span> <span class="o">=</span> <span class="mf">0.0</span>           <span class="c">#init as 0</span>
+<span class="n">current_frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Slen</span><span class="p">)</span>
+<span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">candidates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">Slen</span><span class="p">,</span> <span class="n">Nframes</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s">'int'</span><span class="p">)</span>
+<span class="n">frame_id</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">notch_freqs</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">y1</span>   
+<span class="n">current_frame</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">x1</span>
+<span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="k">if</span> <span class="n">pos</span><span class="o">==</span><span class="n">Slen</span><span class="p">:</span>
+<span class="c">#update notch filter frame by frame</span>
+<span class="n">freq_ids</span> <span class="o">=</span> <span class="n">howling_detect</span><span class="p">(</span><span class="n">current_frame</span><span class="p">,</span> <span class="n">win</span><span class="p">,</span> <span class="n">nFFT</span><span class="p">,</span> <span class="n">Slen</span><span class="p">,</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">frame_id</span><span class="p">)</span>
+<span class="c">#freq_ids = [46]</span>
+<span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">freq_ids</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">freq_ids</span><span class="p">)</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="n">notch_freqs</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">notch_freqs</span><span class="p">,</span> <span class="n">freqs</span><span class="p">[</span><span class="n">freq_ids</span><span class="p">])))):</span>
+<span class="n">notch_freqs</span> <span class="o">=</span> <span class="n">freqs</span><span class="p">[</span><span class="n">freq_ids</span><span class="p">]</span>
+<span class="n">sos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">notch_freqs</span><span class="p">),</span> <span class="mi">6</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">notch_freqs</span><span class="p">)):</span>
+<span class="n">b0</span><span class="p">,</span> <span class="n">a0</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">iirnotch</span><span class="p">(</span><span class="n">notch_freqs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Srate</span><span class="p">)</span>
+<span class="n">sos</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b0</span><span class="p">,</span><span class="n">a0</span><span class="p">)</span>
+<span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">sos2tf</span><span class="p">(</span><span class="n">sos</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"frame id: "</span><span class="p">,</span> <span class="n">frame_id</span><span class="p">,</span> <span class="s">"/"</span><span class="p">,</span> <span class="n">Nframes</span><span class="p">,</span> <span class="s">"notch freqs:"</span><span class="p">,</span> <span class="n">notch_freqs</span><span class="p">)</span>
+<span class="n">current_frame</span><span class="p">[:</span><span class="n">Slen</span><span class="o">-</span><span class="n">len2</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_frame</span><span class="p">[</span><span class="n">len2</span><span class="p">:]</span>  <span class="c">#shift by len2</span>
+<span class="n">pos</span> <span class="o">=</span> <span class="n">len2</span>
+<span class="n">frame_id</span> <span class="o">=</span> <span class="n">frame_id</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="n">x2</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">x2</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> 
+<span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">G</span><span class="o">*</span><span class="n">x1</span>
+<span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c">#amplitude clipping</span>
+<span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>      
+<span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x2</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)],</span> <span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x3</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>  <span class="c">#IIR filter     </span>
+<span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>  <span class="c">#amplitude clipping</span>
+<span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>      
+<span class="n">x3</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">x3</span><span class="p">[:</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> 
+<span class="n">x3</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span>  <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x3</span><span class="p">,</span> <span class="n">rir</span><span class="p">[:</span><span class="n">N</span><span class="p">])</span>
+</code></pre></div></div>
+
+<table border="1" style="width: 100%;margin:auto">
+
+    <tr> 
+	<th style="text-align:center">With Howling Detection</th>
+        <td>
+<audio src="/static/posts/2020/07/processed.wav" controls="controls" style="width: 200px;"></audio>
+</td>
+        <td><figure align="center" style="width: 100%;margin:auto">
+  <img width="auto" height="auto" src="/static/posts/2020/07/processed.png" />
+  <figcaption></figcaption>
+</figure> </td>
+    </tr>
+</table>
+
+<p><br /></p>
+
+<p><strong>参考资料</strong></p>
+
+<p>[1] T. van Waterschoot and M. Moonen, “Fifty Years of Acoustic Feedback Control: State of the Art and Future Challenges,” in Proceedings of the IEEE, vol. 99, no. 2, pp. 288-327, Feb. 2011, doi: 10.1109/JPROC.2010.2090998.</p>
+
+<p>[2] <a href="https://github.com/Mathilda11/Speech-processing">https://github.com/Mathilda11/Speech-processing</a></p>
+</div>
+  <div class="share-page">
+  <span style="float: left;">Share this on &rarr;&nbsp;&nbsp;</span>
+
+  <!-- Twitter -->
+  <a href="https://twitter.com/share" class="twitter-share-button" data-via="">Tweet</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+  <!-- Facebook -->
+  <div class="fb-share-button" data-href="https://chenwj1989.github.io/post/cn/howling-suppression-cn.html" data-layout="button_count" style="position: relative; top: -8px; left: 3px;"></div>
+</div>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</div>
+
+
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+            
+            <div class="panel-body">
+              <h4>Related Posts</h4>
+              <ul>
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/speex-aec-cn.html">Speex回声消除</a>
+                  
+                    (Categories: <a href="/category/语音">语音</a>, <a href="/category/信号处理">信号处理</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/freq-domain-lms-cn.html">频域LMS自适应滤波</a>
+                  
+                    (Categories: <a href="/category/机器学习">机器学习</a>, <a href="/category/信号处理">信号处理</a>)
+                  
+                </li>
+          
+          
+        
+      
+    
+  
+    
+      
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-webrtc-cn.html">单通道语音增强之WebRTC去噪算法</a>
+                  
+                    (Categories: <a href="/category/语音">语音</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+  
+    
+      
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-review-cn.html">单通道语音增强之综述</a>
+                  
+                    (Categories: <a href="/category/语音">语音</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+  
+    
+      
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-books-cn.html">单通道语音增强之参考书</a>
+                  
+                    (Categories: <a href="/category/语音">语音</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+  
+    
+      
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-filtering-cn.html">单通道语音增强之谱减法与维纳滤波</a>
+                  
+                    (Categories: <a href="/category/语音">语音</a>)
+                  
+                </li>
+          
+          
+        
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+  
+  
+  </ul>
+</div>
+
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/post/cn/speex-aec-cn.html">&laquo; Speex回声消除</a>
+  
+  
+</div>
+
+<div class="disqus-comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var disqus_shortname = "wjchen";
+    var disqus_identifier = "https://chenwj1989.github.io_啸叫抑制之陷波法";
+    var disqus_title = "啸叫抑制之陷波法";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    /* ]]> */
+  </script>
+</div>
+
+        <footer>
+          &copy; wjchen
+          
+            - <a href="https://github.com/chenwj1989">https://github.com/chenwj1989</a> - Powered by Jekyll.
+          
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/jquery-1.11.0.min.js"></script>
+    <script src="/static/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+    
+    <script src="/static/katex/katex.min.js"></script>
+    <script src="/static/katex/contrib/auto-render.min.js"></script>
+    <script src="/static/katex/contrib/mathtex-script-type.min.js"></script>
+    <script>
+      renderMathInElement(
+          document.body,
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+    </script>
+
+  </body>
+</html>
+

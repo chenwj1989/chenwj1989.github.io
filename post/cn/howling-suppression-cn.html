@@ -217,6 +217,7 @@
 <span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 <span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">rir</span><span class="p">[:</span><span class="n">N</span><span class="p">])</span>
 </code></pre></div></div>
+<p>下面将一段干净语音经过反馈路径仿真，产生啸叫。反馈路径RIR直接使用参考资料[2]的path数据。可以看到加啸叫后的音频，幅度已饱和，无法分辨原本语音，语谱图可以看见多个啸叫峰值。</p>
 
 <table border="1" style="width: 100%;margin:auto">
 
@@ -254,22 +255,35 @@
  <figcaption></figcaption>
 </figure>
 
-<table border="1" style="width: 100%;margin:auto">
+<p>从前面啸叫语音的语谱图手动选择两个最大峰值，分别是603Hz和1745Hz (大概值，不是特别精确)。并且使用Python生成IIR Notch Filter 的系数b和a。</p>
 
-    <tr> 
-	<td><figure align="center" style="width: 100%;margin:auto">
-  	<img width="auto" height="auto" src="/static/posts/2020/07/howling_spec.png" />
-  	<figcaption></figcaption>
-	</figure> 
-	</td>
-        <td><figure align="center" style="width: 100%;margin:auto">
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c">#notch filter</span>
+    <span class="n">fs</span> <span class="o">=</span> <span class="n">Srate</span>  <span class="c"># Sample frequency (Hz)</span>
+    <span class="n">f0</span> <span class="o">=</span> <span class="mi">603</span>  <span class="c"># Frequency to be removed from signal (Hz)</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c"># Quality factor</span>
+    <span class="c"># Design notch filter</span>
+    <span class="n">b1</span><span class="p">,</span> <span class="n">a1</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">iirnotch</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+    <span class="n">sos1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b1</span><span class="p">,</span><span class="n">a1</span><span class="p">)</span>
+    <span class="c">#plot_notch_filter(b1, a1, fs)</span>
+    
+    <span class="n">f0</span> <span class="o">=</span> <span class="mi">1745</span>  <span class="c"># Frequency to be removed from signal (Hz)</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c"># Quality factor</span>
+    <span class="c"># Design notch filter</span>
+    <span class="n">b2</span><span class="p">,</span> <span class="n">a2</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">iirnotch</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+    <span class="n">sos2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b2</span><span class="p">,</span><span class="n">a2</span><span class="p">)</span>
+    <span class="c">#plot_notch_filter(b2, a2, fs)</span>
+
+    <span class="n">sos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">sos1</span><span class="p">,</span><span class="n">sos2</span><span class="p">))</span>
+    <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">sos2tf</span><span class="p">(</span><span class="n">sos</span><span class="p">)</span>
+    <span class="n">plot_notch_filter</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+</code></pre></div></div>
+
+<figure align="center" style="width: 100%;margin:auto">
   	<img width="auto" height="auto" src="/static/posts/2020/07/notch.png" />
   	<figcaption></figcaption>
-	</figure> 
-	</td>
-    </tr>
+	</figure>
 
-</table>
+<p>使用固定系数的陷波滤波器，插入到前面的声反馈系统中进行仿真。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#==============================Notch Filtering ==================================</span>
 <span class="c">#                                 _______________         ______________                     </span>
@@ -297,6 +311,8 @@
 <span class="n">x3</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span>  <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 <span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x3</span><span class="p">,</span> <span class="n">rir</span><span class="p">[:</span><span class="n">N</span><span class="p">])</span>
 </code></pre></div></div>
+
+<p>插入陷波滤波器后的扬声器输出信号频谱明显看见在603Hz和1745Hz 被抑制了，整体语音的谱图重现，可以听到清楚的语音信号 (除了陷波频率附近频率有损)。</p>
 
 <table border="1" style="width: 100%;margin:auto">
 
@@ -368,6 +384,8 @@
   <figcaption></figcaption>
 </figure>
 
+<p>下面进行仿真，暂时只把PTPR, PAPR, PNPR IPMP考虑进去。并且做一个Screening, 把离得太近的候选频点去除。</p>
+
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="k">def</span> <span class="nf">howling_detect</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">win</span><span class="p">,</span> <span class="n">nFFT</span><span class="p">,</span> <span class="n">Slen</span><span class="p">,</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">frame_id</span><span class="p">):</span>
 	<span class="n">insign</span> <span class="o">=</span> <span class="n">win</span> <span class="o">*</span> <span class="n">frame</span>
@@ -390,6 +408,8 @@
 </code></pre></div></div>
 
 <h3 id="22-陷波法抑制啸叫">2.2 陷波法抑制啸叫</h3>
+
+<p>将啸叫检测和陷波滤波器都插入到声反馈系统中，动态监测啸叫频率，进行仿真。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#=============================Notch Filtering =======================================================     </span>
 <span class="c">#                                    ___________________       </span>
@@ -448,6 +468,8 @@
 <span class="n">x3</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span>  <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 <span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x3</span><span class="p">,</span> <span class="n">rir</span><span class="p">[:</span><span class="n">N</span><span class="p">])</span>
 </code></pre></div></div>
+
+<p>从结果上看，除了初始阶段产生了啸叫，后面基本抑制住了，可以听到语音信号。但是有断断续续的低幅度啸叫产生。IPMP等需要啸叫达到一定程度才能检测出来，如果换用IMSD，可能可以更快地动态抑制啸叫。</p>
 
 <table border="1" style="width: 100%;margin:auto">
 

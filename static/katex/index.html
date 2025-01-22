@@ -170,18 +170,18 @@
 
 <h3 id="api">API</h3>
 
-<p>Call <code class="highlighter-rouge">katex.render</code> to render a TeX expression directly into a DOM element.
+<p>Call <code class="language-plaintext highlighter-rouge">katex.render</code> to render a TeX expression directly into a DOM element.
 For example:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">katex</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s2">"c = </span><span class="err">\\</span><span class="s2">pm</span><span class="err">\\</span><span class="s2">sqrt{a^2 + b^2}"</span><span class="p">,</span> <span class="nx">element</span><span class="p">,</span> <span class="p">{</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">katex</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="dl">"</span><span class="s2">c = </span><span class="se">\\</span><span class="s2">pm</span><span class="se">\\</span><span class="s2">sqrt{a^2 + b^2}</span><span class="dl">"</span><span class="p">,</span> <span class="nx">element</span><span class="p">,</span> <span class="p">{</span>
     <span class="na">throwOnError</span><span class="p">:</span> <span class="kc">false</span>
 <span class="p">});</span>
 </code></pre></div></div>
 
-<p>Call <code class="highlighter-rouge">katex.renderToString</code> to generate an HTML string of the rendered math,
+<p>Call <code class="language-plaintext highlighter-rouge">katex.renderToString</code> to generate an HTML string of the rendered math,
 e.g., for server-side rendering.  For example:</p>
 
-<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="nx">katex</span><span class="p">.</span><span class="nx">renderToString</span><span class="p">(</span><span class="s2">"c = </span><span class="err">\\</span><span class="s2">pm</span><span class="err">\\</span><span class="s2">sqrt{a^2 + b^2}"</span><span class="p">,</span> <span class="p">{</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">html</span> <span class="o">=</span> <span class="nx">katex</span><span class="p">.</span><span class="nx">renderToString</span><span class="p">(</span><span class="dl">"</span><span class="s2">c = </span><span class="se">\\</span><span class="s2">pm</span><span class="se">\\</span><span class="s2">sqrt{a^2 + b^2}</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span>
     <span class="na">throwOnError</span><span class="p">:</span> <span class="kc">false</span>
 <span class="p">});</span>
 <span class="c1">// '&lt;span class="katex"&gt;...&lt;/span&gt;'</span>
@@ -191,7 +191,7 @@ e.g., for server-side rendering.  For example:</p>
 If you are doing all rendering on the server, there is no need to include the
 JavaScript on the client.</p>
 
-<p>The examples above use the <code class="highlighter-rouge">throwOnError: false</code> option, which renders invalid
+<p>The examples above use the <code class="language-plaintext highlighter-rouge">throwOnError: false</code> option, which renders invalid
 inputs as the TeX source code in red (by default), with the error message as
 hover text.  For other available options, see the
 <a href="https://katex.org/docs/api.html">API documentation</a>,

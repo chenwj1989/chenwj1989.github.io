@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/favicon.ico" />
+    <title>Implement the Discrete Fourier Transform using C++ - All Articles</title>
+    <meta name="author" content="wjchen" />
+    <meta name="description" content="Implement the Discrete Fourier Transform using C++" />
+    <meta name="keywords" content="Implement the Discrete Fourier Transform using C++, All Articles, signal_processing" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <meta content="" property="fb:app_id">
+    <meta content="All Articles" property="og:site_name">
+
+    
+
+    
+      <meta content="Implement the Discrete Fourier Transform using C++" property="og:title">
+      <meta content="article" property="og:type">
+    
+
+    
+      <meta content="My Personal Thoughts" property="og:description">
+    
+
+    
+      <meta content="https://chenwj1989.github.io/post/en/dft-implementation-en.html" property="og:url">
+    
+
+    
+      <meta content="2024-12-11T14:32:04+08:00" property="article:published_time">
+      <meta content="https://chenwj1989.github.io/about/" property="article:author">
+    
+
+    
+      <meta content="https://chenwj1989.github.io/static/img/avatar.jpg" property="og:image">
+    
+
+    
+      
+        <meta content="signal_processing" property="article:section">
+      
+    
+
+    
+      
+    
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@">
+
+    
+      <meta name="twitter:title" content="Implement the Discrete Fourier Transform using C++">
+    
+
+    
+      <meta name="twitter:url" content="https://chenwj1989.github.io/post/en/dft-implementation-en.html">
+    
+
+    
+      <meta name="twitter:description" content="My Personal Thoughts">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="/static/css/fonts.css" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/katex/katex.min.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+          <div class="author" align="center">
+          <a href="/"><img class="profile-avatar" src="/static/img/avatar.jpg" height="100px" width="100px" /></a>
+          <h1 class="author-name">wjchen</h1>
+          
+            <div class="profile-about">
+              Never lose a holy curiosity.
+            </div>
+          
+           <div class="social">
+            <ul>
+              
+                <li><a href="https://github.com/chenwj1989" target="_blank"><i class="fab fa-github"></i></a></li>
+              
+                <li><a href="https://www.zhihu.com/people/wjchen-16/activities" target="_blank"><i class="fab fa-zhihu"></i></a></li>
+              
+            </ul>
+          </div>
+	  </div>
+          <div class="search" id="js-search">
+            <input type="text" placeholder="$ type to search" class="search__input form-control" id="js-search__input">
+            <ul class="search__results" id="js-search__results"></ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/projects/">My Projects</a></li>
+            
+              <li><a class="about" href="/about/">About Me</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-8 col-offset-1 main-layout">
+        <header class="post-header">
+  <h1 class="post-title">Implement the Discrete Fourier Transform using C++</h1>
+</header>
+
+<span class="time">11 Dec 2024</span>
+
+  <span class="categories">
+    &raquo; <a href="/category/signal_processing">signal_processing</a>
+  </span>
+
+
+<div class="content">
+  <div class="post"><p><br /></p>
+<ul id="markdown-toc">
+  <li><a href="#whats-the-fourier-transform" id="markdown-toc-whats-the-fourier-transform">What’s the Fourier Transform?</a>    <ul>
+      <li><a href="#fourier-series-fs" id="markdown-toc-fourier-series-fs">Fourier Series (FS)</a></li>
+      <li><a href="#continuous-time-fourier-transform-ctft" id="markdown-toc-continuous-time-fourier-transform-ctft">Continuous Time Fourier Transform (CTFT)</a></li>
+    </ul>
+  </li>
+  <li><a href="#what-is-the-discrete-fourier-transform-dft" id="markdown-toc-what-is-the-discrete-fourier-transform-dft">What is the Discrete Fourier Transform (DFT)?</a>    <ul>
+      <li><a href="#discretization-in-time-discrete-time-fourier-transform-dtft" id="markdown-toc-discretization-in-time-discrete-time-fourier-transform-dtft">Discretization in Time: Discrete Time Fourier Transform (DTFT)</a></li>
+      <li><a href="#discretization-in-frequency-discrete-fourier-transform-dft" id="markdown-toc-discretization-in-frequency-discrete-fourier-transform-dft">Discretization in Frequency: Discrete Fourier Transform (DFT)</a></li>
+    </ul>
+  </li>
+  <li><a href="#programming-of-the-dft" id="markdown-toc-programming-of-the-dft">Programming of the DFT</a></li>
+  <li><a href="#discrete-fourier-transform-of-a-real-signal" id="markdown-toc-discrete-fourier-transform-of-a-real-signal">Discrete Fourier Transform of a Real Signal</a></li>
+  <li><a href="#dft-benchmarking" id="markdown-toc-dft-benchmarking">DFT Benchmarking</a></li>
+  <li><a href="#reference" id="markdown-toc-reference">Reference</a></li>
+</ul>
+
+<p>The Discrete Fourier Transform (DFT) is a form of Fourier Transform suitable for computers. The goal of this repository is to learn how to implement DFT, optimize it step by step.</p>
+
+<p>Before we start coding, some understand the background knowledge of the Fourier Transform and the Discrete Fourier Transform should be introduced.</p>
+
+<h1 id="whats-the-fourier-transform">What’s the Fourier Transform?</h1>
+
+<p>The most direct way to observe and measure signals in the physical world is to record how the signals change over time. This provides us the time-domain signal x(t), which represents the signal‘s amplitude as it changes over time. There are various methods for analyzing signals in the time domain, but certain signal characteristics may not be readily apparent in the time domain. Mathematicians/physicists might convert signals to a specific transform domain for analysis.</p>
+
+<p>For instance, when you document a live performance. Different vocal and instrumental elements, such as bass and soprano singing, along with a variety of musical instruments, can be heard at different pitches. In the time domain, an audio signal looks like a chaotically changing sequence, where you can only see that the volume is sometimes high and sometimes low. How can we distinguish between bass, soprano, and instrumental voices, and identify the songs they are performing?</p>
+
+<figure align="center" style="width: 90%;margin:auto">
+  <img width="100%" height="100%" src="/static/posts/2024/music_time.png" />
+</figure>
+<p><br /></p>
+
+<p>Sound waves are a type of vibration that is defined by two factors: frequency of vibration and amplitude of vibration. As the frequency of vibration increases, the human ear perceives sharper sounds, while lower frequencies are felt as deeper tones.</p>
+
+<p>Adult males typically have thicker and wider vocal cords compared to females, resulting in slower vibration and deeper voices for males, and higher voices for females. Various musical instruments resonate at unique frequencies and harmonics. By determining the vibration frequencies present in the music’s sound wave signal, we can identify the instruments, singers, and song playing. As show in he image blow, the peaks on the spectrum highlight the specific frequencies of the music being played at that moment.</p>
+
+<figure align="center" style="width: 90%;margin:auto">
+  <img width="100%" height="100%" src="/static/posts/2024/music_freq.png" />
+</figure>
+<p><br /></p>
+
+<p>The Fourier transform is a mathematical tool that converts signals from the time domain (amplitude, time) to the frequency domain (amplitude, frequency) for analysis and processing.</p>
+
+<p>How can this transformation be accomplished? Let’s revisit the music signal above and zoom in a certain section. We notice that certain waveforms are repeated, with smaller waveforms overlaid on the larger ones. The time domain sequence that appears to vary randomly is actually not random. It can be broken down into a combination of signals with varying period of time. Frequency decreases as the period lengthens and increases as the period shortens.</p>
+
+<figure align="center" style="width: 90%;margin:auto">
+  <img width="100%" height="100%" src="/static/posts/2024/music_time_zoom.png" />
+</figure>
+<p><br /></p>
+
+<p>Decomposing a time-domain signal into a linear superposition of periodic signals of different frequencies is the fundamental concept behind the Fourier transform.</p>
+
+<h2 id="fourier-series-fs">Fourier Series (FS)</h2>
+
+<p>The Fourier series offers a way to break down a periodic function into a combination of sine and cosine functions. Using the figure presented as a reference, a rectangular wave can be decomposed into a major sine wave which is then combined with multiple smaller sine waves.</p>
+
+<figure align="center" style="width: 70%;margin:auto">
+  <img width="100%" height="100%" src="/static/posts/2024/Fourier_series_and_transform.gif" />
+</figure>
+
+<p><em><a href="https://commons.wikimedia.org/w/index.php?curid=28399050">Fourier transform time and frequency domains (small).gif, CC0, By Lucas Vieira</a></em></p>
+
+<p>The Fourier series utilizes frequency-multiplying trigonometric functions as a set of orthogonal basis, and transforms a periodic signal into coefficients of these orthogonal basis.</p>
+
+<p>Heere is the real number form of the Fourier Series, where $T_0$ is the period in the time domain and $f_0 = 1/T_0$.</p>
+
+\[\begin{aligned}
+f(t) &amp; = \frac{a_0}{2}+\sum_{n=0}^{\infty} \left[a_n\cos(2\pi nf_0t)+b_n\sin(2\pi nf_0t)\right] \\
+where \\
+a_0 &amp; = \frac{1}{T_0}\int_{-T/2}^{T/2} f(t)dt \\
+a_n &amp; = \frac{2}{T_0}\int_{-T/2}^{T/2} f(t)\cos(2\pi nf_0t)dt \\
+b_n &amp; = \frac{2}{T_0}\int_{-T/2}^{T/2} f(t)\sin(2\pi nf_0t)dt \\
+\end{aligned}\]
+
+<p>The complex number form is as follows:</p>
+
+\[\begin{aligned}
+X(kf_0) &amp; = \frac{1}{T_0}\int_{T0} x(t) e^{-j2\pi kf_0t}dt \\
+x(t) &amp; = \sum_{k=-\infty}^{\infty} X(kf_0)e^{j2\pi kf_0t} 
+\end{aligned}\]
+
+<h2 id="continuous-time-fourier-transform-ctft">Continuous Time Fourier Transform (CTFT)</h2>
+
+<p>Non-periodic signals cannot be directly analyzed using the Fourier Series. However, a non-periodic signal can be seen as a unique periodic function as its period approaches infinity. Under this condition, the Fourier series can be derived as the Fourier integral, and the result is a spectral density function.</p>
+
+\[\begin{aligned}
+X(f) &amp; = \lim_{T_0-&gt;\infty} \frac{1}{T_0}\int_{T0} x(t) e^{-j2\pi kf_0t}dt 
+\end{aligned}\]
+
+<p>The Fourier integral can be used to analyze the spectral density of non-periodic continuous signals, and the spectral density can also be used to restore the time domain signal. This is the continuous-time Fourier transform (CTFT).</p>
+
+\[\begin{aligned}
+X(f) &amp; = \int_{t=-\infty}^{\infty} x(t) e^{-j2\pi ft}dt \\
+x(t) &amp; = \int_{k=-\infty}^{\infty} X(f)e^{j2\pi ft}df 
+\end{aligned}\]
+
+<h1 id="what-is-the-discrete-fourier-transform-dft">What is the Discrete Fourier Transform (DFT)?</h1>
+
+<p>The CTFT is a useful technique for analyzing continuous signal in the real world. In the digital world, computers rely on binary calculations and have limited memory capacity, meaning that only digitized signals are compatible. Digitized signals refer to signals that are finite, discrete in time, and quantized in vlaue.</p>
+
+<p>The Discrete Fourier Transform (DFT) is designed for the digital world. It is a transform that applies finite and discrte time signals, and generates discrete and finite signals int the frequency domain.</p>
+
+<h2 id="discretization-in-time-discrete-time-fourier-transform-dtft">Discretization in Time: Discrete Time Fourier Transform (DTFT)</h2>
+
+<p>First, let’s do discretization in the time domain: sampling signals with a period $T_s$. That’s equivalent to multiplying the original signal with a impluse train $x(t)\delta(t-nT_s)$.</p>
+
+<figure align="center" style="width: 70%;margin:auto">
+  <img width="100%" height="100%" src="/static/posts/2024/impulse_train_sampling.png" />
+</figure>
+
+<p>Apply Fourier transformto the new signal $x(t)\delta(t-nT_s)$:</p>
+
+\[\begin{aligned}
+X(f) &amp; = \int_{t=-\infty}^{\infty} x(t)\delta(t-nT_s) e^{-j2\pi ft}dt \\
+      &amp; = \sum_{k=-\infty}^{\infty} x(nTs) e^{-j2\pi f(nTs)} \\
+      &amp; = \sum_{k=-\infty}^{\infty} x(nTs) e^{-j2\pi nf/f_s}
+\end{aligned}\]
+
+<p>According to the properties of Fourier transform, multiplying by an impulse train in the time domain is equivalent to convolving the Fourier transform of an impulse string in the frequency domain. The figures in the textbook <em>Signals and Systems</em> shows that convoling an impluse train means a periodic extention. The spectrum shifts and repeats with period  $f_s = T_s$.</p>
+
+<figure align="center" style="width: 70%;margin:auto">
+  <img width="100%" height="100%" src="/static/posts/2024/impulse_train_convolution.png" />
+</figure>
+
+<p>By sampling in time with period $T_s$, the spectrum is periodic with period $f_s$. The DTFT formula of normalized frequency ($\omega = 2\pi f / f_s$) is as below.</p>
+
+\[\begin{aligned}
+X(\omega) &amp; = \sum_{k=-\infty}^{\infty} x[n] e^{-j\omega n} \\
+x[n] &amp; = \frac{1}{2\pi}\int_{-\pi}^{\pi} X(\omega)e^{j\omega n} d\omega 
+\end{aligned}\]
+
+<p>Since the spetrum is periodically extended, information is useful only in one period (normally $-\pi$ to $\pi$ ). The time-domain signal can be recovered by an inverse transform using spectrum between $-\pi$ and $\pi$. So the integral upper and lower bounds of the inverse DTFT transform are $-\pi$ and $\pi$.</p>
+
+<h2 id="discretization-in-frequency-discrete-fourier-transform-dft">Discretization in Frequency: Discrete Fourier Transform (DFT)</h2>
+
+<p>The DTFT achieves the discretization of time domain. In the same way, we can achieve frequency domain discretization on the DTFT result by sampling the spectrum.</p>
+
+<p>When we sample the DTFT spectrum every $\omega_k$, series in time periodically extends with period $2\pi/\omega_k$. Thereupon a pair of discrete signals and transformations between them are achieved. That is the Discrete Fourier Transform (DFT).</p>
+
+\[\begin{aligned}
+DFT: X[k] &amp; = \sum_{n=0}^{N-1} x[n] e^{-2\pi \frac{k}{N}n} \\
+IDFT: x[n] &amp; = \frac{1}{N}\sum_{n=0}^{N-1} X[k] e^{2\pi \frac{k}{N}n} 
+\end{aligned}\]
+
+<p>In summary, the DFT is derived from the CTFT following these steps:</p>
+<ul>
+  <li>Sampling in time wihe period $T_s$. (periodical extention in spectrum withe period $f_s = 1/T_s$ )</li>
+  <li>Truncation and periodical extention in time with finite length T_k. (discretization in frequency with sampling period $\omega_k = 2 \pi/T_k$ )</li>
+  <li>USe one period in time as the DFT input, and one period in spectrum as the DFT result.</li>
+</ul>
+
+<p>Here is a brief summary of the above transformations:</p>
+
+<figure align="center" style="width: 70%;margin:auto">
+  <img width="100%" height="100%" src="/static/posts/2024/fs_ctft_dtft_dft.png" />
+</figure>
+<p>&lt;/br&gt;</p>
+
+<p>DFT enables digital systems to analyze the frequencies of real-world signals. Various mathematical and software techniques can be utilized to speed up calculations, turning it into a highly effective tool for digital signal processing. This has resulted in a range of digital signal processing applications, particularly focused on these three stages:</p>
+
+<ul>
+  <li>Analysis: transformation form time domain to frequency domain，like audio to spectogram.</li>
+  <li>Filtering: procesing on spectrum, like low-pass, high-pass, euqalization.</li>
+  <li>Synthesis: transformation form frequency domain to time domain，like syntheizing speech from spectrogram.</li>
+</ul>
+
+<p>It should be noted that DFT is the discretization of CTFT, which is a mathematical approximation to be deployed in digital systems. The discretization and quantization of digital systems come at a cost.</p>
+
+<p>Sampling and truncation in the time domain and frequency domain will cause spectrum aliasing and spectrum leakage, and the numerical precision for calculations will also cause quantization errors. The amount of these errors is an indicator of the precision of the digital system, which must be considered at all times durin engineering.</p>
+
+<h1 id="programming-of-the-dft">Programming of the DFT</h1>
+
+<p>Based on the information provided, we have derived the formulas for the DFT and inverse DFT. The next step is how to implement DFT using a programming language.</p>
+
+\[\begin{aligned}
+DFT: X[k] &amp; = \sum_{n=0}^{N-1} x[n] e^{-2\pi \frac{k}{N}n} \\
+IDFT: x[n] &amp; = \frac{1}{N}\sum_{n=0}^{N-1} X[k] e^{2\pi \frac{k}{N}n} 
+\end{aligned}\]
+
+<p>The signal $x[n]$ in time and $X[k]$ in frequency are complex-valued signals. Since computer arithmetic operations operate on  real numbers, we can modify the DFT formula to use real number operations. The signals and complex exponentials in the DFT and IDFT can be expanded to real and imaginary parts using Euler’s formula.</p>
+
+\[\begin{aligned}
+X[k] &amp; = \sum_{n=0}^{N-1} x[n] e^{-2\pi \frac{k}{N}n} \\
+     &amp; = \sum_{n=0}^{N-1} x[n] \left[ \cos(2\pi \frac{k}{N}n) - j\sin(2\pi \frac{k}{N}n)\right] \\
+     &amp; = \sum_{n=0}^{N-1} \left( x_r[n] + jx_i[n]\right) \left[ \cos(2\pi \frac{k}{N}n) - j\sin(2\pi \frac{k}{N}n)\right] 
+\end{aligned}\]
+
+<p>Separate the real and imaginary parts for DFT and IDFT:</p>
+
+\[\begin{aligned}
+X_r[k] &amp; = \sum_{n=0}^{N-1} \left[ x_r[n]\cos(2\pi \frac{k}{N}n) + x_i[n]\sin(2\pi \frac{k}{N}n)\right] \\
+X_i[k] &amp; = \sum_{n=0}^{N-1} \left[-x_r[n]\sin(2\pi \frac{k}{N}n) + x_i[n]\cos(2\pi \frac{k}{N}n)\right] \\
+\end{aligned}\]
+
+\[\begin{aligned}
+x_r[n] &amp; = \frac{1}{N}\sum_{n=0}^{N-1} \left[ X_r[k]\cos(2\pi \frac{k}{N}n) - X_r[k]\sin(2\pi \frac{k}{N}n)\right] \\
+x_i[n] &amp; = \frac{1}{N}\sum_{n=0}^{N-1} \left[X_r[k]\sin(2\pi \frac{k}{N}n) + X_r[k]\cos(2\pi \frac{k}{N}n)\right] \\
+\end{aligned}\]
+
+<p>Here let’s use time-space tradeoff to reduce calculation time. When initilizing a DFT class, a sine and a cosine lookup table could be setup for the given size N : $t_cos[k][n] = \cos(2\pi \frac{k}{N}n)$ and $t_sin[k][n] = \sin(2\pi \frac{k}{N}n)$. The DFT kernel program would look up the sine and cosine values.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">double</span> <span class="n">arg</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="kt">double</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">*</span> <span class="n">M_PI</span> <span class="o">*</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">m_size</span><span class="p">;</span>
+            <span class="n">m_sin</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">arg</span><span class="p">);</span>
+            <span class="n">m_cos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">arg</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+<p>Finally, we can implement a basic DFT and inverse DFT program the following four formulas.</p>
+
+\[\begin{aligned}
+X_r[k] &amp; = \sum_{n=0}^{N-1} \left( x_r[n]*t\_cos[k][n] + x_i[n]*t\_sin[k][n]\right) \\
+X_i[k] &amp; = \sum_{n=0}^{N-1} \left(-x_r[n]*t\_sin[k][n] + x_i[n]*t\_cos[k][n]\right) \\
+x_r[n] &amp; = \frac{1}{N}\sum_{n=0}^{N-1} \left( X_r[k]*t\_cos[k][n] - X_i[k]*t\_sin[k][n]\right) \\
+x_i[n] &amp; = \frac{1}{N}\sum_{n=0}^{N-1} \left(X_r[k]*t\_sin[k][n] + X_i[k]*t\_cos[k][n]\right) \\
+\end{aligned}\]
+
+<p>Here is the C++ implementation of DFT and IDFT.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">DFT</span><span class="o">::</span><span class="n">Forward</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_in</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">imag_in</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_out</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">imag_out</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">double</span> <span class="n">re</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">im</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="n">re</span> <span class="o">+=</span> <span class="n">real_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_cos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">imag_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_sin</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="n">im</span> <span class="o">-=</span> <span class="n">real_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_sin</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">imag_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_cos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">DFT</span><span class="o">::</span><span class="n">Inverse</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_in</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">imag_in</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_out</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">imag_out</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">double</span> <span class="n">re</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">im</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="n">re</span> <span class="o">+=</span> <span class="n">real_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_cos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">imag_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_sin</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="n">im</span> <span class="o">+=</span> <span class="n">real_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_sin</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">imag_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_cos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<h1 id="discrete-fourier-transform-of-a-real-signal">Discrete Fourier Transform of a Real Signal</h1>
+
+<p>In real-world scenarios, the signals collected typically consist of sequences of real numbers, with zero imaginary components, allowing for the elimination of all imaginary part multiplications. So the DFT formula can be simplified like this:</p>
+
+\[\begin{aligned}
+X_r[k] &amp; = \sum_{n=0}^{N-1} \left[ x_r[n]\cos(2\pi \frac{k}{N}n)\right] \\
+X_i[k] &amp; = \sum_{n=0}^{N-1} \left[-x_r[n]\sin(2\pi \frac{k}{N}n)\right] \\
+\end{aligned}\]
+
+<p>The conjugate symmetry of the real-valued DFT is drived form symmetry of cosine and sine functions.</p>
+
+\[\begin{aligned}
+X_r[k] &amp; = X_r[N-k] \\
+X_i[k] &amp; = -X_i[N-k] \\
+X[k] &amp; = X^*[N-k]
+\end{aligned}\]
+
+<p>For a 8-point real-value DFT, we have $X_0, X_1, X_2, X_3, X_4, X_5, X_6, X_7$, where</p>
+
+\[\begin{aligned}
+X_1 = X_7^* \\
+X_2 = X_6^* \\
+X_3 = X_5^* \\
+\end{aligned}\]
+
+<p>Therefore, only calculations for $X_0, X_1, X_2, X_3, X_4$ are necessary. $X_5, X_6, X_7$ can be derived using conjugae symmetry. For
+a N-point real-value DFT, the first $N/2 + 1$ points are to calculate if N is even, and the first $N/2$ points are to calculate for odd N.</p>
+
+<p>This property allows us to save half computation time and storage space in a real-valued DFT.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kt">void</span> <span class="n">DFT</span><span class="o">::</span><span class="n">ForwardReal</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_in</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_out</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">imag_out</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_size</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">double</span> <span class="n">re</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">im</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">re</span> <span class="o">+=</span> <span class="n">real_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_cos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">im</span> <span class="o">-=</span> <span class="n">real_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_sin</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+            <span class="n">real_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="p">;</span>
+            <span class="n">imag_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">im</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>In the inverse transform, we need to use the real and imaginary parts in the frequency domain to calculate the real part in the time domain.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kt">void</span> <span class="n">DFT</span><span class="o">::</span><span class="n">InverseReal</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_in</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">imag_in</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_out</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">double</span> <span class="n">re</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_bins</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">re</span> <span class="o">+=</span> <span class="n">real_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_cos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">m_bins</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">re</span> <span class="o">+=</span> <span class="n">real_in</span><span class="p">[</span><span class="n">m_size</span> <span class="o">-</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_cos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_bins</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">re</span> <span class="o">-=</span> <span class="n">imag_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_sin</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">m_bins</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">re</span> <span class="o">-=</span> <span class="o">-</span><span class="n">imag_in</span><span class="p">[</span><span class="n">m_size</span> <span class="o">-</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_sin</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+
+            <span class="n">real_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="dft-benchmarking">DFT Benchmarking</h1>
+
+<p>Now let’s verify the correctness and computational performance of the DFT implementation. First, we choose a commonly used open source FFT software<a href="https://github.com/mborgerding/kissfft">KISSFFT</a> as a baseline to compare。These values would be recorded:</p>
+
+<ul>
+  <li>Runtime per pass of my DFT and KISS.</li>
+  <li>The error between the output of my_dft and KISS for the same input.。</li>
+  <li>Run my_dft with DFT forward, and then IDFT to recover the signal., then performs the IDFT on the result. Recored the error between the recovered result and the original signal.</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">start_time</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+    <span class="n">my_dft</span><span class="p">.</span><span class="n">Forward</span><span class="p">(</span><span class="n">in_real</span><span class="p">,</span> <span class="n">in_imag</span><span class="p">,</span> <span class="n">out_real</span><span class="p">,</span> <span class="n">out_imag</span><span class="p">);</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+
+</code></pre></div></div>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">start_time</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+    <span class="n">kiss_fft</span><span class="p">(</span><span class="n">forward_fft</span><span class="p">,</span> <span class="n">in_cpx</span><span class="p">,</span> <span class="n">out_cpx</span><span class="p">);</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>The same comparison is made for real sequence DFT.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">start_time</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+    <span class="n">my_dft</span><span class="p">.</span><span class="n">ForwardReal</span><span class="p">(</span><span class="n">in_real</span><span class="p">,</span> <span class="n">out_real</span><span class="p">,</span> <span class="n">out_imag</span><span class="p">);</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">start_time</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+    <span class="n">kiss_fftr</span><span class="p">(</span><span class="n">forward_fft</span><span class="p">,</span> <span class="n">in_real</span><span class="p">,</span> <span class="n">out_cpx</span><span class="p">);</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>Using 1024-point random double as input, the DFT performance were tested on a Macbook pro with 2.3Ghz Intel Core i9 CPU.</p>
+
+<figure align="center" style="width: 70%;margin:auto">
+  <img width="100%" height="100%" src="/static/posts/2024/dft_benchmarking.png" />
+</figure>
+
+<p>So far, we have implemented a basic DFT using C++, which can actually run in a program. The correctness of the calculation was also vierified. However, its computational complexity is $O(log N^2)$, and the computational performance is still far from commercial use.</p>
+
+<p>Therefore, we need to introduce DFT computational optimization, which is the fast Fourier transform (FFT) to be discussed next.</p>
+
+<h1 id="reference">Reference</h1>
+<ul>
+  <li>Oppenheim, Willsky, Nawab - Signals &amp; Systems [2nd Edition]</li>
+  <li>Proakis, John G. Digital signal processing: principles algorithms and applications. Pearson Education India, 2001.</li>
+  <li><a href="https://ccrma.stanford.edu/~jos/mdft/mdft.html">Mathematics of the Discrete Fourier Transform (DFT), with Audio Applications — Second Edition, by Julius O. Smith III, W3K Publishing, 2007</a></li>
+  <li><a href="https://alan23273850.gitbook.io/signals-and-systems">從傅立葉轉換到數位訊號處理</a></li>
+  <li><a href="https://github.com/mborgerding/kissfft">KISSFFT, by Mark Borgerding</a></li>
+</ul>
+
+</div>
+  <div class="share-page">
+  <span style="float: left;">Share this on &rarr;&nbsp;&nbsp;</span>
+
+  <!-- Twitter -->
+  <a href="https://twitter.com/share" class="twitter-share-button" data-via="">Tweet</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+  <!-- Facebook -->
+  <div class="fb-share-button" data-href="https://chenwj1989.github.io/post/en/dft-implementation-en.html" data-layout="button_count" style="position: relative; top: -8px; left: 3px;"></div>
+</div>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</div>
+
+
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+  
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/post/en/dft-implementation-cn.html">&laquo; C++实现离散傅里叶变换</a>
+  
+  
+</div>
+
+<div class="disqus-comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var disqus_shortname = "wjchen";
+    var disqus_identifier = "https://chenwj1989.github.io_Implement the Discrete Fourier Transform using C++";
+    var disqus_title = "Implement the Discrete Fourier Transform using C++";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    /* ]]> */
+  </script>
+</div>
+
+        <footer>
+          &copy; wjchen
+          
+            - <a href="https://github.com/chenwj1989">https://github.com/chenwj1989</a> - Powered by Jekyll.
+          
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/jquery-1.11.0.min.js"></script>
+    <script src="/static/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+    
+    <script src="/static/katex/katex.min.js"></script>
+    <script src="/static/katex/contrib/auto-render.min.js"></script>
+    <script src="/static/katex/contrib/mathtex-script-type.min.js"></script>
+    <script>
+      renderMathInElement(
+          document.body,
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+    </script>
+
+  </body>
+</html>
+

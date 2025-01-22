@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/favicon.ico" />
+    <title>C++实现离散傅里叶变换 - All Articles</title>
+    <meta name="author" content="wjchen" />
+    <meta name="description" content="C++实现离散傅里叶变换" />
+    <meta name="keywords" content="C++实现离散傅里叶变换, All Articles, 信号处理" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <meta content="" property="fb:app_id">
+    <meta content="All Articles" property="og:site_name">
+
+    
+
+    
+      <meta content="C++实现离散傅里叶变换" property="og:title">
+      <meta content="article" property="og:type">
+    
+
+    
+      <meta content="My Personal Thoughts" property="og:description">
+    
+
+    
+      <meta content="https://chenwj1989.github.io/post/en/dft-implementation-cn.html" property="og:url">
+    
+
+    
+      <meta content="2024-12-11T14:32:04+08:00" property="article:published_time">
+      <meta content="https://chenwj1989.github.io/about/" property="article:author">
+    
+
+    
+      <meta content="https://chenwj1989.github.io/static/img/avatar.jpg" property="og:image">
+    
+
+    
+      
+        <meta content="信号处理" property="article:section">
+      
+    
+
+    
+      
+    
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@">
+
+    
+      <meta name="twitter:title" content="C++实现离散傅里叶变换">
+    
+
+    
+      <meta name="twitter:url" content="https://chenwj1989.github.io/post/en/dft-implementation-cn.html">
+    
+
+    
+      <meta name="twitter:description" content="My Personal Thoughts">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="/static/css/fonts.css" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/katex/katex.min.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+          <div class="author" align="center">
+          <a href="/"><img class="profile-avatar" src="/static/img/avatar.jpg" height="100px" width="100px" /></a>
+          <h1 class="author-name">wjchen</h1>
+          
+            <div class="profile-about">
+              Never lose a holy curiosity.
+            </div>
+          
+           <div class="social">
+            <ul>
+              
+                <li><a href="https://github.com/chenwj1989" target="_blank"><i class="fab fa-github"></i></a></li>
+              
+                <li><a href="https://www.zhihu.com/people/wjchen-16/activities" target="_blank"><i class="fab fa-zhihu"></i></a></li>
+              
+            </ul>
+          </div>
+	  </div>
+          <div class="search" id="js-search">
+            <input type="text" placeholder="$ type to search" class="search__input form-control" id="js-search__input">
+            <ul class="search__results" id="js-search__results"></ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/projects/">My Projects</a></li>
+            
+              <li><a class="about" href="/about/">About Me</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-8 col-offset-1 main-layout">
+        <header class="post-header">
+  <h1 class="post-title">C++实现离散傅里叶变换</h1>
+</header>
+
+<span class="time">11 Dec 2024</span>
+
+  <span class="categories">
+    &raquo; <a href="/category/信号处理">信号处理</a>
+  </span>
+
+
+<div class="content">
+  <div class="post"><p><br /></p>
+<ul id="markdown-toc">
+  <li><a href="#什么是傅里叶变换" id="markdown-toc-什么是傅里叶变换">什么是傅里叶变换?</a>    <ul>
+      <li><a href="#傅里叶级数fs" id="markdown-toc-傅里叶级数fs">傅里叶级数FS</a></li>
+      <li><a href="#连续时间傅里叶变换ctft" id="markdown-toc-连续时间傅里叶变换ctft">连续时间傅里叶变换CTFT</a></li>
+    </ul>
+  </li>
+  <li><a href="#什么是dft" id="markdown-toc-什么是dft">什么是DFT?</a>    <ul>
+      <li><a href="#时域离散化离散时间傅里叶变换dtft" id="markdown-toc-时域离散化离散时间傅里叶变换dtft">时域离散化：离散时间傅里叶变换DTFT</a></li>
+      <li><a href="#频域离散化离散傅里叶变换dft" id="markdown-toc-频域离散化离散傅里叶变换dft">频域离散化：离散傅里叶变换DFT</a></li>
+    </ul>
+  </li>
+  <li><a href="#dft的代码实现" id="markdown-toc-dft的代码实现">DFT的代码实现</a></li>
+  <li><a href="#实数序列dft" id="markdown-toc-实数序列dft">实数序列DFT</a></li>
+  <li><a href="#dft性能测试" id="markdown-toc-dft性能测试">DFT性能测试</a></li>
+  <li><a href="#参考资料" id="markdown-toc-参考资料">参考资料</a></li>
+</ul>
+
+<p>DFT是离散傅里叶变换，是一种适合计算机实现的傅里叶变换形式。这个仓库的目标是学习如何实现DFT，并逐步优化。在开始学习怎么使用代码实现DFT之前，我们需要快速理解傅里叶变换和离散傅里叶变换的背景知识。</p>
+
+<h1 id="什么是傅里叶变换">什么是傅里叶变换?</h1>
+
+<p>对物理世界的信号进行观察、测量，最直接的方式，是记录信号随着时间的变化。这就得到时域信号x(t)，表示时间方向的信号幅度。对信号进行时域分析，有很多数学工具。但是信号的一些特征，可能是非时变的、在时域上并不能直接感知的，数学家/物理学家会将信号转到某种变换域上去分析。</p>
+
+<p>比如，在一场音乐会上录制的音频，有男低音的歌声、女高音的歌声、各种乐器或高或低的演奏声。音频信号在时域上，看起来像是杂乱无章变化的序列，只能看到有时候音量高，有时候音量低。我们如何分辨里面哪些声音是男低音、哪些是女高音、哪些是乐器、各自表演的歌曲是什么？</p>
+
+<figure align="center" style="width: 90%;margin:auto">
+  <img width="100%" height="100%" src="/static/posts/2024/music_time.png" />
+</figure>
+<p><br /></p>
+
+<p>我们知道，声波是一种振动，其特征就是两个量：振动频率和振动幅度。振动频率越高的声音，人耳的感受更尖锐，振动频率越低，人耳感受越低沉。成人男性的声带一般较女性的声带更粗更宽，声带震动慢，因此一般男声更低沉、女声更高亢。而不同的乐器有不同的共振频率和谐波，比如琴弦越短，声音越高。如果我们把音乐的声波信号包含了哪些振动频率找出来，我们就能分析这首音乐包含了哪些乐器和演唱者、是在演奏什么歌曲了。如下图，这首音乐的频谱上看到不同的高亮频点，那就是该时刻演奏的频率特征。</p>
+
+<figure align="center" style="width: 90%;margin:auto">
+  <img width="100%" height="100%" src="/static/posts/2024/music_freq.png" />
+</figure>
+<p><br /></p>
+
+<p>傅里叶变换就是这样一种数学工具，可以将时域信号中的（幅度，时间）变换到频域中的（幅度，频率）进行频率分析和处理。</p>
+
+<p>这个变换是怎么实现的呢？我们回头看上面的音乐信号，将其中一段放大，可以看到一些相似波形在重复出现，而大波形里又叠加了一些小波形。看起来杂乱无章变化的时域序列，并不是真的杂乱无章，其实可以分解为不同周期信号的叠加。周期越长，就是频率越低，周期越短，就是频率越高。</p>
+
+<figure align="center" style="width: 90%;margin:auto">
+  <img width="100%" height="100%" src="/static/posts/2024/music_time_zoom.png" />
+</figure>
+<p><br /></p>
+
+<p>将一个时域信号，分解为不同频率的周期信号的线性叠加，这就是傅里叶变换的基础出发点。</p>
+
+<h2 id="傅里叶级数fs">傅里叶级数FS</h2>
+
+<p>傅里叶级数提供了一种数学表达，将一个周期函数分解成无限个三角函数sine和cosine的线性叠加。以下图为例，一个矩形波，可以分解成一个大的正弦波再叠加一系列小的正弦波。</p>
+
+<figure align="center" style="width: 70%;margin:auto">
+  <img width="100%" height="100%" src="/static/posts/2024/Fourier_series_and_transform.gif" />
+</figure>
+
+<p><em><a href="https://commons.wikimedia.org/w/index.php?curid=28399050">Fourier transform time and frequency domains (small).gif, CC0, By Lucas Vieira</a></em></p>
+
+<p>傅里叶级数将一组倍频的三角函数作为正交基，周期信号可变换为这组正交基的权重。</p>
+
+<p>实数形式傅里叶级数如下，其中 $T_0$ 是时域周期，$f_0 = 1/T_0$。：</p>
+
+\[\begin{aligned}
+f(t) &amp; = \frac{a_0}{2}+\sum_{n=0}^{\infty} \left[a_n\cos(2\pi nf_0t)+b_n\sin(2\pi nf_0t)\right] \\
+其中 \\
+a_0 &amp; = \frac{1}{T_0}\int_{-T/2}^{T/2} f(t)dt \\
+a_n &amp; = \frac{2}{T_0}\int_{-T/2}^{T/2} f(t)\cos(2\pi nf_0t)dt \\
+b_n &amp; = \frac{2}{T_0}\int_{-T/2}^{T/2} f(t)\sin(2\pi nf_0t)dt \\
+\end{aligned}\]
+
+<p>复数形式的傅里叶级数形式如下:</p>
+
+\[\begin{aligned}
+X(kf_0) &amp; = \frac{1}{T_0}\int_{T0} x(t) e^{-j2\pi kf_0t}dt \\
+x(t) &amp; = \sum_{k=-\infty}^{\infty} X(kf_0)e^{j2\pi kf_0t} 
+\end{aligned}\]
+
+<h2 id="连续时间傅里叶变换ctft">连续时间傅里叶变换CTFT</h2>
+
+<p>对于非周期信号，不能直接用傅里叶级数，但可认为这是一种特殊的周期函数，其周期趋近于无穷。这个条件下，傅里叶级数可以推导为傅里叶积分，得到的是一个频谱密度函数。</p>
+
+\[\begin{aligned}
+X(f) &amp; = \lim_{T_0-&gt;\infty} \frac{1}{T_0}\int_{T0} x(t) e^{-j2\pi kf_0t}dt 
+\end{aligned}\]
+
+<p>傅里叶积分可用来分析非周期连续信号的频谱密度，也可以用频谱密度恢复时域信号。这就是连续时间傅里叶变换CTFT。</p>
+
+\[\begin{aligned}
+X(f) &amp; = \int_{t=-\infty}^{\infty} x(t) e^{-j2\pi ft}dt \\
+x(t) &amp; = \int_{k=-\infty}^{\infty} X(f)e^{j2\pi ft}df 
+\end{aligned}\]
+
+<h1 id="什么是dft">什么是DFT?</h1>
+<p>针对物理世界的连续信号，我们有连续时间傅里叶变换作为数学工具。但是电子计算机使用二进制器件进行计算、且只有固定的内存空间，故只能处理数字化的信号，也就是有限长的、离散化的、量化的信号。</p>
+
+<p>而离散傅里叶变换（DFT）就是为数字世界设计的，一种时域信号离散且有限长、频域信号离散且有限长的变换。</p>
+
+<h2 id="时域离散化离散时间傅里叶变换dtft">时域离散化：离散时间傅里叶变换DTFT</h2>
+
+<p>首先，我们对连续信号时域上作离散化，按 $T_s$ 周期采样, 也就是将原信号乘以一个冲击串函数: $x(t)\delta(t-nT_s)$。</p>
+
+<figure align="center" style="width: 70%;margin:auto">
+  <img width="100%" height="100%" src="/static/posts/2024/impulse_train_sampling.png" />
+</figure>
+
+<p>将 $x(t)\delta(t-nT_s)$ 带入傅里叶变换公式，我们就得到一个周期采样的傅里叶变换。</p>
+
+\[\begin{aligned}
+X(f) &amp; = \int_{t=-\infty}^{\infty} x(t)\delta(t-nT_s) e^{-j2\pi ft}dt \\
+      &amp; = \sum_{k=-\infty}^{\infty} x(nTs) e^{-j2\pi f(nTs)} \\
+      &amp; = \sum_{k=-\infty}^{\infty} x(nTs) e^{-j2\pi nf/f_s}
+\end{aligned}\]
+
+<p>根据傅里叶变换的性质，时域上乘以一个冲击串，相当于频域卷积一个冲击串的傅里叶变换，冲击串的傅里叶变换也是一个冲击串。《信号与系统》教材里说明了，这个结果，就是频域上以 $f_s = T_s$ 为周期重复。</p>
+
+<figure align="center" style="width: 70%;margin:auto">
+  <img width="100%" height="100%" src="/static/posts/2024/impulse_train_convolution.png" />
+</figure>
+
+<p>所以时域周期 $T_s$ 采样后的频谱，周期为 $f_s$ 的周期函数，以 $\omega = 2\pi f / f_s$ 归一化频率，我们可以得到归一化频率的离散时间傅里叶变换DTFT公式。</p>
+
+\[\begin{aligned}
+X(\omega) &amp; = \sum_{k=-\infty}^{\infty} x[n] e^{-j\omega n} \\
+x[n] &amp; = \frac{1}{2\pi}\int_{-\pi}^{\pi} X(\omega)e^{j\omega n} d\omega 
+\end{aligned}\]
+
+<p>因为频谱被周期延拓了，实际的有效频谱只在一个周期内（通常取 $-\pi$ 到 $\pi$ ），也就是使用 $-\pi$ 到 $\pi$ 内的频谱作逆变换，即可恢复时域信号。所以DTFT逆变换的积分上下界取的是 $-\pi$ 到 $\pi$。</p>
+
+<h2 id="频域离散化离散傅里叶变换dft">频域离散化：离散傅里叶变换DFT</h2>
+
+<p>DTFT实现了时域的离散化。类似地，我们可以在此基础上实现频域的离散化，也就是对频域进行采样。假设在DTFT的频域上按照 $\omega_k$ 采样, 则时域信号按照 $2\pi/\omega_k$ 周期延拓，于是我们就得到了一对离散信号和他们之间的变换与逆变换，这就是离散傅里叶变换DFT。</p>
+
+\[\begin{aligned}
+DFT: X[k] &amp; = \sum_{n=0}^{N-1} x[n] e^{-2\pi \frac{k}{N}n} \\
+IDFT: x[n] &amp; = \frac{1}{N}\sum_{n=0}^{N-1} X[k] e^{2\pi \frac{k}{N}n} 
+\end{aligned}\]
+
+<p>所以从CTFT到DFT，我们经过几个步骤</p>
+<ul>
+  <li>时域上按 $T_s$ 周期采样（频域上成为周期为 $f_s = 1/T_s$ 的周期频谱）</li>
+  <li>时域信号截短成为有限长信号，并作周期 $T_k$ 延拓（也就是频域离散化，采样间隔 $\omega_k = 2 \pi/T_k$ ）</li>
+  <li>取时域上一个周期、频域上一个周期的序列作为离散傅里叶变化的输入和输出。</li>
+</ul>
+
+<p>可以对比一下以上几种变换的性质：</p>
+
+<figure align="center" style="width: 70%;margin:auto">
+  <img width="100%" height="100%" src="/static/posts/2024/fs_ctft_dtft_dft.png" />
+</figure>
+<p>&lt;/br&gt;</p>
+
+<p>有了DFT，我们就可以对现实世界的信号进行频率分析啦，而且可以使用数学或软件的手段进行计算加速，成为一种高效的数字信号处理工具。从而衍生出各式各样的数字信号处理的应用，DSP应用主要是围绕这三个阶段：</p>
+<ul>
+  <li>Analysis 分析：从时域到频域的信号变换，如语音到语谱。</li>
+  <li>Filtering 滤波：频域上的操作，如高通、低通、均衡。</li>
+  <li>Synthesis 合成：从频域到时域的逆变换，如从语谱合成语音。</li>
+</ul>
+
+<p>要注意DFT是CTFT的离散化，是对真实连续信号的一种数学近似，从而可以在数字系统中落地。数字系统的离散化、量化是有代价的。时域和频域的采样、截短会带来频谱混叠和频谱泄漏，使用不同精度的数值类型进行运算也会带来不同的量化误差。这些误差的大小就是衡量数字系统的精密程度的指标，是我们工程实现中要时刻考虑的。</p>
+
+<h1 id="dft的代码实现">DFT的代码实现</h1>
+<p>从前面的背景知识，我们已经得到N点的DFT变换和逆变换的公式如下，后面就是怎么用代码实现DFT了。</p>
+
+\[\begin{aligned}
+DFT: X[k] &amp; = \sum_{n=0}^{N-1} x[n] e^{-2\pi \frac{k}{N}n} \\
+IDFT: x[n] &amp; = \frac{1}{N}\sum_{n=0}^{N-1} X[k] e^{2\pi \frac{k}{N}n} 
+\end{aligned}\]
+
+<p>上式中时域信号$x[n]$和频域信号$X[k]$都是复数信号。因为计算机的算数运算都是实数运算，我们可以将DFT公式展开成实数运算。首先使用欧拉公式展开复指数：</p>
+
+\[\begin{aligned}
+X[k] &amp; = \sum_{n=0}^{N-1} x[n] e^{-2\pi \frac{k}{N}n} \\
+     &amp; = \sum_{n=0}^{N-1} x[n] \left[ \cos(2\pi \frac{k}{N}n) - j\sin(2\pi \frac{k}{N}n)\right] \\
+     &amp; = \sum_{n=0}^{N-1} \left( x_r[n] + jx_i[n]\right) \left[ \cos(2\pi \frac{k}{N}n) - j\sin(2\pi \frac{k}{N}n)\right] 
+\end{aligned}\]
+
+<p>然后分解实部和虚部，我们就得到了DFT和IDFT实部和虚部计算的四条公式：</p>
+
+\[\begin{aligned}
+X_r[k] &amp; = \sum_{n=0}^{N-1} \left[ x_r[n]\cos(2\pi \frac{k}{N}n) + x_i[n]\sin(2\pi \frac{k}{N}n)\right] \\
+X_i[k] &amp; = \sum_{n=0}^{N-1} \left[-x_r[n]\sin(2\pi \frac{k}{N}n) + x_i[n]\cos(2\pi \frac{k}{N}n)\right] \\
+\end{aligned}\]
+
+\[\begin{aligned}
+x_r[n] &amp; = \frac{1}{N}\sum_{n=0}^{N-1} \left[ X_r[k]\cos(2\pi \frac{k}{N}n) - X_r[k]\sin(2\pi \frac{k}{N}n)\right] \\
+x_i[n] &amp; = \frac{1}{N}\sum_{n=0}^{N-1} \left[X_r[k]\sin(2\pi \frac{k}{N}n) + X_r[k]\cos(2\pi \frac{k}{N}n)\right] \\
+\end{aligned}\]
+
+<p>为了减少计算的时间，我们可以使用空间换时间。在DFT类初始化时，给定DFT的size，并且预创建三角函数表 $t_cos[k][n] = \cos(2\pi \frac{k}{N}n)$ 和 $t_sin[k][n] = \sin(2\pi \frac{k}{N}n)$, 后续每次计算DFT时查表即可。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">double</span> <span class="n">arg</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="kt">double</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">*</span> <span class="n">M_PI</span> <span class="o">*</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">m_size</span><span class="p">;</span>
+            <span class="n">m_sin</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">arg</span><span class="p">);</span>
+            <span class="n">m_cos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">arg</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+<p>最后，我们通过下面四条公式即可实现基础的DFT变化和逆变换。</p>
+
+\[\begin{aligned}
+X_r[k] &amp; = \sum_{n=0}^{N-1} \left( x_r[n]*t\_cos[k][n] + x_i[n]*t\_sin[k][n]\right) \\
+X_i[k] &amp; = \sum_{n=0}^{N-1} \left(-x_r[n]*t\_sin[k][n] + x_i[n]*t\_cos[k][n]\right) \\
+x_r[n] &amp; = \frac{1}{N}\sum_{n=0}^{N-1} \left( X_r[k]*t\_cos[k][n] - X_i[k]*t\_sin[k][n]\right) \\
+x_i[n] &amp; = \frac{1}{N}\sum_{n=0}^{N-1} \left(X_r[k]*t\_sin[k][n] + X_i[k]*t\_cos[k][n]\right) \\
+\end{aligned}\]
+
+<p>以下就是按照DFT和IDFT公式实现的C++代码。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">DFT</span><span class="o">::</span><span class="n">Forward</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_in</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">imag_in</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_out</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">imag_out</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">double</span> <span class="n">re</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">im</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="n">re</span> <span class="o">+=</span> <span class="n">real_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_cos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">imag_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_sin</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="n">im</span> <span class="o">-=</span> <span class="n">real_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_sin</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">imag_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_cos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">DFT</span><span class="o">::</span><span class="n">Inverse</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_in</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">imag_in</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_out</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">imag_out</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">double</span> <span class="n">re</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">im</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="n">re</span> <span class="o">+=</span> <span class="n">real_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_cos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">imag_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_sin</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="n">im</span> <span class="o">+=</span> <span class="n">real_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_sin</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">imag_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_cos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<h1 id="实数序列dft">实数序列DFT</h1>
+<p>现实世界采集的信号通常是实数序列，其虚部为零，所以虚部乘法全部可以去掉。于是DFT的公式可以简化如下：</p>
+
+\[\begin{aligned}
+X_r[k] &amp; = \sum_{n=0}^{N-1} \left[ x_r[n]\cos(2\pi \frac{k}{N}n)\right] \\
+X_i[k] &amp; = \sum_{n=0}^{N-1} \left[-x_r[n]\sin(2\pi \frac{k}{N}n)\right] \\
+\end{aligned}\]
+
+<p>根据cosine和sine函数的对称性，我们可以得到实数序列DFT的共轭对称性：
+\(\begin{aligned}
+X_r[k] &amp; = X_r[N-k] \\
+X_i[k] &amp; = -X_i[N-k] \\
+X[k] &amp; = X^*[N-k]
+\end{aligned}\)</p>
+
+<p>比如对于8点的DFT，$X_0, X_1, X_2, X_3, X_4, X_5, X_6, X_7$,  有</p>
+
+\[\begin{aligned}
+X_1 = X_7^* \\
+X_2 = X_6^* \\
+X_3 = X_5^* \\
+\end{aligned}\]
+
+<p>因此我们只要计算 $X_0, X_1, X_2, X_3, X_4$ 既可以，$X_5, X_6, X_7$ 可以从共轭推导出来。对于N点DFT，假设只考虑偶数N， 那我们只要计算前 $N/2 + 1$ 个点即可。</p>
+
+<p>有了这个性质，对于实数序列DFT, 我们不仅节约了大半计算耗时，还节省接近一半存储空间。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kt">void</span> <span class="n">DFT</span><span class="o">::</span><span class="n">ForwardReal</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_in</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_out</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">imag_out</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_size</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">double</span> <span class="n">re</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">im</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">re</span> <span class="o">+=</span> <span class="n">real_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_cos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">im</span> <span class="o">-=</span> <span class="n">real_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_sin</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+            <span class="n">real_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="p">;</span>
+            <span class="n">imag_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">im</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>而逆变换中，我们需要频域的实部和虚部，计算出时域的实部。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kt">void</span> <span class="n">DFT</span><span class="o">::</span><span class="n">InverseReal</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_in</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">imag_in</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_out</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">double</span> <span class="n">re</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_bins</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">re</span> <span class="o">+=</span> <span class="n">real_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_cos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">m_bins</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">re</span> <span class="o">+=</span> <span class="n">real_in</span><span class="p">[</span><span class="n">m_size</span> <span class="o">-</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_cos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_bins</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">re</span> <span class="o">-=</span> <span class="n">imag_in</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_sin</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">m_bins</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">re</span> <span class="o">-=</span> <span class="o">-</span><span class="n">imag_in</span><span class="p">[</span><span class="n">m_size</span> <span class="o">-</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_sin</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+
+            <span class="n">real_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="dft性能测试">DFT性能测试</h1>
+
+<p>现在我们来验证一下DFT实现的正确性和计算性能。首先，我们选择一种常用的开源FFT软件<a href="https://github.com/mborgerding/kissfft">KISSFFT</a>作为对比方案。我们记录几个值</p>
+
+<ul>
+  <li>对比KISS和my_dft跑一轮变换的时间。</li>
+  <li>计算my_dft和KISS同一输入的输出结果之间的误差。</li>
+  <li>计算my_dft先运行DFT，然后对结果作IDFT，恢复的结果与原信号之间的误差。</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">start_time</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+    <span class="n">my_dft</span><span class="p">.</span><span class="n">Forward</span><span class="p">(</span><span class="n">in_real</span><span class="p">,</span> <span class="n">in_imag</span><span class="p">,</span> <span class="n">out_real</span><span class="p">,</span> <span class="n">out_imag</span><span class="p">);</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+
+</code></pre></div></div>
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">start_time</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+    <span class="n">kiss_fft</span><span class="p">(</span><span class="n">forward_fft</span><span class="p">,</span> <span class="n">in_cpx</span><span class="p">,</span> <span class="n">out_cpx</span><span class="p">);</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>对实序列DFT，作同样的对比</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">start_time</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+    <span class="n">my_dft</span><span class="p">.</span><span class="n">ForwardReal</span><span class="p">(</span><span class="n">in_real</span><span class="p">,</span> <span class="n">out_real</span><span class="p">,</span> <span class="n">out_imag</span><span class="p">);</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+</code></pre></div></div>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">start_time</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+    <span class="n">kiss_fftr</span><span class="p">(</span><span class="n">forward_fft</span><span class="p">,</span> <span class="n">in_real</span><span class="p">,</span> <span class="n">out_cpx</span><span class="p">);</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">clock</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>以1024点double类型随机数作输入，在一台CPU是2.3Ghz Intel Core i9的Macbook pro 上测试 DFT性能结果如下：</p>
+
+<figure align="center" style="width: 70%;margin:auto">
+  <img width="100%" height="100%" src="/static/posts/2024/dft_benchmarking.png" />
+</figure>
+
+<p>到这里，我们就使用C++实现了一个基础的DFT，可以在程序中实际运行且验证了计算的正确性。但是其计算复杂度是$O(log N^2)$,计算性能离可商用距离还比较遥远。</p>
+
+<p>因此，我们需要引入DFT的计算优化，也就是下一步要讨论的快速傅里叶变换（FFT）。</p>
+
+<h1 id="参考资料">参考资料</h1>
+<ul>
+  <li>Oppenheim, Willsky, Nawab - Signals &amp; Systems [2nd Edition]</li>
+  <li>Proakis, John G. Digital signal processing: principles algorithms and applications. Pearson Education India, 2001.</li>
+  <li><a href="https://ccrma.stanford.edu/~jos/mdft/mdft.html">Mathematics of the Discrete Fourier Transform (DFT), with Audio Applications — Second Edition, by Julius O. Smith III, W3K Publishing, 2007</a></li>
+  <li><a href="https://alan23273850.gitbook.io/signals-and-systems">從傅立葉轉換到數位訊號處理</a></li>
+  <li><a href="https://github.com/mborgerding/kissfft">KISSFFT, by Mark Borgerding</a></li>
+</ul>
+</div>
+  <div class="share-page">
+  <span style="float: left;">Share this on &rarr;&nbsp;&nbsp;</span>
+
+  <!-- Twitter -->
+  <a href="https://twitter.com/share" class="twitter-share-button" data-via="">Tweet</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+  <!-- Facebook -->
+  <div class="fb-share-button" data-href="https://chenwj1989.github.io/post/en/dft-implementation-cn.html" data-layout="button_count" style="position: relative; top: -8px; left: 3px;"></div>
+</div>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</div>
+
+
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+        
+          
+            
+            <div class="panel-body">
+              <h4>Related Posts</h4>
+              <ul>
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/howling-suppression-cn.html">啸叫抑制之陷波法</a>
+                  
+                    (Categories: <a href="/category/语音">语音</a>, <a href="/category/信号处理">信号处理</a>)
+                  
+                </li>
+          
+          
+        
+      
+    
+  
+    
+      
+        
+          
+      
+    
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/speex-aec-cn.html">Speex回声消除</a>
+                  
+                    (Categories: <a href="/category/语音">语音</a>, <a href="/category/信号处理">信号处理</a>)
+                  
+                </li>
+          
+          
+        
+      
+    
+  
+    
+      
+        
+          
+      
+    
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/freq-domain-lms-cn.html">频域LMS自适应滤波</a>
+                  
+                    (Categories: <a href="/category/机器学习">机器学习</a>, <a href="/category/信号处理">信号处理</a>)
+                  
+                </li>
+          
+          
+        
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+  
+  </ul>
+</div>
+
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/post/cn/howling-suppression-cn.html">&laquo; 啸叫抑制之陷波法</a>
+  
+  
+    <a class="next" href="/post/en/dft-implementation-en.html">Implement the Discrete Fourier Transform using C++ &raquo;</a>
+  
+</div>
+
+<div class="disqus-comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var disqus_shortname = "wjchen";
+    var disqus_identifier = "https://chenwj1989.github.io_C++实现离散傅里叶变换";
+    var disqus_title = "C++实现离散傅里叶变换";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    /* ]]> */
+  </script>
+</div>
+
+        <footer>
+          &copy; wjchen
+          
+            - <a href="https://github.com/chenwj1989">https://github.com/chenwj1989</a> - Powered by Jekyll.
+          
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/jquery-1.11.0.min.js"></script>
+    <script src="/static/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+    
+    <script src="/static/katex/katex.min.js"></script>
+    <script src="/static/katex/contrib/auto-render.min.js"></script>
+    <script src="/static/katex/contrib/mathtex-script-type.min.js"></script>
+    <script>
+      renderMathInElement(
+          document.body,
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+    </script>
+
+  </body>
+</html>
+

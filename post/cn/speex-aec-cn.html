@@ -154,11 +154,11 @@
 
 <p>AEC一般的方法使用自适应FIR滤波器设计$w(z)$：</p>
 
-<script type="math/tex; mode=display">y(n)=\sum_{i=0}^{N-1}w_ix(n-i)</script>
+\[y(n)=\sum_{i=0}^{N-1}w_ix(n-i)\]
 
 <p>自适应滤波器的算法的的目标误差$e(n)$，也是回声消除后的近端输出信号。</p>
 
-<script type="math/tex; mode=display">e(n)=d(n)-y(n)</script>
+\[e(n)=d(n)-y(n)\]
 
 <p>Speex的信号处理部分单独分成一个项目SpeexDSP, 在以下地址：<a href="https://github.com/xiph/speexdsp">https://github.com/xiph/speexdsp</a></p>
 
@@ -184,7 +184,7 @@
 
 <h2 id="2-mdf滤波器">2. MDF滤波器</h2>
 
-<p>Speex AEC 的滤波部分主要是基于[1] Multidelayblock frequency domain adaptive filter所提出的MDF结构。我的另外一篇博文<a href="http://localhost:4000/post/cn/freq-domain-lms-cn.html">《频域LMS自适应滤波》</a>说过， MDF和PBFDAF、PFBLMS是一回事，也就是将FIR滤波器分割的频域LMS滤波。</p>
+<p>Speex AEC 的滤波部分主要是基于[1] Multidelayblock frequency domain adaptive filter所提出的MDF结构。我的另外一篇博文<a href="http://wjchen.net/post/cn/freq-domain-lms-cn.html">《频域LMS自适应滤波》</a>说过， MDF和PBFDAF、PFBLMS是一回事，也就是将FIR滤波器分割的频域LMS滤波。</p>
 
 <figure align="center" style="width: 90%;margin:auto">
   <img width="auto" height="auto" src="/static/posts/2020/02/pfblms.png" />
@@ -224,28 +224,27 @@
 
 <p>　（实际只需计算最后一列，前P-1列可以使用上一次迭代保留结果）</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-Xf_k =
-FFT\left[ \begin{matrix} x_{k-P}&...& x_{k-2} & x_{k-1}\\x_{k-P+1}&...& x_{k-1} & x_k \end{matrix} \right] %]]></script>
+\[Xf_k =
+FFT\left[ \begin{matrix} x_{k-P}&amp;...&amp; x_{k-2} &amp; x_{k-1}\\x_{k-P+1}&amp;...&amp; x_{k-1} &amp; x_k \end{matrix} \right]\]
 
 <p>　2. 计算块输出</p>
 
-<script type="math/tex; mode=display">\left[ \begin{matrix} C\\ y_k \end{matrix} \right]=IFFT\left[ 
-FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] Xf_k\right]</script>
+\[\left[ \begin{matrix} C\\ y_k \end{matrix} \right]=IFFT\left[ 
+FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] Xf_k\right]\]
 
 <p>　3. 计算误差： $e = y_k - d_k$</p>
 
 <p>　4. 计算梯度：</p>
 
-<script type="math/tex; mode=display">\left[ \begin{matrix} \phi\\ D \end{matrix} \right]=IFFT\left[ 
+\[\left[ \begin{matrix} \phi\\ D \end{matrix} \right]=IFFT\left[ 
 FFT\left[ \begin{matrix} 0\\ e \end{matrix} \right] 
-\overline{Xf_k}\right]</script>
+\overline{Xf_k}\right]\]
 
 <p>　5. 更新滤波器：</p>
 
-<script type="math/tex; mode=display">FFT\left[ \begin{matrix} w_{k+1}\\ 0 \end{matrix} \right]= 
+\[FFT\left[ \begin{matrix} w_{k+1}\\ 0 \end{matrix} \right]= 
 FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] +
-\mu FFT\left[ \begin{matrix} \phi\\ 0 \end{matrix} \right]</script>
+\mu FFT\left[ \begin{matrix} \phi\\ 0 \end{matrix} \right]\]
 
 <h2 id="2-双滤波器结构与双讲检测">2. 双滤波器结构与双讲检测</h2>
 
@@ -269,11 +268,11 @@ FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] +
 
 <p>Speex AEC使用的判决准则，可以从代码里面提炼出来，跟以上提到的几点不完全一样，是用Foreground Filter和Background Filter输出的残留功率之差来进行判别，</p>
 
-<script type="math/tex; mode=display">(Sff-See)*abs(Sff-See) > (Sff*Dbf)</script>
+\[(Sff-See)*abs(Sff-See) &gt; (Sff*Dbf)\]
 
 <p>其中$Sff$是Foreground Filter与麦克风信号之差的功率，$See$是Background Filter与麦克风信号之差的功率, Dbf是两个Filter输出信号之差的平方。 于是判别公式可以写成</p>
 
-<script type="math/tex; mode=display">(e_f^2-e_b^2)|e_f^2-e_b^2|> e_f^2|e_f - e_b|^2</script>
+\[(e_f^2-e_b^2)|e_f^2-e_b^2|&gt; e_f^2|e_f - e_b|^2\]
 
 <p>这个判决准则的数学原理暂没有深究，其代码如下。</p>
 
@@ -361,10 +360,10 @@ On Adjusting the Learning Rate in Frequency Domain Echo Cancellation With Double
 
 <p>下面摘录其中的主要结论。 最优步长等于残余回声方差与误差信号方差之比</p>
 
-<script type="math/tex; mode=display">\mu_{opt} = \frac{\sigma_r^2}{\sigma_e^2}</script>
+\[\mu_{opt} = \frac{\sigma_r^2}{\sigma_e^2}\]
 
 <p>为了计算残留回声的功率，定义泄漏因子$\eta$， 取值在0～1之间
-<script type="math/tex">\sigma_r^2 = \eta \sigma_Y^2</script></p>
+\(\sigma_r^2 = \eta \sigma_Y^2\)</p>
 
 <p>泄漏因子通过递归平均更新：</p>
 
@@ -384,11 +383,11 @@ On Adjusting the Learning Rate in Frequency Domain Echo Cancellation With Double
 
 <p>如上图所示，麦克风输入信号通常包括几部分，近端语音$s$, 近端噪声$n$, 自适应滤波的目标回声$d$。 于是AEC的输出误差信号为</p>
 
-<script type="math/tex; mode=display">e = (d-y) + s + n</script>
+\[e = (d-y) + s + n\]
 
 <p>其中$d-y$就是残留回声信号。残留回声的功率通过泄漏因子计算：</p>
 
-<script type="math/tex; mode=display">\sigma_r^2 = \eta \sigma_Y^2</script>
+\[\sigma_r^2 = \eta \sigma_Y^2\]
 
 <p>Speex在preprocessor.c中，将Post Filter实现为一个统计信号处理估计的噪声抑制器，近端噪声、残留回声、混响均视作噪声，将其功率求和，得到总噪声功率。</p>
 
@@ -450,10 +449,38 @@ On Adjusting the Learning Rate in Frequency Domain Echo Cancellation With Double
       
         
           
+      
+          
+      
+    
+  
+    
+      
+        
+          
+      
+          
             
             <div class="panel-body">
               <h4>Related Posts</h4>
               <ul>
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/en/dft-implementation-cn.html">C++实现离散傅里叶变换</a>
+                  
+                    (Categories: <a href="/category/信号处理">信号处理</a>)
+                  
+                </li>
+          
+          
+        
+      
+    
+  
+    
+      
+        
+          
             
                 <li class="relatedPost">
                   <a href="https://chenwj1989.github.io/post/cn/howling-suppression-cn.html">啸叫抑制之陷波法</a>
@@ -576,16 +603,6 @@ On Adjusting the Learning Rate in Frequency Domain Echo Cancellation With Double
       
         
           
-            
-                <li class="relatedPost">
-                  <a href="https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-filtering-cn.html">单通道语音增强之谱减法与维纳滤波</a>
-                  
-                    (Categories: <a href="/category/语音">语音</a>)
-                  
-                </li>
-          
-          
-        
       
           
       

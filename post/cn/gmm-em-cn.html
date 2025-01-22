@@ -166,7 +166,7 @@
 
 <p>高斯分布是拟合随机数据最常用的模型。单变量$x$的高斯分布概率密函数如下:</p>
 
-<script type="math/tex; mode=display">\textit{N}(x; \mu, \sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]</script>
+\[\textit{N}(x; \mu, \sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]\]
 
 <p>其中</p>
 <ul>
@@ -180,7 +180,7 @@
 
 <p>更一般的情况，如果数据集是d维的数据, 就可以用多变量高斯模型来拟合。概率密度是:</p>
 
-<script type="math/tex; mode=display">\textit{N}(x; \mu, \Sigma) = \frac{1}{\sqrt{(2\pi)^d\det(\Sigma)}}\exp\left[-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu)\right]</script>
+\[\textit{N}(x; \mu, \Sigma) = \frac{1}{\sqrt{(2\pi)^d\det(\Sigma)}}\exp\left[-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu)\right]\]
 
 <p>其中</p>
 <ul>
@@ -195,7 +195,7 @@
 
 <p><strong>定理.</strong>  对一个凸函数$f$和随机变量$x$:</p>
 
-<script type="math/tex; mode=display">f\left[E(x)\right] \leq E\left[f(x)\right]</script>
+\[f\left[E(x)\right] \leq E\left[f(x)\right]\]
 
 <figure align="center" style="width: 75%;margin:auto">
   <img width="55%" height="auto" src="/static/posts/convex.png" />
@@ -204,7 +204,7 @@
 <p><br />
 <strong>定理.</strong>  对一个凹函数$f$和随机变量$x$:</p>
 
-<script type="math/tex; mode=display">f\left[E(x)\right] \geq E\left[f(x)\right]</script>
+\[f\left[E(x)\right] \geq E\left[f(x)\right]\]
 
 <figure align="center" style="width: 75%;margin:auto">
   <img width="55%" height="auto" src="/static/posts/concave.png" />
@@ -216,22 +216,21 @@
 <p>多维高斯混合模型的求解需要借助于矩阵和向量求导的公式。
 下面是从 《The Matrix Cookbook》一书中摘录在推导过程中可能会用到的公式。</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-\frac{\partial x^Ta}{\partial x} &= \frac{\partial a^Tx}{\partial x} = a\\
-\frac{\partial x^TBx}{\partial x} &=  (B + B^T )x\\
-\frac{\partial (x -s)^TW(x-s)}{\partial x} &= -2W(x-s), \text{ (W是对称矩阵)} \\
-\frac{\partial a^TXa}{\partial X} &= \frac{\partial a^TX^Ta}{\partial X} = aa^T\\
-\frac{\partial \det(X)}{\partial X} &= \det(X)(X^{-1})^T\\
-\frac{\partial \ln \det(X)}{\partial X} &= (X^{-1})^T\\
-\frac{\partial \det(X^{-1})}{\partial X} &= -\det(X^{-1})(X^{-1})^T\\
+\[\begin{aligned}
+\frac{\partial x^Ta}{\partial x} &amp;= \frac{\partial a^Tx}{\partial x} = a\\
+\frac{\partial x^TBx}{\partial x} &amp;=  (B + B^T )x\\
+\frac{\partial (x -s)^TW(x-s)}{\partial x} &amp;= -2W(x-s), \text{ (W是对称矩阵)} \\
+\frac{\partial a^TXa}{\partial X} &amp;= \frac{\partial a^TX^Ta}{\partial X} = aa^T\\
+\frac{\partial \det(X)}{\partial X} &amp;= \det(X)(X^{-1})^T\\
+\frac{\partial \ln \det(X)}{\partial X} &amp;= (X^{-1})^T\\
+\frac{\partial \det(X^{-1})}{\partial X} &amp;= -\det(X^{-1})(X^{-1})^T\\
 \frac{\partial \ln \det(X)}{\partial X^{-1}} 
-&= \frac{\partial \ln \det(X)}{\partial \det(X)}\frac{\partial \det(X)}{\partial X^{-1}} \\
-&= \frac{1}{\det(X)}\left[-\det(X)X^T\right]\\
-&= -X^T\\
-\frac{\partial Tr(AXB)}{\partial X} &= A^TB^T\\
-\frac{\partial Tr(AX^-1B)}{\partial X} &= -(X^{-1}BAX^{-1})^T
-\end{aligned} %]]></script>
+&amp;= \frac{\partial \ln \det(X)}{\partial \det(X)}\frac{\partial \det(X)}{\partial X^{-1}} \\
+&amp;= \frac{1}{\det(X)}\left[-\det(X)X^T\right]\\
+&amp;= -X^T\\
+\frac{\partial Tr(AXB)}{\partial X} &amp;= A^TB^T\\
+\frac{\partial Tr(AX^-1B)}{\partial X} &amp;= -(X^{-1}BAX^{-1})^T
+\end{aligned}\]
 
 <h2 id="2高斯混合模型和em算法">2.高斯混合模型和EM算法</h2>
 
@@ -241,7 +240,7 @@
 
 <p>假设有一个数据集，包含了$N$个相互独立的数据：$x = {x_1, x_2 …x_i… x_N}$, 这些数据看起来有$K$个峰，这样的数据集可用以下定义的高斯混合模型拟合：</p>
 
-<script type="math/tex; mode=display">p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k) = \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\left[-\frac{(x-\mu_k)^2}{2\sigma_k^2}\right]</script>
+\[p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k) = \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\left[-\frac{(x-\mu_k)^2}{2\sigma_k^2}\right]\]
 
 <table style="width: 600px; height: 200px; margin:auto">
     <tr>
@@ -264,15 +263,14 @@
 <p><br />
 如果每一个数据点$x_i$都是d维的, 这些数据$x$如上图看起来分散在$K$个聚类，这种数据集可以用多变量高斯混合模型拟合。</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-p(x|\Theta) &= \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \Sigma_k)  \\
-&= \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x-\mu_k)^T\Sigma_{k}^{-1}(x-\mu_k)\right]
-\end{aligned} %]]></script>
+\[\begin{aligned}
+p(x|\Theta) &amp;= \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \Sigma_k)  \\
+&amp;= \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x-\mu_k)^T\Sigma_{k}^{-1}(x-\mu_k)\right]
+\end{aligned}\]
 
 <p>其中$\Theta$ 代表全体高斯模型参数, $\alpha_k$ 是第$k$个高斯模型的先验概率, 各个高斯模型的先验概率加起来等于1。</p>
 
-<script type="math/tex; mode=display">\sum_{k}\alpha_k = 1</script>
+\[\sum_{k}\alpha_k = 1\]
 
 <h3 id="22-em算法">2.2 EM算法</h3>
 <p>EM 算法是一种迭代的算法，算法解决的问题可如下表述：</p>
@@ -287,21 +285,21 @@ $\mu_k$, $\sigma_k$), 或 ($\alpha_{k}$, $\mu_k$, $\Sigma_{k}$).</li>
 
 <p>对于相互独立的一组数据, 最大似然估计(MLE)是最直接的估计方法。$N$个数据点的总概率可以表述成每个数据点的概率之乘积，这被称作似然函数</p>
 
-<script type="math/tex; mode=display">p(x|\Theta) = \prod_{i}p(x_i|\Theta)</script>
+\[p(x|\Theta) = \prod_{i}p(x_i|\Theta)\]
 
 <p>最大似然估计通过求似然函数的极大值，来估计参数$\Theta$。</p>
 
-<script type="math/tex; mode=display">\Theta = \argmax_{\Theta} \prod_{i}p(x_i|\Theta)</script>
+\[\Theta = \argmax_{\Theta} \prod_{i}p(x_i|\Theta)\]
 
 <p>对高斯混合模型使用最大似然估计，求得的似然函数是比较的复杂的，单变量和多变量GMM似然函数结果如下，可以看到多变量GMM似然函数涉及多个矩阵的求逆和乘积等运算。所以要准确估计出$K$组高斯模型的参数，是很难的。</p>
 
-<script type="math/tex; mode=display">p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{N}(x_i| \mu_k, \sigma_k) \right]</script>
+\[p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{N}(x_i| \mu_k, \sigma_k) \right]\]
 
-<script type="math/tex; mode=display">p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{N}(x_i| \mu_k, \Sigma_k)\right]</script>
+\[p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{N}(x_i| \mu_k, \Sigma_k)\right]\]
 
 <p>GMM 似然函数首先可以通过求对数进行简化，把乘积变成和。和的形式更方便求导和求极值。</p>
 
-<script type="math/tex; mode=display">L(x|\Theta) = \sum_{i}\ln\left[p(x_{i}|\mu_k, \sigma_k) \right] = \sum_{i}\ln\left[\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k) \right]</script>
+\[L(x|\Theta) = \sum_{i}\ln\left[p(x_{i}|\mu_k, \sigma_k) \right] = \sum_{i}\ln\left[\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k) \right]\]
 
 <p><strong>隐参数:</strong></p>
 
@@ -310,75 +308,72 @@ $\mu_k$, $\sigma_k$), 或 ($\alpha_{k}$, $\mu_k$, $\Sigma_{k}$).</li>
 <p>EM算法提出了用迭代逼近的方法，来对最优的高斯混合模型进行逼近。为了帮助迭代算法的过程，EM算法提出了隐参数$z$, 每次迭代，先使用上一次的参数计算隐参数$z$的分布，然后使用$z$更新似然函数，对目标参数进行估计。
 在GMM估计问题中，EM算法所设定的隐参量$z$ 一般属于${1 ,2 … k … K}$. 用于描述<strong>计算出GMM中$K$组高斯模型的参数后，某个数据点$x_i$属于第$z$个高斯模型的概率</strong>:</p>
 
-<script type="math/tex; mode=display">p(z|x_{i}, \mu_k, \sigma_k)</script>
+\[p(z|x_{i}, \mu_k, \sigma_k)\]
 
 <p>把隐参量$x$引入到第$i$个数据的概率估计中：</p>
 
-<script type="math/tex; mode=display">p(x_{i}|\Theta) = \sum_{k} p(x_{i}|z=k,\mu_k, \sigma_k) p(z=k) \\</script>
+\[p(x_{i}|\Theta) = \sum_{k} p(x_{i}|z=k,\mu_k, \sigma_k) p(z=k) \\\]
 
 <p>跟高斯混合分布 
 $p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k)$ 作对比, 
 发现$\alpha_k$就是$z$的先验分布$p(z=k)$.</p>
 
-<script type="math/tex; mode=display">p(z=k) = \alpha_k</script>
+\[p(z=k) = \alpha_k\]
 
 <p>而在$z=k$条件下的$x$条件概率就是第$k$个高斯模型.</p>
 
-<script type="math/tex; mode=display">p(x_{i}|z=k,\mu_k, \sigma_k)  = \textit{N}(x_i; \mu_k, \sigma_k)</script>
+\[p(x_{i}|z=k,\mu_k, \sigma_k)  = \textit{N}(x_i; \mu_k, \sigma_k)\]
 
 <p>现在可以把隐参量代入到对数似然函数中。可以加入冗余项：隐参数在数据$x_i$和高斯参数下的后验概率，从而引入Jensen不等式来简化似然函数。</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-L(x|\Theta) &= \sum_{i}\ln\left[p(x_{i}, z|\mu_k, \sigma_k) \right]  \\
-&= \sum_{i}\ln \sum_{k}  p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)   \\
-&= \sum_{i}\ln \sum_{k} p(z=k|x_{i},\mu_k, \sigma_k) \frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z=k|x_{i},\mu_k, \sigma_k)} \\
-\end{aligned} %]]></script>
+\[\begin{aligned}
+L(x|\Theta) &amp;= \sum_{i}\ln\left[p(x_{i}, z|\mu_k, \sigma_k) \right]  \\
+&amp;= \sum_{i}\ln \sum_{k}  p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)   \\
+&amp;= \sum_{i}\ln \sum_{k} p(z=k|x_{i},\mu_k, \sigma_k) \frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z=k|x_{i},\mu_k, \sigma_k)} \\
+\end{aligned}\]
 
 <p><strong>似然函数简化:</strong></p>
 
 <p>下面通过Jensen不等式简化对数似然函数。</p>
 
-<script type="math/tex; mode=display">f\left[E(x)\right] \geq E\left[f(x)\right]</script>
+\[f\left[E(x)\right] \geq E\left[f(x)\right]\]
 
 <p>对照Jensen不等式，让$u$指代 
 $\frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z|x_{i},\mu_k, \sigma_k)}$。</p>
 
 <p>可以得到</p>
 
-<script type="math/tex; mode=display">f(u) = \ln u</script>
+\[f(u) = \ln u\]
 
-<script type="math/tex; mode=display">E(u) = \sum_{k} p(z|x_{i},\mu_k, \sigma_k) u</script>
+\[E(u) = \sum_{k} p(z|x_{i},\mu_k, \sigma_k) u\]
 
 <p>得到</p>
 
-<script type="math/tex; mode=display">L(x|\Theta) \geq \sum_{i}\sum_{k} p(z=k|x_{i},\mu_k, \sigma_k) \ln \frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z=k|x_{i},\mu_k, \sigma_k)}</script>
+\[L(x|\Theta) \geq \sum_{i}\sum_{k} p(z=k|x_{i},\mu_k, \sigma_k) \ln \frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z=k|x_{i},\mu_k, \sigma_k)}\]
 
 <p>于是似然函数简化成对数函数的两重求和。等式右侧给似然函数提供了一个下界。</p>
 
 <p>我们可以根据贝叶斯准则进行推导其中的后验概率</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-p(z=k|x_{i},\mu_k, \sigma_k) &= \frac{ p(x_{i}|z=k,\mu_k, \sigma_k)}{ \sum_{k} p(x_{i}|z=k, \mu_k, \sigma_k)}  \\
-&=  \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)} 
-\end{aligned} %]]></script>
+\[\begin{aligned}
+p(z=k|x_{i},\mu_k, \sigma_k) &amp;= \frac{ p(x_{i}|z=k,\mu_k, \sigma_k)}{ \sum_{k} p(x_{i}|z=k, \mu_k, \sigma_k)}  \\
+&amp;=  \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)} 
+\end{aligned}\]
 
 <p>定义</p>
 
-<script type="math/tex; mode=display">\omega_{i,k} = p(z=k|x_{i},\mu_k, \sigma_k) = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}</script>
+\[\omega_{i,k} = p(z=k|x_{i},\mu_k, \sigma_k) = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}\]
 
 <p>那么</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-L(x|\Theta) &= \sum_{i}\ln \sum_{k} \omega_{i,k} \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}}  \\
-&\geq \sum_{i} \sum_{k} \omega_{i,k} \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}} 
-\end{aligned} %]]></script>
+\[\begin{aligned}
+L(x|\Theta) &amp;= \sum_{i}\ln \sum_{k} \omega_{i,k} \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}}  \\
+&amp;\geq \sum_{i} \sum_{k} \omega_{i,k} \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}} 
+\end{aligned}\]
 
 <p>不等式的右侧给似然函数提供了一个下界。EM算法提出迭代逼近的方法，不断提高下界，从而逼近似然函数。每次迭代都以下面这个目标函数作为优化目标：</p>
 
-<script type="math/tex; mode=display">Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}</script>
+\[Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}\]
 
 <p>这个式子表示，在第$t$次迭代后，获得参数$\Theta^t$，然后就可以计算隐参数概率$\omega_{i,k}^t$。 将隐参数代回$Q(\Theta,\Theta^{t})$, 进行最大似然优化，即可求出更优的参数$\Theta^{t+1}$。</p>
 
@@ -393,20 +388,20 @@ L(x|\Theta) &= \sum_{i}\ln \sum_{k} \omega_{i,k} \frac{\alpha_{k}\textit{N}(x_{i
     <p>基于当前的参数$\Theta^t$，用高斯混合模型计算隐参数概率 $\omega_{i,k}^t$。然后将隐参数概率代入对数似然函数，得到似然函数数学期望表达式。
 这一步叫<strong>expectation step</strong>.</p>
 
-    <script type="math/tex; mode=display">\omega_{i,k}^t = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}</script>
+\[\omega_{i,k}^t = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}\]
   </li>
   <li>
     <p>如前文使用Jensen推导得出，得到每次更新了隐参数$\omega_{i,k}^t$后的目标函数是：</p>
   </li>
 </ul>
 
-<script type="math/tex; mode=display">Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}</script>
+\[Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}\]
 
 <ul>
   <li>
     <p>利用$\omega_{i,k}$当前值, 最大化目标函数，从而得出新一组GMM参数 $\Theta^{t+1}$.  这一步叫作<strong>maximization step</strong>。</p>
 
-    <script type="math/tex; mode=display">\Theta^{t+1} = \argmax_{\Theta} \sum_{i}\sum_{k} \ln \omega_{i,k}^t \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}</script>
+\[\Theta^{t+1} = \argmax_{\Theta} \sum_{i}\sum_{k} \ln \omega_{i,k}^t \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}\]
   </li>
 </ul>
 
@@ -414,7 +409,7 @@ L(x|\Theta) &= \sum_{i}\ln \sum_{k} \omega_{i,k} \frac{\alpha_{k}\textit{N}(x_{i
 
 <p>单变量 GMM使用EM算法时，完整的目标函数为</p>
 
-<script type="math/tex; mode=display">Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega_{i,k}^t\sqrt{2\pi\sigma_k^2}}\exp\left[-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right]</script>
+\[Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega_{i,k}^t\sqrt{2\pi\sigma_k^2}}\exp\left[-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right]\]
 
 <h3 id="31-e-step">3.1 E-Step:</h3>
 
@@ -422,98 +417,95 @@ L(x|\Theta) &= \sum_{i}\ln \sum_{k} \omega_{i,k} \frac{\alpha_{k}\textit{N}(x_{i
 
 <p>每一次迭代后 $\omega_{i,k}$都可以用最新的高斯参数$(\alpha_k, \mu_k, \sigma_k)$进行更新。</p>
 
-<script type="math/tex; mode=display">\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}</script>
+\[\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}\]
 
 <p>E-step 就可以把更新的$\omega$代入似然函数，得到目标函数的最新表达。该目标函数展开如下：</p>
 
-<script type="math/tex; mode=display">Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)</script>
+\[Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)\]
 
 <h3 id="32-m-step">3.2 M-Step:</h3>
 
 <p>M-step的任务就是最大化目标函数，从而求出高斯参数的估计。
-<script type="math/tex">\Theta := \argmax_{\Theta} Q(\Theta,\Theta^{t})</script></p>
+\(\Theta := \argmax_{\Theta} Q(\Theta,\Theta^{t})\)</p>
 
 <p><strong>更新$\alpha_k:$</strong></p>
 
 <p>在高斯混合模型定义中，$\alpha_k$受限于$\sum_{k}\alpha_k =1$。所以$\alpha_k$的估计是一个受限优化问题。</p>
 
-<script type="math/tex; mode=display">\begin{gathered}
+\[\begin{gathered}
 \alpha_k^{t+1} := \argmax_{\alpha_k}{ \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}\\
 \text{subject to}  \sum_{k}\alpha_k =1 
-\end{gathered}</script>
+\end{gathered}\]
 
 <p>这种问题通常用拉格朗日乘子法计算。下面构造拉格朗日乘子：</p>
 
-<script type="math/tex; mode=display">\mathcal{L}(\alpha_k, \lambda) = { \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}+ \lambda\left[\sum_{k}\alpha_k -1\right]</script>
+\[\mathcal{L}(\alpha_k, \lambda) = { \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}+ \lambda\left[\sum_{k}\alpha_k -1\right]\]
 
 <p>对拉格朗日方程求极值，也就是对$\alpha_k$求导数为0处，该点就是我们要更新的$\alpha_{k}^{t+1}$值。</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-\frac{\partial \mathcal{L}(\alpha_k, \lambda) }{\partial \alpha_k} &= { \sum_{i}\omega_{i,k}^t\frac{1}{\alpha_k}}+ \lambda = 0 \\
-\Rightarrow  \alpha_k &= -\frac{\sum_{i}\omega_{i,k}^t}{\lambda}
-\end{aligned} %]]></script>
+\[\begin{aligned}
+\frac{\partial \mathcal{L}(\alpha_k, \lambda) }{\partial \alpha_k} &amp;= { \sum_{i}\omega_{i,k}^t\frac{1}{\alpha_k}}+ \lambda = 0 \\
+\Rightarrow  \alpha_k &amp;= -\frac{\sum_{i}\omega_{i,k}^t}{\lambda}
+\end{aligned}\]
 
 <p>将所有$k$项累加, 就可以求得$\lambda$.</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-\sum_{k}\alpha_k &= -\frac{\sum_{i}\sum_{k}\omega_{i,k}^t}{\lambda} \\
-\Rightarrow 1 &= -\sum_{i}\frac{1}{\lambda} = -\frac{N}{\lambda}  \\
-\Rightarrow \lambda &= -N  
-\end{aligned} %]]></script>
+\[\begin{aligned}
+\sum_{k}\alpha_k &amp;= -\frac{\sum_{i}\sum_{k}\omega_{i,k}^t}{\lambda} \\
+\Rightarrow 1 &amp;= -\sum_{i}\frac{1}{\lambda} = -\frac{N}{\lambda}  \\
+\Rightarrow \lambda &amp;= -N  
+\end{aligned}\]
 
 <p>于是利用地$t$次迭代的隐参量，我们就得到了$\alpha_k$在$t+1$次迭代的更新方程：</p>
 
-<script type="math/tex; mode=display">\alpha_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t}{N}</script>
+\[\alpha_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t}{N}\]
 
 <p><strong>更新$\mu_k:$</strong> </p>
 
 <p>$\mu_k$并没有类似$\alpha_k$的限制条件，可以直接把目标函数对$\mu_k$求导数：</p>
 
-<script type="math/tex; mode=display">\mu_k^{t+1} :=  \argmax_{\mu_k}   Q(\Theta,\Theta^{t})</script>
+\[\mu_k^{t+1} :=  \argmax_{\mu_k}   Q(\Theta,\Theta^{t})\]
 
 <p>让$\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k}=0$, 得到
-<script type="math/tex">\frac{\partial \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)}{\partial \mu_k} =  0</script></p>
+\(\frac{\partial \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)}{\partial \mu_k} =  0\)</p>
 
-<script type="math/tex; mode=display">\begin{aligned}
+\[\begin{aligned}
 \sum_{i}\omega_{i,k}^t\frac{x_i-\mu_k}{\sigma_k^2} = 0\\
 \Rightarrow \sum_{i}\omega_{i,k}^t\mu_k = \sum_{i}\omega_{i,k}^tx_i \\
 \Rightarrow \mu_k\sum_{i}\omega_{i,k}^t = \sum_{i}\omega_{i,k}^tx_i 
-\end{aligned}</script>
+\end{aligned}\]
 
 <p>所以在$t+1$次迭代， $\mu_k$就用全部$x$的加权平均来求得，权值正是$x_i$属于第$k$个模型产生的概率$\omega_{i,k}^t$。</p>
 
-<script type="math/tex; mode=display">\mu_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^tx_i}{\sum_{i}\omega_{i,k}^t}</script>
+\[\mu_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^tx_i}{\sum_{i}\omega_{i,k}^t}\]
 
 <p><strong>更新$\sigma_k:$</strong> </p>
 
 <p>类似地, 将目标函数对$\sigma_k$求极大值：</p>
 
-<script type="math/tex; mode=display">\sigma_k^{t+1} :=  \argmax_{\sigma_k}   Q(\Theta,\Theta^{t})</script>
+\[\sigma_k^{t+1} :=  \argmax_{\sigma_k}   Q(\Theta,\Theta^{t})\]
 
 <p>让导数为0：</p>
 
-<script type="math/tex; mode=display">\frac{\partial Q(\Theta,\Theta^{t})}{\partial \sigma_k} = \frac{\partial \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)}{\partial \sigma_k}=0</script>
+\[\frac{\partial Q(\Theta,\Theta^{t})}{\partial \sigma_k} = \frac{\partial \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)}{\partial \sigma_k}=0\]
 
 <p>得到</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
- \sum_{i}\omega_{i,k}\left[-\frac{1}{\sigma_k}+\frac{(x_i-\mu_k)^2}{\sigma_k^3}\right]&= 0\\
-\Rightarrow \sum_{i}\omega_{i,k}\sigma_k^2 &= \sum_{i}\omega_{i,k}(x_i-\mu_k)^2 \\
-\Rightarrow \sigma_k^2 \sum_{i}\omega_{i,k} &= \sum_{i}\omega_{i,k}(x_i-\mu_k)^2 \\
-\end{aligned} %]]></script>
+\[\begin{aligned}
+ \sum_{i}\omega_{i,k}\left[-\frac{1}{\sigma_k}+\frac{(x_i-\mu_k)^2}{\sigma_k^3}\right]&amp;= 0\\
+\Rightarrow \sum_{i}\omega_{i,k}\sigma_k^2 &amp;= \sum_{i}\omega_{i,k}(x_i-\mu_k)^2 \\
+\Rightarrow \sigma_k^2 \sum_{i}\omega_{i,k} &amp;= \sum_{i}\omega_{i,k}(x_i-\mu_k)^2 \\
+\end{aligned}\]
 
 <p>高斯模型里面使用的都是$\sigma_k^2$,所以就不需要求平方根了。$\sigma_k^2$的更新方程如下，依赖于更新的$\mu_k$。 所以一般都是先把$\mu_k^{t+1}$算出来，然后再更新$\sigma_k^2$。</p>
 
-<script type="math/tex; mode=display">(\sigma_k^2)^{t+1} = \frac{\sum_{i}\omega_{i,k}(x_i-\mu_k^{t+1})^2 }{\sum_{i}\omega_{i,k}}</script>
+\[(\sigma_k^2)^{t+1} = \frac{\sum_{i}\omega_{i,k}(x_i-\mu_k^{t+1})^2 }{\sum_{i}\omega_{i,k}}\]
 
 <h2 id="4em算法解多变量gmm">4.EM算法解多变量GMM</h2>
 
 <p>同样的，我们可以得到每次迭代的目标函数如下：</p>
 
-<script type="math/tex; mode=display">Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega_{i,k}^t\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]</script>
+\[Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega_{i,k}^t\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]\]
 
 <p>其中</p>
 <ul>
@@ -528,15 +520,14 @@ L(x|\Theta) &= \sum_{i}\ln \sum_{k} \omega_{i,k} \frac{\alpha_{k}\textit{N}(x_{i
 
 <p>跟单变量GMM一样，E-step计算隐参数，但是需要用多维高斯分布，利用了多维矩阵乘法和矩阵求逆，计算复杂度要大很多。</p>
 
-<script type="math/tex; mode=display">\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}</script>
+\[\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}\]
 
 <p>目标函数更新如下：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-&Q(\Theta,\Theta^{t}) \\
-&= \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \frac{d}{2}\ln \sqrt{(2\pi)^d} -\frac{1}{2}\ln\det(\Sigma_k)-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right) 
-\end{aligned} %]]></script>
+\[\begin{aligned}
+&amp;Q(\Theta,\Theta^{t}) \\
+&amp;= \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \frac{d}{2}\ln \sqrt{(2\pi)^d} -\frac{1}{2}\ln\det(\Sigma_k)-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right) 
+\end{aligned}\]
 
 <h3 id="42-m-step">4.2 M-Step:</h3>
 
@@ -544,53 +535,52 @@ L(x|\Theta) &= \sum_{i}\ln \sum_{k} \omega_{i,k} \frac{\alpha_{k}\textit{N}(x_{i
 
 <p>多变量GMM下，$\alpha_k$的更新跟单变量 GMM一样。</p>
 
-<script type="math/tex; mode=display">\begin{gathered}
+\[\begin{gathered}
 \alpha_k^{t+1} := \argmax_{\alpha_k}{ \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}\\
 \text{subject to}  \sum_{k}\alpha_k =1 
-\end{gathered}</script>
+\end{gathered}\]
 
 <p>得到完全一样的更新方程：</p>
 
-<script type="math/tex; mode=display">\alpha_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t}{N}</script>
+\[\alpha_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t}{N}\]
 
 <p><strong>更新$\mu_k:$</strong></p>
 
-<script type="math/tex; mode=display">\mu_k^{t+1} :=  \argmax_{\mu_k}   Q(\Theta,\Theta^{t})</script>
+\[\mu_k^{t+1} :=  \argmax_{\mu_k}   Q(\Theta,\Theta^{t})\]
 
 <p>$Q(\Theta,\Theta^{t})$对$\mu_k$求导，得到</p>
 
-<script type="math/tex; mode=display">\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k} = \sum_{i}\omega_{i,k}^t\frac{\partial \left[-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]}{\partial \mu_k}  = 0\\</script>
+\[\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k} = \sum_{i}\omega_{i,k}^t\frac{\partial \left[-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]}{\partial \mu_k}  = 0\\\]
 
 <p>实数协方差矩阵$\Sigma_{k}$对称的, 其逆矩阵也是对称的。 于是我们可以利用第一部分列出的公式$\frac{\partial (x -s)^TW(x-s)}{\partial x} = -2W(x-s)$求偏导数.</p>
 
-<script type="math/tex; mode=display">\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k} = 
- \sum_{i}\omega_{i,k}^t \Sigma_{k}^{-1}\left(x_i - \mu_k\right) =0</script>
+\[\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k} = 
+ \sum_{i}\omega_{i,k}^t \Sigma_{k}^{-1}\left(x_i - \mu_k\right) =0\]
 
-<script type="math/tex; mode=display">\Rightarrow \sum_{i}\omega_{i,k}^t x_i= \mu_k\sum_{i}\omega_{i,k}^t</script>
+\[\Rightarrow \sum_{i}\omega_{i,k}^t x_i= \mu_k\sum_{i}\omega_{i,k}^t\]
 
 <p>所以$\mu_k$的更新方程同样是$x$的加权平均，只是这时候$\mu_k$ is a d×1 向量。
-<script type="math/tex">\mu_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t x_i}{\sum_{i}\omega_{i,k}^t}</script></p>
+\(\mu_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t x_i}{\sum_{i}\omega_{i,k}^t}\)</p>
 
 <p><strong>更新$\Sigma_k:$</strong></p>
 
-<script type="math/tex; mode=display">\Sigma_k^{t+1} :=  \argmax_{\Sigma_k}   Q(\Theta,\Theta^{t})</script>
+\[\Sigma_k^{t+1} :=  \argmax_{\Sigma_k}   Q(\Theta,\Theta^{t})\]
 
 <p>让导数$\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} =0$, 得到</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} &= \sum_{i}\omega_{i,k}^t\frac{\partial \left[  -\frac{1}{2}\ln\det(\Sigma_k)-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]}{\partial  \Sigma_k^{-1}}  \\
- &= -\frac{1}{2} \sum_{i}\omega_{i,k}^t \left[\frac{\partial \ln\det(\Sigma_k)}{\partial  \Sigma_k^{-1}}+\frac{\partial (x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)}{\partial  \Sigma_k^{-1}} \right] \\
- &= 0 
-\end{aligned} %]]></script>
+\[\begin{aligned}
+\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} &amp;= \sum_{i}\omega_{i,k}^t\frac{\partial \left[  -\frac{1}{2}\ln\det(\Sigma_k)-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]}{\partial  \Sigma_k^{-1}}  \\
+ &amp;= -\frac{1}{2} \sum_{i}\omega_{i,k}^t \left[\frac{\partial \ln\det(\Sigma_k)}{\partial  \Sigma_k^{-1}}+\frac{\partial (x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)}{\partial  \Sigma_k^{-1}} \right] \\
+ &amp;= 0 
+\end{aligned}\]
 
 <p>协方差矩阵$\Sigma_k$是对称的,可以利用第一部分的矩阵求导公式 $\frac{\partial \ln \det(X)}{\partial X^{-1}} =-X^T $ and $\frac{\partial a^TXa}{\partial X} = aa^T$，求得极大值$ Q(\Theta,\Theta^{t})$.</p>
 
-<script type="math/tex; mode=display">\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} =   \frac{1}{2}\sum_{i}\omega_{i,k}^t \left[\Sigma_k - (x_i-\mu_k)(x_i-\mu_k)^T\right] = 0</script>
+\[\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} =   \frac{1}{2}\sum_{i}\omega_{i,k}^t \left[\Sigma_k - (x_i-\mu_k)(x_i-\mu_k)^T\right] = 0\]
 
 <p>类似地, 我们可以得到$\Sigma_k$在第$t+1$次迭代的更新方程, 它依赖于$\mu_k$。所以我们需要先计算$\mu_k^{t+1}$，然后更新$\Sigma_k$</p>
 
-<script type="math/tex; mode=display">\Sigma_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t (x_i-\mu_k^{t+1})(x_i-\mu_k^{t+1})^T }{\sum_{i}\omega_{i,k}^t}</script>
+\[\Sigma_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t (x_i-\mu_k^{t+1})(x_i-\mu_k^{t+1})^T }{\sum_{i}\omega_{i,k}^t}\]
 
 <h2 id="5总结">5.总结</h2>
 
@@ -655,6 +645,20 @@ L(x|\Theta) &= \sum_{i}\ln \sum_{k} \omega_{i,k} \frac{\alpha_{k}\textit{N}(x_{i
 </div>
 
 
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
   
     
       

@@ -167,7 +167,7 @@
 <p>The Gaussian distribution is very widely used to fit random data. The
 probability density for a one-dimensional random variable $x$ follows:</p>
 
-<script type="math/tex; mode=display">\textit{N}(x; \mu, \sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]</script>
+\[\textit{N}(x; \mu, \sigma) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]\]
 
 <p>where</p>
 <ul>
@@ -182,7 +182,7 @@ variance.</p>
 
 <p>More generally, when the data set is a d-dimensional data, it can be fit by a multivariate Gaussian model. The probability density is:</p>
 
-<script type="math/tex; mode=display">\textit{N}(x; \mu, \Sigma) = \frac{1}{\sqrt{(2\pi)^d\det(\Sigma)}}\exp\left[-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu)\right]</script>
+\[\textit{N}(x; \mu, \Sigma) = \frac{1}{\sqrt{(2\pi)^d\det(\Sigma)}}\exp\left[-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu)\right]\]
 
 <p>where</p>
 <ul>
@@ -197,7 +197,7 @@ variance.</p>
 
 <p><strong>Theorem.</strong>For convex function $f$ and a random variable $x$:</p>
 
-<script type="math/tex; mode=display">f\left[E(x)\right] \leq E\left[f(x)\right]</script>
+\[f\left[E(x)\right] \leq E\left[f(x)\right]\]
 
 <figure align="center" style="width: 60%;margin:auto">
   <img width="70%" height="70%" src="/static/posts/convex.png" />
@@ -207,7 +207,7 @@ a and b. The expectation of $f(x)$ is always above $f[E(x)]$.</figcaption>
 <p><br />
 <strong>Theorem.</strong> For concave function $f$ and a random variable $x$:</p>
 
-<script type="math/tex; mode=display">f\left[E(x)\right] \geq E\left[f(x)\right]</script>
+\[f\left[E(x)\right] \geq E\left[f(x)\right]\]
 
 <figure align="center" style="width: 60%;margin:auto">
   <img width="70%" height="70%" src="/static/posts/concave.png" />
@@ -221,22 +221,21 @@ between a and b. The expectation of $f(x)$ is always under $f[E(x)]$.</figcaptio
 some rules about derivatives of a matrix or a vector. Here are some 
 useful equations cited from <em>The Matrix Cookbook</em>.</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-\frac{\partial x^Ta}{\partial x} &= \frac{\partial a^Tx}{\partial x} = a\\
-\frac{\partial x^TBx}{\partial x} &=  (B + B^T )x\\
-\frac{\partial (x -s)^TW(x-s)}{\partial x} &= -2W(x-s), \text{ (W is symmetric)} \\
-\frac{\partial a^TXa}{\partial X} &= \frac{\partial a^TX^Ta}{\partial X} = aa^T\\
-\frac{\partial \det(X)}{\partial X} &= \det(X)(X^{-1})^T\\
-\frac{\partial \ln \det(X)}{\partial X} &= (X^{-1})^T\\
-\frac{\partial \det(X^{-1})}{\partial X} &= -\det(X^{-1})(X^{-1})^T\\
+\[\begin{aligned}
+\frac{\partial x^Ta}{\partial x} &amp;= \frac{\partial a^Tx}{\partial x} = a\\
+\frac{\partial x^TBx}{\partial x} &amp;=  (B + B^T )x\\
+\frac{\partial (x -s)^TW(x-s)}{\partial x} &amp;= -2W(x-s), \text{ (W is symmetric)} \\
+\frac{\partial a^TXa}{\partial X} &amp;= \frac{\partial a^TX^Ta}{\partial X} = aa^T\\
+\frac{\partial \det(X)}{\partial X} &amp;= \det(X)(X^{-1})^T\\
+\frac{\partial \ln \det(X)}{\partial X} &amp;= (X^{-1})^T\\
+\frac{\partial \det(X^{-1})}{\partial X} &amp;= -\det(X^{-1})(X^{-1})^T\\
 \frac{\partial \ln \det(X)}{\partial X^{-1}} 
-&= \frac{\partial \ln \det(X)}{\partial \det(X)}\frac{\partial \det(X)}{\partial X^{-1}} \\
-&= \frac{1}{\det(X)}\left[-\det(X)X^T\right]\\
-&= -X^T\\
-\frac{\partial Tr(AXB)}{\partial X} &= A^TB^T\\
-\frac{\partial Tr(AX^-1B)}{\partial X} &= -(X^{-1}BAX^{-1})^T\\
-\end{aligned} %]]></script>
+&amp;= \frac{\partial \ln \det(X)}{\partial \det(X)}\frac{\partial \det(X)}{\partial X^{-1}} \\
+&amp;= \frac{1}{\det(X)}\left[-\det(X)X^T\right]\\
+&amp;= -X^T\\
+\frac{\partial Tr(AXB)}{\partial X} &amp;= A^TB^T\\
+\frac{\partial Tr(AX^-1B)}{\partial X} &amp;= -(X^{-1}BAX^{-1})^T\\
+\end{aligned}\]
 
 <h2 id="2gaussian-mixture-model-gmm-and-expectation-maximizationem-algorithm">2.Gaussian Mixture Model (GMM) and Expectation-Maximization(EM) Algorithm</h2>
 
@@ -249,7 +248,7 @@ is used to describe a combination of $K$ Gaussian distribution.</p>
 
 <p>Suppose we have a training set of $N$ independent data points $x = {x_1, x_2 …x_i… x_N}$, and the values show multiple peaks. We can model this data set by a Gaussian mixture model</p>
 
-<script type="math/tex; mode=display">p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k) = \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\left[-\frac{(x-\mu_k)^2}{2\sigma_k^2}\right]</script>
+\[p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \sigma_k) = \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{2\pi\sigma_k^2}}\exp\left[-\frac{(x-\mu_k)^2}{2\sigma_k^2}\right]\]
 
 <table style="width: 600px; height: 200px; margin:auto">
     <tr>
@@ -272,15 +271,14 @@ is used to describe a combination of $K$ Gaussian distribution.</p>
 <p><br />
 When each data sample $x_i$ is d-dimensional, and the data set $x$ seem scattering to multiple clusters, the data can be modeled by a multivariate version Gaussian mixture model.</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-p(x|\Theta) &= \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \Sigma_k)  \\
-&= \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x-\mu_k)^T\Sigma_{k}^{-1}(x-\mu_k)\right]
-\end{aligned} %]]></script>
+\[\begin{aligned}
+p(x|\Theta) &amp;= \sum_{k}^{}\alpha_{k}\textit{N}(x; \mu_k, \Sigma_k)  \\
+&amp;= \sum_{k}^{}\alpha_{k}\frac{1}{\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x-\mu_k)^T\Sigma_{k}^{-1}(x-\mu_k)\right]
+\end{aligned}\]
 
 <p>In the models,  $\Theta$ means all parameters, and $\alpha_k$ is the prior probability of th $k^{th}$ Gaussian model, and</p>
 
-<script type="math/tex; mode=display">\sum_{k}\alpha_k = 1</script>
+\[\sum_{k}\alpha_k = 1\]
 
 <h3 id="22-em">2.2 EM</h3>
 <p>The expectation-maximization(EM) algorithm is an iterative supervised training algorithm. The task is formulated as:</p>
@@ -298,96 +296,93 @@ $\mu_k$, $\sigma_k$), or ($\alpha_{k}$, $\mu_k$, $\Sigma_{k}$).</li>
 
 <p>The probability of N independent tests is described as the product of probability of each test. This is called the likelihood function:</p>
 
-<script type="math/tex; mode=display">p(x|\Theta) = \prod_{i}p(x_i|\Theta)</script>
+\[p(x|\Theta) = \prod_{i}p(x_i|\Theta)\]
 
 <p>MLE is to estimate the  parameters $\Theta$ by maximizing the likelihood function.</p>
 
-<script type="math/tex; mode=display">\Theta = \argmax_{\Theta} \prod_{i}p(x_i|\Theta)</script>
+\[\Theta = \argmax_{\Theta} \prod_{i}p(x_i|\Theta)\]
 
 <p>By applying the MLE , the likelihood function for uni and multiple variate Gaussian mixture models are very complicated.</p>
 
-<script type="math/tex; mode=display">p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{N}(x_i| \mu_k, \sigma_k) \right]</script>
+\[p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{N}(x_i| \mu_k, \sigma_k) \right]\]
 
-<script type="math/tex; mode=display">p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{N}(x_i| \mu_k, \Sigma_k)\right]</script>
+\[p(x|\Theta) = \prod_{i}p(x_i|\Theta) = \prod_{i}\left[\sum_{k}\alpha_{k}\textit{N}(x_i| \mu_k, \Sigma_k)\right]\]
 
 <p>To estimate K set of Gaussian parameters directly and explicitly is difficult. The EM algorithm simplifies the likelihood function of GMM, and provides an iterative way to optimize the estimation.Here we try to briefly describe the EM algorithm for GMM parameter estimation.</p>
 
 <p>First, the likelihood function of a GMM model can be simplified by taking the log likelihood function. An formula with the form of summation is easier for separating independent data samples and taking derivatives of parameters.</p>
 
-<script type="math/tex; mode=display">L(x|\Theta) = \sum_{i}\ln\left[p(x_{i}|\mu_k, \sigma_k) \right] = \sum_{i}\ln\left[\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k) \right]</script>
+\[L(x|\Theta) = \sum_{i}\ln\left[p(x_{i}|\mu_k, \sigma_k) \right] = \sum_{i}\ln\left[\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k) \right]\]
 
 <p><strong>Latent Parameters:</strong></p>
 
 <p>There is no efficient way to explicitly maximizing the log likelihood function for GMM above. The EM algorithm introduces a latent parameter $z$, that $z \in {1 ,2 … k … K}$. That is used to describe the <strong>probability of a given training sample $x_i$ belonging to cluster z, given full GMM parameters</strong>:
-<script type="math/tex">p(z|x_{i}, \mu_k, \sigma_k)</script></p>
+\(p(z|x_{i}, \mu_k, \sigma_k)\)</p>
 
 <p>Introduce the latent parameter $z$ in the  probability distribution of $x_i$.</p>
 
-<script type="math/tex; mode=display">p(x_{i}|\Theta) = \sum_{k} p(x_{i}|z=k,\mu_k, \sigma_k) p(z=k) \\</script>
+\[p(x_{i}|\Theta) = \sum_{k} p(x_{i}|z=k,\mu_k, \sigma_k) p(z=k) \\\]
 
 <p>Compared with 
 $p(x|\Theta) = \sum_{k}^{}\alpha_{k}\textit{N}(x|\mu_k, \sigma_k)$,</p>
 
 <p>we can conclude that $\alpha_k \text{ is the prior probability of } p(z=k)$.</p>
 
-<script type="math/tex; mode=display">p(z=k) = \alpha_k</script>
+\[p(z=k) = \alpha_k\]
 
 <p>and the conditional probability of $x$ given $z=k$ is the $k^{th}$ Gaussian model.</p>
 
-<script type="math/tex; mode=display">p(x_{i}|z=k,\mu_k, \sigma_k)  = \textit{N}(x_i; \mu_k, \sigma_k)</script>
+\[p(x_{i}|z=k,\mu_k, \sigma_k)  = \textit{N}(x_i; \mu_k, \sigma_k)\]
 
 <p>Now the latent parameter can be introduced into the log likelihood
 function. Be noted that an redundant term $p(z|x_{i},\mu_k, \sigma_k) $
 is added, in order to match the form of Jensen’s inequality.</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-L(x|\Theta) &= \sum_{i}\ln\left[p(x_{i}, z|\mu_k, \sigma_k) \right]  \\
-&= \sum_{i}\ln \sum_{k}  p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)   \\
-&= \sum_{i}\ln \sum_{k} p(z=k|x_{i},\mu_k, \sigma_k) \frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z=k|x_{i},\mu_k, \sigma_k)} \\
-\end{aligned} %]]></script>
+\[\begin{aligned}
+L(x|\Theta) &amp;= \sum_{i}\ln\left[p(x_{i}, z|\mu_k, \sigma_k) \right]  \\
+&amp;= \sum_{i}\ln \sum_{k}  p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)   \\
+&amp;= \sum_{i}\ln \sum_{k} p(z=k|x_{i},\mu_k, \sigma_k) \frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z=k|x_{i},\mu_k, \sigma_k)} \\
+\end{aligned}\]
 
 <p><strong>Simplify the Likelihood function:</strong></p>
 
 <p>However the summation inside a log function make it difficult to maximize. Here recall Jensen’s inequality:</p>
 
-<script type="math/tex; mode=display">f\left[E(x)\right] \geq E\left[f(x)\right]</script>
+\[f\left[E(x)\right] \geq E\left[f(x)\right]\]
 
 <p>Let $u$ represent 
 $\frac{p(x_{i} | z=k, \mu_k, \sigma_k)p(z=k)}{p(z | x_{i},\mu_k, \sigma_k)}$ to match Jensen’s inequality.</p>
 
 <p>We get</p>
 
-<script type="math/tex; mode=display">f(u) = \ln u</script>
+\[f(u) = \ln u\]
 
-<script type="math/tex; mode=display">E(u) = \sum_{k} p(z|x_{i},\mu_k, \sigma_k) u</script>
+\[E(u) = \sum_{k} p(z|x_{i},\mu_k, \sigma_k) u\]
 
 <p>Therefore,</p>
 
-<script type="math/tex; mode=display">L(x|\Theta) \geq \sum_{i}\sum_{k} p(z=k|x_{i},\mu_k, \sigma_k) \ln \frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z=k|x_{i},\mu_k, \sigma_k)}</script>
+\[L(x|\Theta) \geq \sum_{i}\sum_{k} p(z=k|x_{i},\mu_k, \sigma_k) \ln \frac{p(x_{i}|z=k, \mu_k, \sigma_k)p(z=k)}{p(z=k|x_{i},\mu_k, \sigma_k)}\]
 
 <p>The posterior probability can be derived by the Bayes’ law.</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-p(z=k|x_{i},\mu_k, \sigma_k) &= \frac{ p(x_{i}|z=k,\mu_k, \sigma_k)}{ \sum_{k} p(x_{i}|z=k, \mu_k, \sigma_k)}  \\
-&=  \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)} 
-\end{aligned} %]]></script>
+\[\begin{aligned}
+p(z=k|x_{i},\mu_k, \sigma_k) &amp;= \frac{ p(x_{i}|z=k,\mu_k, \sigma_k)}{ \sum_{k} p(x_{i}|z=k, \mu_k, \sigma_k)}  \\
+&amp;=  \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)} 
+\end{aligned}\]
 
 <p>Define
-<script type="math/tex">\omega_{i,k} = p(z=k|x_{i},\mu_k, \sigma_k) = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}</script></p>
+\(\omega_{i,k} = p(z=k|x_{i},\mu_k, \sigma_k) = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}\)</p>
 
 <p>Then</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-L(x|\Theta) &= \sum_{i}\ln \sum_{k} \omega_{i,k} \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}}  \\
-&\geq \sum_{i} \sum_{k} \omega_{i,k} \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}} 
-\end{aligned} %]]></script>
+\[\begin{aligned}
+L(x|\Theta) &amp;= \sum_{i}\ln \sum_{k} \omega_{i,k} \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}}  \\
+&amp;\geq \sum_{i} \sum_{k} \omega_{i,k} \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}} 
+\end{aligned}\]
 
 <p>This equation defines a lower bound for the log likelihood function. Therefore, an iterative target function for the EM algorithm is defined:</p>
 
-<script type="math/tex; mode=display">Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}</script>
+\[Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}\]
 
 <p>After $t$ iterations, we’ve got $\Theta^t$，and hence the latent $\omega_{i,k}^t$。 Apply the latest latent parameters in $Q(\Theta,\Theta^{t})$，and then we can update $\Theta^{t+1}$ by maiximization.</p>
 
@@ -403,19 +398,19 @@ achieved.</p>
     <p>Calculate latent parameters $\omega_{i,k}^t$ by applying $\Theta^t$
 into the GMM. This step is called <strong>expectation step</strong>.</p>
 
-    <script type="math/tex; mode=display">\omega_{i,k}^t = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}</script>
+\[\omega_{i,k}^t = \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\sum_{k}\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}\]
   </li>
   <li>
     <p>Apply the latest latent parameters $\omega_{i,k}^t$ in the target function. The target function is derived by simplifying the log likelihood funciton by Jensen’s inequality.</p>
 
-    <script type="math/tex; mode=display">Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}</script>
+\[Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t \ln\frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}\]
   </li>
   <li>
     <p>With $\omega_{i,k}$, maximize the target log likelihood function, to
 update GMM parameters $\Theta^{t+1}$. This step is called
 <strong>maximization step</strong>.</p>
 
-    <script type="math/tex; mode=display">\Theta^{t+1} = \argmax_{\Theta} \sum_{i}\sum_{k} \ln \omega_{i,k}^t \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}</script>
+\[\Theta^{t+1} = \argmax_{\Theta} \sum_{i}\sum_{k} \ln \omega_{i,k}^t \frac{\alpha_{k}\textit{N}(x_{i}| \mu_k, \sigma_k)}{\omega_{i,k}^t}\]
   </li>
 </ul>
 
@@ -423,7 +418,7 @@ update GMM parameters $\Theta^{t+1}$. This step is called
 
 <p>The complete form of the EM target function for a univariate GMM is</p>
 
-<script type="math/tex; mode=display">Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega_{i,k}^t\sqrt{2\pi\sigma_k^2}}\exp\left[-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right]</script>
+\[Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega_{i,k}^t\sqrt{2\pi\sigma_k^2}}\exp\left[-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right]\]
 
 <h3 id="31-e-step">3.1 E-Step:</h3>
 
@@ -431,98 +426,95 @@ update GMM parameters $\Theta^{t+1}$. This step is called
 
 <p>On every iteration, $\omega_{i,k}$ is calculated from the latest Gaussian parameters $(\alpha_k, \mu_k, \sigma_k)$</p>
 
-<script type="math/tex; mode=display">\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}</script>
+\[\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \sigma_k^t)}\]
 
 <h3 id="32-m-step">3.2 M-Step:</h3>
 
-<script type="math/tex; mode=display">\Theta := \argmax_{\Theta} Q(\Theta,\Theta^{t})</script>
+\[\Theta := \argmax_{\Theta} Q(\Theta,\Theta^{t})\]
 
 <p>The target likelihood function can be expanded to decouple items clearly.</p>
 
-<script type="math/tex; mode=display">Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)</script>
+\[Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)\]
 
 <p><strong>Update $\alpha_k:$</strong></p>
 
 <p>As defined in GMM, $\alpha_k$ is constrained by $\sum_{k}\alpha_k =1$, so estimating $\alpha_k$ is a constrained optimization problem.</p>
 
-<script type="math/tex; mode=display">\begin{gathered}
+\[\begin{gathered}
 \alpha_k^{t+1} := \argmax_{\alpha_k}{ \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}\\
 \text{subject to}  \sum_{k}\alpha_k =1 
-\end{gathered}</script>
+\end{gathered}\]
 
 <p>The method of Lagrange multipliers is used to find the local maxima of such constrained optimization problem. We can construct a Lagrangean function:</p>
 
-<script type="math/tex; mode=display">\mathcal{L}(\alpha_k, \lambda) = { \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}+ \lambda\left[\sum_{k}\alpha_k -1\right]</script>
+\[\mathcal{L}(\alpha_k, \lambda) = { \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}+ \lambda\left[\sum_{k}\alpha_k -1\right]\]
 
 <p>The local maxima $\alpha_{k}^{t+1}$ should make the derivative of the Lagrangean function equal to 0. Hence,</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-\frac{\partial \mathcal{L}(\alpha_k, \lambda) }{\partial \alpha_k} &= { \sum_{i}\omega_{i,k}^t\frac{1}{\alpha_k}}+ \lambda = 0 \\
-\Rightarrow  \alpha_k &= -\frac{\sum_{i}\omega_{i,k}^t}{\lambda}
-\end{aligned} %]]></script>
+\[\begin{aligned}
+\frac{\partial \mathcal{L}(\alpha_k, \lambda) }{\partial \alpha_k} &amp;= { \sum_{i}\omega_{i,k}^t\frac{1}{\alpha_k}}+ \lambda = 0 \\
+\Rightarrow  \alpha_k &amp;= -\frac{\sum_{i}\omega_{i,k}^t}{\lambda}
+\end{aligned}\]
 
 <p>By summing the equation for all $k$, the value of $\lambda$ can be calculated.</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-\sum_{k}\alpha_k &= -\frac{\sum_{i}\sum_{k}\omega_{i,k}^t}{\lambda} \\
-\Rightarrow 1 &= -\sum_{i}\frac{1}{\lambda} = -\frac{N}{\lambda}  \\
-\Rightarrow \lambda &= -N  
-\end{aligned} %]]></script>
+\[\begin{aligned}
+\sum_{k}\alpha_k &amp;= -\frac{\sum_{i}\sum_{k}\omega_{i,k}^t}{\lambda} \\
+\Rightarrow 1 &amp;= -\sum_{i}\frac{1}{\lambda} = -\frac{N}{\lambda}  \\
+\Rightarrow \lambda &amp;= -N  
+\end{aligned}\]
 
 <p>Therefore, $\alpha_k$ on iteration $t+1$ based on latent parameters on iteration $t$ is updated by</p>
 
-<script type="math/tex; mode=display">\alpha_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t}{N}</script>
+\[\alpha_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t}{N}\]
 
 <p><strong>Update $\mu_k:$</strong> </p>
 
 <p>$\mu_k$ is unconstrained, and can be derived by taking the derivative of the target likelihood function.</p>
 
-<script type="math/tex; mode=display">\mu_k^{t+1} :=  \argmax_{\mu_k}   Q(\Theta,\Theta^{t})</script>
+\[\mu_k^{t+1} :=  \argmax_{\mu_k}   Q(\Theta,\Theta^{t})\]
 
 <p>Let $\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k}=0$, hence</p>
 
-<script type="math/tex; mode=display">\frac{\partial \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)}{\partial \mu_k} =  0</script>
+\[\frac{\partial \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)}{\partial \mu_k} =  0\]
 
-<script type="math/tex; mode=display">\begin{aligned}
+\[\begin{aligned}
 \sum_{i}\omega_{i,k}^t\frac{x_i-\mu_k}{\sigma_k^2} = 0\\
 \Rightarrow \sum_{i}\omega_{i,k}^t\mu_k = \sum_{i}\omega_{i,k}^tx_i \\
 \Rightarrow \mu_k\sum_{i}\omega_{i,k}^t = \sum_{i}\omega_{i,k}^tx_i 
-\end{aligned}</script>
+\end{aligned}\]
 
 <p>Hence $\mu_k$ on iteration $t+1$ can be updated as a form of weighted mean of $x$.</p>
 
-<script type="math/tex; mode=display">\mu_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^tx_i}{\sum_{i}\omega_{i,k}^t}</script>
+\[\mu_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^tx_i}{\sum_{i}\omega_{i,k}^t}\]
 
 <p><strong>Update $\sigma_k:$</strong> </p>
 
 <p>Similarly, updated $\sigma_k$ is derived by taking the derivative of the target likelihood function with respect to $\sigma_k$.</p>
 
-<script type="math/tex; mode=display">\sigma_k^{t+1} :=  \argmax_{\sigma_k}   Q(\Theta,\Theta^{t})</script>
+\[\sigma_k^{t+1} :=  \argmax_{\sigma_k}   Q(\Theta,\Theta^{t})\]
 
 <p>Let</p>
 
-<p><script type="math/tex">\frac{\partial Q(\Theta,\Theta^{t})}{\partial \sigma_k} = \frac{\partial \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)}{\partial \sigma_k}=0</script>.</p>
+<p>\(\frac{\partial Q(\Theta,\Theta^{t})}{\partial \sigma_k} = \frac{\partial \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \ln \sqrt{2\pi\sigma_k^2}-\frac{(x_i-\mu_k)^2}{2\sigma_k^2}\right)}{\partial \sigma_k}=0\).</p>
 
 <p>We get</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
- \sum_{i}\omega_{i,k}\left[-\frac{1}{\sigma_k}+\frac{(x_i-\mu_k)^2}{\sigma_k^3}\right]&= 0\\
-\Rightarrow \sum_{i}\omega_{i,k}\sigma_k^2 &= \sum_{i}\omega_{i,k}(x_i-\mu_k)^2 \\
-\Rightarrow \sigma_k^2 \sum_{i}\omega_{i,k} &= \sum_{i}\omega_{i,k}(x_i-\mu_k)^2 \\
-\end{aligned} %]]></script>
+\[\begin{aligned}
+ \sum_{i}\omega_{i,k}\left[-\frac{1}{\sigma_k}+\frac{(x_i-\mu_k)^2}{\sigma_k^3}\right]&amp;= 0\\
+\Rightarrow \sum_{i}\omega_{i,k}\sigma_k^2 &amp;= \sum_{i}\omega_{i,k}(x_i-\mu_k)^2 \\
+\Rightarrow \sigma_k^2 \sum_{i}\omega_{i,k} &amp;= \sum_{i}\omega_{i,k}(x_i-\mu_k)^2 \\
+\end{aligned}\]
 
 <p>For $\sigma_k$, we can update $\sigma_k^2$, which is enough for Gaussian model calculation. New $sigma_k^2$ depends on $\mu_k$, so normally $\mu_k^{t+1}$ is calculated first and then applied to the update equation for $\sigma_k^2$</p>
 
-<script type="math/tex; mode=display">(\sigma_k^2)^{t+1} = \frac{\sum_{i}\omega_{i,k}(x_i-\mu_k^{t+1})^2 }{\sum_{i}\omega_{i,k}}</script>
+\[(\sigma_k^2)^{t+1} = \frac{\sum_{i}\omega_{i,k}(x_i-\mu_k^{t+1})^2 }{\sum_{i}\omega_{i,k}}\]
 
 <h2 id="4em-algorithm-for-multivariate-gmm">4.EM Algorithm for Multivariate GMM</h2>
 
 <p>Similarlyt the target likelihood function for a multivariat GMM is</p>
 
-<script type="math/tex; mode=display">Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega_{i,k}^t\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]</script>
+\[Q(\Theta,\Theta^{t}) = \sum_{i}\sum_{k}\omega_{i,k}^t\ln\frac{\alpha_{k}}{\omega_{i,k}^t\sqrt{(2\pi)^d\det(\Sigma_k)}}\exp\left[-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]\]
 
 <p>Be aware that</p>
 <ul>
@@ -537,15 +529,14 @@ update GMM parameters $\Theta^{t+1}$. This step is called
 
 <p>The E-step to estimate the latent parameters is the same as univariate GMM, except that the Gaussian distribution is a multivariate one, which is more complicated.</p>
 
-<script type="math/tex; mode=display">\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}</script>
+\[\omega_{i,k}^t = \frac{\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}{\sum_{k}\alpha_{k}^t\textit{N}(x_{i}| \mu_k^t, \Sigma_k^t)}\]
 
 <p>The target likelihood function can be expanded.</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-&Q(\Theta,\Theta^{t}) \\
-&= \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \frac{d}{2}\ln \sqrt{(2\pi)^d} -\frac{1}{2}\ln\det(\Sigma_k)-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right) 
-\end{aligned} %]]></script>
+\[\begin{aligned}
+&amp;Q(\Theta,\Theta^{t}) \\
+&amp;= \sum_{i}\sum_{k}\omega_{i,k}^t\left(\ln\alpha_k - \ln \omega_{i,k}^t - \frac{d}{2}\ln \sqrt{(2\pi)^d} -\frac{1}{2}\ln\det(\Sigma_k)-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right) 
+\end{aligned}\]
 
 <h3 id="42-m-step">4.2 M-Step:</h3>
 
@@ -553,54 +544,53 @@ update GMM parameters $\Theta^{t+1}$. This step is called
 
 <p>The formula to update $\alpha_k$ for multivariate GMMs is exactly the same as univariate GMMs.</p>
 
-<script type="math/tex; mode=display">\begin{gathered}
+\[\begin{gathered}
 \alpha_k^{t+1} := \argmax_{\alpha_k}{ \sum_{i}\sum_{k}\omega_{i,k}^t\ln\alpha_k}\\
 \text{subject to}  \sum_{k}\alpha_k =1 
-\end{gathered}</script>
+\end{gathered}\]
 
 <p>Hence we get the same update equation.</p>
 
-<script type="math/tex; mode=display">\alpha_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t}{N}</script>
+\[\alpha_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t}{N}\]
 
 <p><strong>Update $\mu_k:$</strong></p>
 
-<script type="math/tex; mode=display">\mu_k^{t+1} :=  \argmax_{\mu_k}   Q(\Theta,\Theta^{t})</script>
+\[\mu_k^{t+1} :=  \argmax_{\mu_k}   Q(\Theta,\Theta^{t})\]
 
 <p>Take the derivative of $Q(\Theta,\Theta^{t})$ with respec to $\mu_k$, we get</p>
 
-<script type="math/tex; mode=display">\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k} = \sum_{i}\omega_{i,k}^t\frac{\partial \left[-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]}{\partial \mu_k}  = 0\\</script>
+\[\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k} = \sum_{i}\omega_{i,k}^t\frac{\partial \left[-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]}{\partial \mu_k}  = 0\\\]
 
 <p>As the covariance matrix $\Sigma_{k}$ is symmetric, the inverse of it is also symmetric.  We can apply $\frac{\partial (x -s)^TW(x-s)}{\partial x} = -2W(x-s)$ (see first section) to the partial derivative.</p>
 
-<script type="math/tex; mode=display">\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k} = 
- \sum_{i}\omega_{i,k}^t \Sigma_{k}^{-1}\left(x_i - \mu_k\right) =0</script>
+\[\frac{\partial Q(\Theta,\Theta^{t})}{\partial \mu_k} = 
+ \sum_{i}\omega_{i,k}^t \Sigma_{k}^{-1}\left(x_i - \mu_k\right) =0\]
 
-<script type="math/tex; mode=display">\Rightarrow \sum_{i}\omega_{i,k}^t x_i= \mu_k\sum_{i}\omega_{i,k}^t</script>
+\[\Rightarrow \sum_{i}\omega_{i,k}^t x_i= \mu_k\sum_{i}\omega_{i,k}^t\]
 
 <p>Hence $\mu_k$ on iteration $t+1$ is also updated as a form of weighted mean of $x$. However, in this scenario $\mu_k$ is a d-by-1 vector.</p>
 
-<script type="math/tex; mode=display">\mu_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t x_i}{\sum_{i}\omega_{i,k}^t}</script>
+\[\mu_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t x_i}{\sum_{i}\omega_{i,k}^t}\]
 
 <p><strong>Update $\Sigma_k:$</strong></p>
 
-<script type="math/tex; mode=display">\Sigma_k^{t+1} :=  \argmax_{\Sigma_k}   Q(\Theta,\Theta^{t})</script>
+\[\Sigma_k^{t+1} :=  \argmax_{\Sigma_k}   Q(\Theta,\Theta^{t})\]
 
 <p>Let $\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} =0$, we get</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} &= \sum_{i}\omega_{i,k}^t\frac{\partial \left[  -\frac{1}{2}\ln\det(\Sigma_k)-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]}{\partial  \Sigma_k^{-1}}  \\
- &= -\frac{1}{2} \sum_{i}\omega_{i,k}^t \left[\frac{\partial \ln\det(\Sigma_k)}{\partial  \Sigma_k^{-1}}+\frac{\partial (x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)}{\partial  \Sigma_k^{-1}} \right] \\
- &= 0 
-\end{aligned} %]]></script>
+\[\begin{aligned}
+\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} &amp;= \sum_{i}\omega_{i,k}^t\frac{\partial \left[  -\frac{1}{2}\ln\det(\Sigma_k)-\frac{1}{2}(x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)\right]}{\partial  \Sigma_k^{-1}}  \\
+ &amp;= -\frac{1}{2} \sum_{i}\omega_{i,k}^t \left[\frac{\partial \ln\det(\Sigma_k)}{\partial  \Sigma_k^{-1}}+\frac{\partial (x_i-\mu_k)^T\Sigma_k^{-1}(x_i-\mu_k)}{\partial  \Sigma_k^{-1}} \right] \\
+ &amp;= 0 
+\end{aligned}\]
 
 <p>By employing $\frac{\partial \ln \det(X)}{\partial X^{-1}} =-X^T $ and $\frac{\partial a^TXa}{\partial X} = aa^T$(see section one) for the symmetric covariance matrix $\Sigma_k$, and find the maxima of $ Q(\Theta,\Theta^{t})$.</p>
 
-<script type="math/tex; mode=display">\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} =   \frac{1}{2}\sum_{i}\omega_{i,k}^t \left[\Sigma_k - (x_i-\mu_k)(x_i-\mu_k)^T\right] = 0</script>
+\[\frac{\partial Q(\Theta,\Theta^{t})}{\partial \Sigma_k^{-1}} =   \frac{1}{2}\sum_{i}\omega_{i,k}^t \left[\Sigma_k - (x_i-\mu_k)(x_i-\mu_k)^T\right] = 0\]
 
 <p>Similarly, we get the update equation for  $\Sigma_k$ at iteration $t+1$, and it depends on $\mu_k$. So again $\mu_k^{t+1}$ is calculated first and then applied to the update equation for $\Sigma_k$</p>
 
-<script type="math/tex; mode=display">\Sigma_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t (x_i-\mu_k^{t+1})(x_i-\mu_k^{t+1})^T }{\sum_{i}\omega_{i,k}^t}</script>
+\[\Sigma_k^{t+1} = \frac{\sum_{i}\omega_{i,k}^t (x_i-\mu_k^{t+1})(x_i-\mu_k^{t+1})^T }{\sum_{i}\omega_{i,k}^t}\]
 
 <h2 id="5summary">5.Summary</h2>
 
@@ -663,6 +653,20 @@ update GMM parameters $\Theta^{t+1}$. This step is called
 </div>
 
 
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
   
     
       

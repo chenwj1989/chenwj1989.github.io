@@ -148,17 +148,17 @@
 
 <p>假设麦克风采集到的带噪语音序列为$y[n]$，并且噪声都是加性噪声。则带噪语音序列为无噪语音序列与噪声序列的和。 原始语音信号与噪声均可视为随机信号。</p>
 
-<script type="math/tex; mode=display">y[n] = x[n] + d[n]</script>
+\[y[n] = x[n] + d[n]\]
 
 <p>常用的语音增强方法都是在频域，需要对带噪信号$y[n]$进行分帧、加窗、短时傅里叶变换（STFT）后，得到每一帧的频域信号，其中X，Y，D分别是干净语音、带噪信号和噪声的频域信号。</p>
 
-<script type="math/tex; mode=display">Y(\omega_{k}) = X(\omega_{k}) + D(\omega_{k})</script>
+\[Y(\omega_{k}) = X(\omega_{k}) + D(\omega_{k})\]
 
 <p>语音增强的目标是对实际信号$X(\omega_{k})$的幅度和相位进行估计。但是因为相位不易估计、而且研究表明相位对去噪效果影响比较小[@wang1982unimportance]，所以大部分方法都只对幅度谱进行增强，而相位则沿用带噪信号的相位。</p>
 
 <p>换句话说，语音增强就是要找出一个频域的实函数$H_{\omega_{k}}$, 并且将这个函数与带噪信号相乘，得到干净语音的估计。这个实函数称作抑制增益(Suppression Gain)。</p>
 
-<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = H(\omega_{k})|Y(\omega_{k})|e^{j\theta_{y}(k)}</script>
+\[\hat{X}(\omega_{k}) = H(\omega_{k})|Y(\omega_{k})|e^{j\theta_{y}(k)}\]
 
 <p>下面是单通道语音增强系统主要步骤的示意图，系统目标就是估计抑制增益，而抑制增益依赖于两个核心步骤：语音检测VAD和噪声估计模块。只有准确估计噪声谱$D(\omega_{k})$，才有可能准确估计抑制增益。 详细的VAD和噪声估计方法不在这篇文章里面详述，具体可以看参考文献。 一种简单的想法是先估计出VAD，如过判断此帧没有语音，则更新噪声谱，否则就沿用上一帧的噪声谱。</p>
 
@@ -191,51 +191,51 @@
 <p>噪声估计模块可以估计噪声功率，也可以估计信噪比，避免信号幅度变化带来的误差。
 定义后验信噪比：</p>
 
-<script type="math/tex; mode=display">\gamma_k = \frac{P_{yy}}{P_{dd}}</script>
+\[\gamma_k = \frac{P_{yy}}{P_{dd}}\]
 
 <p>定义先验信噪比：</p>
 
-<script type="math/tex; mode=display">\xi_k = \frac{P_{xx}}{P_{dd}}</script>
+\[\xi_k = \frac{P_{xx}}{P_{dd}}\]
 
 <h2 id="2-谱减法-spectral-subtraction">2. 谱减法 Spectral Subtraction</h2>
 
 <p>谱减法是最直观的去噪声思想，就是带噪信号减去噪声的频谱，就等于干净信号的频谱。估计信号频谱的表达式如下，其中$\hat{D}(\omega_{k})$应是噪声估计模块得到的噪声频谱。</p>
 
-<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = Y(\omega_{k}) - \hat{D}(\omega_{k})</script>
+\[\hat{X}(\omega_{k}) = Y(\omega_{k}) - \hat{D}(\omega_{k})\]
 
 <p>传统的语音增强算法都不恢复准确的相位，而是沿用测量信号$Y(\omega_{k})$的相位，所以实际谱减法的公式为幅度谱相减：</p>
 
-<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = \left[|Y(\omega_{k})| - |\hat{D}(\omega_{k})|\right]e^{j\phi_y}</script>
+\[\hat{X}(\omega_{k}) = \left[|Y(\omega_{k})| - |\hat{D}(\omega_{k})|\right]e^{j\phi_y}\]
 
 <p>其中$\hat{D}(\omega_{k})$是估计的噪声幅值。 最终增益函数为</p>
 
-<script type="math/tex; mode=display">H(\omega_{k}) = \frac{|Y(\omega_{k})| - |\hat{D}(\omega_{k})|}{|Y(\omega_{k})|}</script>
+\[H(\omega_{k}) = \frac{|Y(\omega_{k})| - |\hat{D}(\omega_{k})|}{|Y(\omega_{k})|}\]
 
 <p>从幅度谱角度做谱减，是架设了测量信号和噪声的相位一样，引入了较大失真。 从功率谱角度做谱减，是更常用的方法。</p>
 
-<script type="math/tex; mode=display">|Y(\omega_{k})|^2 = |X(\omega_{k})|^2 + |D(\omega_{k})|^2 + X(\omega_{k})^*D(\omega_{k}) + X(\omega_{k})D(\omega_{k})^*</script>
+\[|Y(\omega_{k})|^2 = |X(\omega_{k})|^2 + |D(\omega_{k})|^2 + X(\omega_{k})^*D(\omega_{k}) + X(\omega_{k})D(\omega_{k})^*\]
 
 <p>假设语音信号与噪声不相关，于是得到估计的信号功率谱是测量信号功率谱减去估计的噪声功率谱。</p>
 
-<script type="math/tex; mode=display">|X(\omega_{k})|^2 =  |Y(\omega_{k})|^2 -  |D(\omega_{k})|^2
-P_{xx}(\omega_{k}) =  P_{yy}(\omega_{k}) -  P_{dd}(\omega_{k})</script>
+\[|X(\omega_{k})|^2 =  |Y(\omega_{k})|^2 -  |D(\omega_{k})|^2
+P_{xx}(\omega_{k}) =  P_{yy}(\omega_{k}) -  P_{dd}(\omega_{k})\]
 
 <p>因此抑制增益函数即为：</p>
 
-<script type="math/tex; mode=display">H(\omega_{k}) =  \sqrt{\frac{P_{yy}(\omega_{k}) -  P_{dd}(\omega_{k})}{P_{yy}(\omega_{k})}}</script>
+\[H(\omega_{k}) =  \sqrt{\frac{P_{yy}(\omega_{k}) -  P_{dd}(\omega_{k})}{P_{yy}(\omega_{k})}}\]
 
 <p>用后验信噪比表示：</p>
 
-<script type="math/tex; mode=display">H(\omega_{k}) = \sqrt{\frac{\gamma_k - 1}{\gamma_k}}</script>
+\[H(\omega_{k}) = \sqrt{\frac{\gamma_k - 1}{\gamma_k}}\]
 
 <p>用先验信噪比表示：</p>
 
-<script type="math/tex; mode=display">H(\omega_{k}) = \sqrt{\frac{\xi_k}{\xi_k+1}}</script>
+\[H(\omega_{k}) = \sqrt{\frac{\xi_k}{\xi_k+1}}\]
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">def</span> <span class="nf">spec_sub_gain</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 		<span class="n">ksi</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'ksi'</span><span class="p">]</span>
-		<span class="n">gain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">ksi</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span> <span class="n">ksi</span><span class="p">))</span> <span class="c"># gain function</span>
-		<span class="k">return</span> <span class="n">gain</span>
+		<span class="n">gain</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">ksi</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span> <span class="n">ksi</span><span class="p">))</span> <span class="c1"># gain function
+</span>		<span class="k">return</span> <span class="n">gain</span>
 </code></pre></div></div>
 
 <h2 id="31-维纳滤波-wiener-filtering">3.1 维纳滤波 Wiener Filtering</h2>
@@ -250,67 +250,64 @@ P_{xx}(\omega_{k}) =  P_{yy}(\omega_{k}) -  P_{dd}(\omega_{k})</script>
 
 <p>频域上，估计信号即为线性滤波器与输入信号的乘积。可见这个滤波器$H(\omega_{k})$正是我们要求的抑制增益函数。维纳滤波语音增强的目标就是寻找系数为实数的线性滤波器，使得滤波偶信号与原干净语音信号之间的均方误差最小。</p>
 
-<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = H(\omega_{k})Y(\omega_{k})</script>
+\[\hat{X}(\omega_{k}) = H(\omega_{k})Y(\omega_{k})\]
 
 <p>均方误差为：</p>
 
-<script type="math/tex; mode=display">E\left[|e(\omega_{k})|^2\right] = 
-E\left\{\left[X(\omega_{k}) - H(\omega_{k})Y(\omega_{k})\right]\left[X(\omega_{k}) - H(\omega_{k})Y(\omega_{k})\right]^*\right\}</script>
+\[E\left[|e(\omega_{k})|^2\right] = 
+E\left\{\left[X(\omega_{k}) - H(\omega_{k})Y(\omega_{k})\right]\left[X(\omega_{k}) - H(\omega_{k})Y(\omega_{k})\right]^*\right\}\]
 
 <p>这是一个优化问题，目标是求使得均方误差最小的参数$H$</p>
 
-<script type="math/tex; mode=display">H(\omega_{k}) =\mathop{\arg\min}_{H(\omega_{k})} E\left[|e(\omega_{k})|^2\right]</script>
+\[H(\omega_{k}) =\mathop{\arg\min}_{H(\omega_{k})} E\left[|e(\omega_{k})|^2\right]\]
 
 <p>展开均方误差：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-E\left[|E(\omega_{k})|^2\right] = &E\left[|X(\omega_{k})|^2\right] + |H(\omega_{k})|^2E\left[|Y(\omega_{k})|^2\right]\\& -  H(\omega_{k})E\left[Y(\omega_{k})X(\omega_{k})^*\right] - H(\omega_{k})^*E\left[X(\omega_{k})Y(\omega_{k})^*\right]
-\end{aligned} %]]></script>
+\[\begin{aligned}
+E\left[|E(\omega_{k})|^2\right] = &amp;E\left[|X(\omega_{k})|^2\right] + |H(\omega_{k})|^2E\left[|Y(\omega_{k})|^2\right]\\&amp; -  H(\omega_{k})E\left[Y(\omega_{k})X(\omega_{k})^*\right] - H(\omega_{k})^*E\left[X(\omega_{k})Y(\omega_{k})^*\right]
+\end{aligned}\]
 
 <p>对$H(\omega_{k})$求极值:</p>
 
-<script type="math/tex; mode=display">\frac{\partial E\left[|E(\omega_{k})|^2\right]}{\partial H(\omega_{k})} = H(\omega_{k})^*E\left[|Y(\omega_{k})|^2\right] -  E\left[Y(\omega_{k})X(\omega_{k})^*\right]</script>
+\[\frac{\partial E\left[|E(\omega_{k})|^2\right]}{\partial H(\omega_{k})} = H(\omega_{k})^*E\left[|Y(\omega_{k})|^2\right] -  E\left[Y(\omega_{k})X(\omega_{k})^*\right]\]
 
 <p>得到极值点：</p>
 
-<script type="math/tex; mode=display">H(\omega_{k})^* = \frac{E\left[Y(\omega_{k})X(\omega_{k})^*\right]}{E\left[|Y(\omega_{k})|^2\right]}</script>
+\[H(\omega_{k})^* = \frac{E\left[Y(\omega_{k})X(\omega_{k})^*\right]}{E\left[|Y(\omega_{k})|^2\right]}\]
 
 <p>求共轭后得到$H(\omega_{k})$：</p>
 
-<script type="math/tex; mode=display">H(\omega_{k}) = \frac{E\left[X(\omega_{k})Y(\omega_{k})^*\right]}{E\left[|Y(\omega_{k})|^2\right]} 
-= \frac{P_{xy}}{P_{yy}}</script>
+\[H(\omega_{k}) = \frac{E\left[X(\omega_{k})Y(\omega_{k})^*\right]}{E\left[|Y(\omega_{k})|^2\right]} 
+= \frac{P_{xy}}{P_{yy}}\]
 
 <p>$P_{xy}$是互功率，X与D不相关， $E\left[X(\omega_{k})D(\omega_{k})^*\right]=0$， 那么</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-P_{xy} &= E\left\{X(\omega_{k})\left[X(\omega_{k})+D(\omega_{k})\right]^*\right\}\\
-&= E\left[|X(\omega_{k})|^2\right] + E\left[X(\omega_{k})D(\omega_{k})^*\right] \\
-&= P_{xx}
-\end{aligned} %]]></script>
+\[\begin{aligned}
+P_{xy} &amp;= E\left\{X(\omega_{k})\left[X(\omega_{k})+D(\omega_{k})\right]^*\right\}\\
+&amp;= E\left[|X(\omega_{k})|^2\right] + E\left[X(\omega_{k})D(\omega_{k})^*\right] \\
+&amp;= P_{xx}
+\end{aligned}\]
 
 <p>带噪信号功率$P_{yy}$也可以展开为语音信号和噪声功率之和。</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-P_{yy} &= E\left\{\left[X(\omega_{k})+D(\omega_{k})\right]\left[X(\omega_{k})+D(\omega_{k})\right]^*\right\}\\
-&= E\left[|X(\omega_{k})|^2\right] +  E\left[|D(\omega_{k})|^2\right]  \\
-&= P_{xx} +  P_{dd}
-\end{aligned} %]]></script>
+\[\begin{aligned}
+P_{yy} &amp;= E\left\{\left[X(\omega_{k})+D(\omega_{k})\right]\left[X(\omega_{k})+D(\omega_{k})\right]^*\right\}\\
+&amp;= E\left[|X(\omega_{k})|^2\right] +  E\left[|D(\omega_{k})|^2\right]  \\
+&amp;= P_{xx} +  P_{dd}
+\end{aligned}\]
 
 <p>用先验信噪比表示</p>
 
-<script type="math/tex; mode=display">H(\omega_{k}) = \frac{P_{xx}}{P_{yy}} = \frac{P_{xx}}{P_{xx} +P_{dd} } = \frac{\xi_k}{\xi_k + 1 }</script>
+\[H(\omega_{k}) = \frac{P_{xx}}{P_{yy}} = \frac{P_{xx}}{P_{xx} +P_{dd} } = \frac{\xi_k}{\xi_k + 1 }\]
 
 <p>用后验信噪比表示：</p>
 
-<script type="math/tex; mode=display">H(\omega_{k}) = \frac{P_{xx}}{P_{yy}} = \frac{P_{yy}-P_{dd}}{P_{yy} } = \frac{1-\gamma_k}{\gamma_k }</script>
+\[H(\omega_{k}) = \frac{P_{xx}}{P_{yy}} = \frac{P_{yy}-P_{dd}}{P_{yy} } = \frac{1-\gamma_k}{\gamma_k }\]
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">def</span> <span class="nf">wiener_gain</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 		<span class="n">ksi</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'ksi'</span><span class="p">]</span>
-		<span class="n">gain</span> <span class="o">=</span> <span class="n">ksi</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span> <span class="n">ksi</span><span class="p">)</span> <span class="c"># gain function</span>
-		<span class="k">return</span> <span class="n">gain</span>
+		<span class="n">gain</span> <span class="o">=</span> <span class="n">ksi</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span> <span class="n">ksi</span><span class="p">)</span> <span class="c1"># gain function
+</span>		<span class="k">return</span> <span class="n">gain</span>
 </code></pre></div></div>
 
 <p><strong>参考文献</strong></p>
@@ -342,6 +339,20 @@ P_{yy} &= E\left\{\left[X(\omega_{k})+D(\omega_{k})\right]\left[X(\omega_{k})+D(
 </div>
 
 
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
   
     
       

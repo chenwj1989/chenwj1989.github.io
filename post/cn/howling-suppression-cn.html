@@ -171,13 +171,13 @@
   <figcaption></figcaption>
 </figure>
 
-<script type="math/tex; mode=display">\frac{Y(\omega)}{S(\omega)} = \frac{G(\omega)}{1-G(\omega)F(\omega)}</script>
+\[\frac{Y(\omega)}{S(\omega)} = \frac{G(\omega)}{1-G(\omega)F(\omega)}\]
 
 <p>根据奈奎斯特稳定判据，在某些频点，增益和相位满足以下条件，将产生自激振荡：</p>
 
-<script type="math/tex; mode=display">G(\omega)F(\omega)>1</script>
+\[G(\omega)F(\omega)&gt;1\]
 
-<script type="math/tex; mode=display">\angle{G(\omega)F(\omega)} = 2k\pi</script>
+\[\angle{G(\omega)F(\omega)} = 2k\pi\]
 
 <p>自激振荡导致了系统的不稳定，信号幅度不断增大，最终形成刺耳的啸叫。在频谱上看到一条连续的谱峰。</p>
 
@@ -195,27 +195,27 @@
 
 <h3 id="12-啸叫仿真">1.2 啸叫仿真</h3>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#simulate acoustic feekback, point-by-point</span>
-<span class="c">#                                    _______________                          </span>
-<span class="c">#   clean speech: x --&gt; mic: x1 --&gt; | Internal Gain | --&gt; x2 -- &gt; speaker : y </span>
-<span class="c">#                        ^          |______G________|                       |</span>
-<span class="c">#                        |                                                  |</span>
-<span class="c">#                        |                      _______________             |</span>
-<span class="c">#                        &lt;-----------------y1--| Room Impulse  |___________ v</span>
-<span class="c">#                                              |____Response___|       </span>
-<span class="c">#</span>
-<span class="n">N</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rir</span><span class="p">))</span> <span class="c">#limit room impulse response length</span>
-<span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>   <span class="c">#buffer N samples of speaker output to generate acoustic feedback</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>  <span class="c">#save speaker output to y </span>
-<span class="n">y1</span> <span class="o">=</span> <span class="mf">0.0</span>           <span class="c">#init as 0</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>       
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#simulate acoustic feekback, point-by-point
+#                                    _______________                          
+#   clean speech: x --&gt; mic: x1 --&gt; | Internal Gain | --&gt; x2 -- &gt; speaker : y 
+#                        ^          |______G________|                       |
+#                        |                                                  |
+#                        |                      _______________             |
+#                        &lt;-----------------y1--| Room Impulse  |___________ v
+#                                              |____Response___|       
+#
+</span><span class="n">N</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rir</span><span class="p">))</span> <span class="c1">#limit room impulse response length
+</span><span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>   <span class="c1">#buffer N samples of speaker output to generate acoustic feedback
+</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>  <span class="c1">#save speaker output to y 
+</span><span class="n">y1</span> <span class="o">=</span> <span class="mf">0.0</span>           <span class="c1">#init as 0
+</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>       
 <span class="n">x1</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">y1</span>   
 <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">G</span><span class="o">*</span><span class="n">x1</span>
-<span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>   <span class="c">#amplitude clipping</span>
-<span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>         
+<span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>   <span class="c1">#amplitude clipping
+</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>         
 <span class="n">x2</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">x2</span><span class="p">[:</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> 
 <span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-<span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">rir</span><span class="p">[:</span><span class="n">N</span><span class="p">])</span>
+<span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">rir</span><span class="p">[:</span><span class="n">N</span><span class="p">])</span>
 </code></pre></div></div>
 <p>下面将一段干净语音经过反馈路径仿真，产生啸叫。反馈路径RIR直接使用参考资料[2]的path数据。可以看到加啸叫后的音频，幅度已饱和，无法分辨原本语音，语谱图可以看见多个啸叫峰值。</p>
 
@@ -257,24 +257,24 @@
 
 <p>从前面啸叫语音的语谱图手动选择两个最大峰值，分别是603Hz和1745Hz (大概值，不是特别精确)。并且使用Python生成IIR Notch Filter 的系数b和a。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c">#notch filter</span>
-    <span class="n">fs</span> <span class="o">=</span> <span class="n">Srate</span>  <span class="c"># Sample frequency (Hz)</span>
-    <span class="n">f0</span> <span class="o">=</span> <span class="mi">603</span>  <span class="c"># Frequency to be removed from signal (Hz)</span>
-    <span class="n">Q</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c"># Quality factor</span>
-    <span class="c"># Design notch filter</span>
-    <span class="n">b1</span><span class="p">,</span> <span class="n">a1</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">iirnotch</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
-    <span class="n">sos1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b1</span><span class="p">,</span><span class="n">a1</span><span class="p">)</span>
-    <span class="c">#plot_notch_filter(b1, a1, fs)</span>
-    
-    <span class="n">f0</span> <span class="o">=</span> <span class="mi">1745</span>  <span class="c"># Frequency to be removed from signal (Hz)</span>
-    <span class="n">Q</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c"># Quality factor</span>
-    <span class="c"># Design notch filter</span>
-    <span class="n">b2</span><span class="p">,</span> <span class="n">a2</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">iirnotch</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
-    <span class="n">sos2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b2</span><span class="p">,</span><span class="n">a2</span><span class="p">)</span>
-    <span class="c">#plot_notch_filter(b2, a2, fs)</span>
-
-    <span class="n">sos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">sos1</span><span class="p">,</span><span class="n">sos2</span><span class="p">))</span>
-    <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">sos2tf</span><span class="p">(</span><span class="n">sos</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">#notch filter
+</span>    <span class="n">fs</span> <span class="o">=</span> <span class="n">Srate</span>  <span class="c1"># Sample frequency (Hz)
+</span>    <span class="n">f0</span> <span class="o">=</span> <span class="mi">603</span>  <span class="c1"># Frequency to be removed from signal (Hz)
+</span>    <span class="n">Q</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Quality factor
+</span>    <span class="c1"># Design notch filter
+</span>    <span class="n">b1</span><span class="p">,</span> <span class="n">a1</span> <span class="o">=</span> <span class="n">signal</span><span class="p">.</span><span class="n">iirnotch</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+    <span class="n">sos1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">b1</span><span class="p">,</span><span class="n">a1</span><span class="p">)</span>
+    <span class="c1">#plot_notch_filter(b1, a1, fs)
+</span>    
+    <span class="n">f0</span> <span class="o">=</span> <span class="mi">1745</span>  <span class="c1"># Frequency to be removed from signal (Hz)
+</span>    <span class="n">Q</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># Quality factor
+</span>    <span class="c1"># Design notch filter
+</span>    <span class="n">b2</span><span class="p">,</span> <span class="n">a2</span> <span class="o">=</span> <span class="n">signal</span><span class="p">.</span><span class="n">iirnotch</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+    <span class="n">sos2</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">b2</span><span class="p">,</span><span class="n">a2</span><span class="p">)</span>
+    <span class="c1">#plot_notch_filter(b2, a2, fs)
+</span>
+    <span class="n">sos</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">sos1</span><span class="p">,</span><span class="n">sos2</span><span class="p">))</span>
+    <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">signal</span><span class="p">.</span><span class="n">sos2tf</span><span class="p">(</span><span class="n">sos</span><span class="p">)</span>
     <span class="n">plot_notch_filter</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
 </code></pre></div></div>
 
@@ -285,31 +285,31 @@
 
 <p>使用固定系数的陷波滤波器，插入到前面的声反馈系统中进行仿真。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#==============================Notch Filtering ==================================</span>
-<span class="c">#                                 _______________         ______________                     </span>
-<span class="c">#clean speech: x --&gt; mic: x1 --&gt; | Internal Gain |-x2--&gt; | Notch Filter |--&gt; speaker: y </span>
-<span class="c">#                     ^          |______G________|       |_____IIR______|         |          </span>
-<span class="c">#                     |                                                           |</span>
-<span class="c">#                     |                      _______________                      |</span>
-<span class="c">#                     &lt;-----------------y1--| Room Impulse  |____________________ v</span>
-<span class="c">#                                           |____Response___|            </span>
-<span class="c">#                      </span>
-
-<span class="n">N</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rir</span><span class="p">))</span> <span class="c">#limit room impulse response length</span>
-<span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>   <span class="c">#</span>
-<span class="n">x3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>   <span class="c">#buffer N samples of speaker output to generate acoustic feedback</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>  <span class="c">#save speaker output to y </span>
-<span class="n">y1</span> <span class="o">=</span> <span class="mf">0.0</span>           <span class="c">#init as 0</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>       
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#==============================Notch Filtering ==================================
+#                                 _______________         ______________                     
+#clean speech: x --&gt; mic: x1 --&gt; | Internal Gain |-x2--&gt; | Notch Filter |--&gt; speaker: y 
+#                     ^          |______G________|       |_____IIR______|         |          
+#                     |                                                           |
+#                     |                      _______________                      |
+#                     &lt;-----------------y1--| Room Impulse  |____________________ v
+#                                           |____Response___|            
+#                      
+</span>
+<span class="n">N</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rir</span><span class="p">))</span> <span class="c1">#limit room impulse response length
+</span><span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>   <span class="c1">#
+</span><span class="n">x3</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>   <span class="c1">#buffer N samples of speaker output to generate acoustic feedback
+</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>  <span class="c1">#save speaker output to y 
+</span><span class="n">y1</span> <span class="o">=</span> <span class="mf">0.0</span>           <span class="c1">#init as 0
+</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>       
 <span class="n">x1</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">y1</span>   
 <span class="n">x2</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">x2</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> 
 <span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">G</span><span class="o">*</span><span class="n">x1</span>
-<span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c">#amplitude clipping</span>
-<span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>      
-<span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x3</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>  <span class="c">#IIR filter</span>
-<span class="n">x3</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">x3</span><span class="p">[:</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> 
+<span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1">#amplitude clipping
+</span><span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>      
+<span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x3</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>  <span class="c1">#IIR filter
+</span><span class="n">x3</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">x3</span><span class="p">[:</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> 
 <span class="n">x3</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span>  <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-<span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x3</span><span class="p">,</span> <span class="n">rir</span><span class="p">[:</span><span class="n">N</span><span class="p">])</span>
+<span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x3</span><span class="p">,</span> <span class="n">rir</span><span class="p">[:</span><span class="n">N</span><span class="p">])</span>
 </code></pre></div></div>
 
 <p>插入陷波滤波器后的扬声器输出信号频谱明显看见在603Hz和1745Hz 被抑制了，整体语音的谱图重现，可以听到清楚的语音信号 (除了陷波频率附近频率有损)。</p>
@@ -341,31 +341,31 @@
 <h4 id="211-峰值阈值功率比peak-to-threshold-power-raio-ptpr">2.1.1 峰值阈值功率比(Peak-to-Threshold Power Raio, PTPR)</h4>
 <p>啸叫的功率远大于正常播放的音频。故设定一个阈值，只有功率超过阈值的频点，才会进行啸叫检测，减少无意义的检测判决。</p>
 
-<script type="math/tex; mode=display">PTPR(\omega_i, t)[dB] = 10\log_{10} \frac{|Y(\omega_i, t)|^2}{P_0}</script>
+\[PTPR(\omega_i, t)[dB] = 10\log_{10} \frac{|Y(\omega_i, t)|^2}{P_0}\]
 
 <h4 id="212-峰值均值功率比peak-to-average-power-raio-papr">2.1.2 峰值均值功率比(Peak-to-Average Power Raio, PAPR)</h4>
 
 <p>产生啸叫的频点功率远大于其他频点的功率，故可以先计算出整个频谱的平均功率，然后计算每个频点功率与平均功率之比。比值大于预设阈值的频点，记为候选啸叫频率。</p>
 
-<script type="math/tex; mode=display">PAPR(\omega_i, t)[dB] = 10\log_{10} \frac{|Y(\omega_i, t)|^2}{P_y(t)}</script>
+\[PAPR(\omega_i, t)[dB] = 10\log_{10} \frac{|Y(\omega_i, t)|^2}{P_y(t)}\]
 
 <h4 id="213-峰值邻近功率比peak-to-neighboring-power-raio-pnpr">2.1.3 峰值邻近功率比(Peak-to-Neighboring Power Raio, PNPR)</h4>
 
 <p>PNPR寻找功率谱的峰值点，加入候选啸叫频率。可以选取左右各M个相邻频点进行比较，当前频点功率比邻值都高时，记为候选啸叫频率。M选取5点左右</p>
 
-<script type="math/tex; mode=display">PNPR(\omega_i, t)[dB] = 10\log_{10} \frac{|Y(\omega_i, t)|^2}{|Y(\omega_i+2\pi m/M, t)|^2}</script>
+\[PNPR(\omega_i, t)[dB] = 10\log_{10} \frac{|Y(\omega_i, t)|^2}{|Y(\omega_i+2\pi m/M, t)|^2}\]
 
 <h4 id="214-峰值谐波功率比peak-to-harmonics-power-raio-phpr">2.1.4 峰值谐波功率比(Peak-to-Harmonics Power Raio, PHPR)</h4>
 <p>语音谱有谐波峰，而啸叫频率是不含谐波峰的，故可以根据一个峰值点的谐波频率功率是不是也很大，来判断该峰值是否啸叫点。</p>
 
-<script type="math/tex; mode=display">PHPR(\omega_i, t)[dB] = 10\log_{10} \frac{|Y(\omega_i, t)|^2}{|Y(m\omega_i, t)|^2}</script>
+\[PHPR(\omega_i, t)[dB] = 10\log_{10} \frac{|Y(\omega_i, t)|^2}{|Y(m\omega_i, t)|^2}\]
 
-<script type="math/tex; mode=display">\bigcap\limits_{m\in{0.5,1.5,2,3,4}} \left[PHPR(\omega_i, t)>T_{PHPR}\right]=1</script>
+\[\bigcap\limits_{m\in{0.5,1.5,2,3,4}} \left[PHPR(\omega_i, t)&gt;T_{PHPR}\right]=1\]
 
 <h4 id="215-帧间峰值保持度interframe-peak-magnitude-persistence-ipmp">2.1.5 帧间峰值保持度(Interframe Peak Magnitude Persistence, IPMP)</h4>
 <p>IPMP是时域特征，如果一个频点，连续几帧都是检测出来的候选啸叫峰值，那就认为这个点确实发生了啸叫。实现时可以选定5帧，超过3帧是候选啸叫频点的位置，判定为啸叫点。</p>
 
-<script type="math/tex; mode=display">IPMP(\omega_i, t)[dB] = \frac{\sum_{j=0}^{Q_M-1}\omega_i \in D(i-j)}{Q_M}</script>
+\[IPMP(\omega_i, t)[dB] = \frac{\sum_{j=0}^{Q_M-1}\omega_i \in D(i-j)}{Q_M}\]
 
 <h4 id="216-帧间幅度斜率偏差度interframe--magnitude-slope-deviation-imsd">2.1.6 帧间幅度斜率偏差度(Interframe  Magnitude Slope Deviation, IMSD)</h4>
 <p>IMSD也是时域特征，是从啸叫开始发生时判断，这是啸叫频点幅度线性增长，那么帧间斜率就会保持不变。取$Q_M$帧进行区间观察，计算$Q_M$帧平均斜率，与区间内更短区间的斜率之间的差值，如果差值在设定阈值以下，就认为该区间斜率保持不变，可能是发生了啸叫。</p>
@@ -389,19 +389,19 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="k">def</span> <span class="nf">howling_detect</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">win</span><span class="p">,</span> <span class="n">nFFT</span><span class="p">,</span> <span class="n">Slen</span><span class="p">,</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">frame_id</span><span class="p">):</span>
 	<span class="n">insign</span> <span class="o">=</span> <span class="n">win</span> <span class="o">*</span> <span class="n">frame</span>
-	<span class="n">spec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">insign</span><span class="p">,</span> <span class="n">nFFT</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+	<span class="n">spec</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">fft</span><span class="p">.</span><span class="n">fft</span><span class="p">(</span><span class="n">insign</span><span class="p">,</span> <span class="n">nFFT</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 	
-	<span class="c">#==========  Howling Detection Stage =====================#   </span>
-	<span class="n">ptpr_idx</span> <span class="o">=</span> <span class="n">pyHowling</span><span class="o">.</span><span class="n">ptpr</span><span class="p">(</span><span class="n">spec</span><span class="p">[:</span><span class="n">Slen</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span>
-	<span class="n">papr_idx</span><span class="p">,</span> <span class="n">papr</span> <span class="o">=</span> <span class="n">pyHowling</span><span class="o">.</span><span class="n">papr</span><span class="p">(</span><span class="n">spec</span><span class="p">[:</span><span class="n">Slen</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span>
-	<span class="n">pnpr_idx</span> <span class="o">=</span> <span class="n">pyHowling</span><span class="o">.</span><span class="n">pnpr</span><span class="p">(</span><span class="n">spec</span><span class="p">[:</span><span class="n">Slen</span><span class="p">],</span> <span class="mi">15</span><span class="p">)</span>
-	<span class="n">intersec_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">ptpr_idx</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">papr_idx</span><span class="p">,</span><span class="n">pnpr_idx</span><span class="p">))</span>
+	<span class="c1">#==========  Howling Detection Stage =====================#   
+</span>	<span class="n">ptpr_idx</span> <span class="o">=</span> <span class="n">pyHowling</span><span class="p">.</span><span class="n">ptpr</span><span class="p">(</span><span class="n">spec</span><span class="p">[:</span><span class="n">Slen</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span>
+	<span class="n">papr_idx</span><span class="p">,</span> <span class="n">papr</span> <span class="o">=</span> <span class="n">pyHowling</span><span class="p">.</span><span class="n">papr</span><span class="p">(</span><span class="n">spec</span><span class="p">[:</span><span class="n">Slen</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span>
+	<span class="n">pnpr_idx</span> <span class="o">=</span> <span class="n">pyHowling</span><span class="p">.</span><span class="n">pnpr</span><span class="p">(</span><span class="n">spec</span><span class="p">[:</span><span class="n">Slen</span><span class="p">],</span> <span class="mi">15</span><span class="p">)</span>
+	<span class="n">intersec_idx</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">ptpr_idx</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">papr_idx</span><span class="p">,</span><span class="n">pnpr_idx</span><span class="p">))</span>
 	
 	<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">intersec_idx</span><span class="p">:</span>
 	<span class="n">candidates</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="n">frame_id</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-	<span class="n">ipmp</span> <span class="o">=</span> <span class="n">pyHowling</span><span class="o">.</span><span class="n">ipmp</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">frame_id</span><span class="p">)</span>
+	<span class="n">ipmp</span> <span class="o">=</span> <span class="n">pyHowling</span><span class="p">.</span><span class="n">ipmp</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">frame_id</span><span class="p">)</span>
 	
-	<span class="n">result</span> <span class="o">=</span> <span class="n">pyHowling</span><span class="o">.</span><span class="n">screening</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">ipmp</span><span class="p">)</span>
+	<span class="n">result</span> <span class="o">=</span> <span class="n">pyHowling</span><span class="p">.</span><span class="n">screening</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">ipmp</span><span class="p">)</span>
 	
 	<span class="k">return</span> <span class="n">result</span>
 
@@ -411,29 +411,29 @@
 
 <p>将啸叫检测和陷波滤波器都插入到声反馈系统中，动态监测啸叫频率，进行仿真。</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#=============================Notch Filtering =======================================================     </span>
-<span class="c">#                                    ___________________       </span>
-<span class="c">#                          -------&gt; | Howling Detection | ______</span>
-<span class="c">#                         |         |___________________|       |</span>
-<span class="c">#                         |                                     |</span>
-<span class="c">#                         |      _______________         _______V______                     </span>
-<span class="c">#clean speech: x --&gt; mic: x1 --&gt; | Internal Gain |-x2--&gt; | Notch Filter | --&gt;speaker:y </span>
-<span class="c">#                     ^          |______G________|       |_____IIR______|         |          </span>
-<span class="c">#                     |                                                           |</span>
-<span class="c">#                     |                      _______________                      |</span>
-<span class="c">#                     &lt;-----------------y1--| Room Impulse  |____________________ v</span>
-<span class="c">#                                           |____Response___|            </span>
-<span class="c">#                         </span>
-<span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#=============================Notch Filtering =======================================================     
+#                                    ___________________       
+#                          -------&gt; | Howling Detection | ______
+#                         |         |___________________|       |
+#                         |                                     |
+#                         |      _______________         _______V______                     
+#clean speech: x --&gt; mic: x1 --&gt; | Internal Gain |-x2--&gt; | Notch Filter | --&gt;speaker:y 
+#                     ^          |______G________|       |_____IIR______|         |          
+#                     |                                                           |
+#                     |                      _______________                      |
+#                     &lt;-----------------y1--| Room Impulse  |____________________ v
+#                                           |____Response___|            
+#                         
+</span><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">,</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-<span class="n">N</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rir</span><span class="p">))</span> <span class="c">#limit room impulse response length</span>
-<span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>   <span class="c">#</span>
-<span class="n">x3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>   <span class="c">#buffer N samples of speaker output to generate acoustic feedback</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>  <span class="c">#save speaker output to y </span>
-<span class="n">y1</span> <span class="o">=</span> <span class="mf">0.0</span>           <span class="c">#init as 0</span>
-<span class="n">current_frame</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Slen</span><span class="p">)</span>
+<span class="n">N</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">rir</span><span class="p">))</span> <span class="c1">#limit room impulse response length
+</span><span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>   <span class="c1">#
+</span><span class="n">x3</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>   <span class="c1">#buffer N samples of speaker output to generate acoustic feedback
+</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>  <span class="c1">#save speaker output to y 
+</span><span class="n">y1</span> <span class="o">=</span> <span class="mf">0.0</span>           <span class="c1">#init as 0
+</span><span class="n">current_frame</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Slen</span><span class="p">)</span>
 <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">candidates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">Slen</span><span class="p">,</span> <span class="n">Nframes</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s">'int'</span><span class="p">)</span>
+<span class="n">candidates</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">Slen</span><span class="p">,</span> <span class="n">Nframes</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s">'int'</span><span class="p">)</span>
 <span class="n">frame_id</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">notch_freqs</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -442,31 +442,31 @@
 <span class="n">current_frame</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">x1</span>
 <span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span>
 <span class="k">if</span> <span class="n">pos</span><span class="o">==</span><span class="n">Slen</span><span class="p">:</span>
-<span class="c">#update notch filter frame by frame</span>
-<span class="n">freq_ids</span> <span class="o">=</span> <span class="n">howling_detect</span><span class="p">(</span><span class="n">current_frame</span><span class="p">,</span> <span class="n">win</span><span class="p">,</span> <span class="n">nFFT</span><span class="p">,</span> <span class="n">Slen</span><span class="p">,</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">frame_id</span><span class="p">)</span>
-<span class="c">#freq_ids = [46]</span>
-<span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">freq_ids</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">freq_ids</span><span class="p">)</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="n">notch_freqs</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">notch_freqs</span><span class="p">,</span> <span class="n">freqs</span><span class="p">[</span><span class="n">freq_ids</span><span class="p">])))):</span>
+<span class="c1">#update notch filter frame by frame
+</span><span class="n">freq_ids</span> <span class="o">=</span> <span class="n">howling_detect</span><span class="p">(</span><span class="n">current_frame</span><span class="p">,</span> <span class="n">win</span><span class="p">,</span> <span class="n">nFFT</span><span class="p">,</span> <span class="n">Slen</span><span class="p">,</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">frame_id</span><span class="p">)</span>
+<span class="c1">#freq_ids = [46]
+</span><span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">freq_ids</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">freq_ids</span><span class="p">)</span><span class="o">!=</span><span class="nb">len</span><span class="p">(</span><span class="n">notch_freqs</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">np</span><span class="p">.</span><span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">equal</span><span class="p">(</span><span class="n">notch_freqs</span><span class="p">,</span> <span class="n">freqs</span><span class="p">[</span><span class="n">freq_ids</span><span class="p">])))):</span>
 <span class="n">notch_freqs</span> <span class="o">=</span> <span class="n">freqs</span><span class="p">[</span><span class="n">freq_ids</span><span class="p">]</span>
-<span class="n">sos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">notch_freqs</span><span class="p">),</span> <span class="mi">6</span><span class="p">])</span>
+<span class="n">sos</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">notch_freqs</span><span class="p">),</span> <span class="mi">6</span><span class="p">])</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">notch_freqs</span><span class="p">)):</span>
-<span class="n">b0</span><span class="p">,</span> <span class="n">a0</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">iirnotch</span><span class="p">(</span><span class="n">notch_freqs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Srate</span><span class="p">)</span>
-<span class="n">sos</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b0</span><span class="p">,</span><span class="n">a0</span><span class="p">)</span>
-<span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">sos2tf</span><span class="p">(</span><span class="n">sos</span><span class="p">)</span>
+<span class="n">b0</span><span class="p">,</span> <span class="n">a0</span> <span class="o">=</span> <span class="n">signal</span><span class="p">.</span><span class="n">iirnotch</span><span class="p">(</span><span class="n">notch_freqs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Srate</span><span class="p">)</span>
+<span class="n">sos</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">b0</span><span class="p">,</span><span class="n">a0</span><span class="p">)</span>
+<span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">signal</span><span class="p">.</span><span class="n">sos2tf</span><span class="p">(</span><span class="n">sos</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="s">"frame id: "</span><span class="p">,</span> <span class="n">frame_id</span><span class="p">,</span> <span class="s">"/"</span><span class="p">,</span> <span class="n">Nframes</span><span class="p">,</span> <span class="s">"notch freqs:"</span><span class="p">,</span> <span class="n">notch_freqs</span><span class="p">)</span>
-<span class="n">current_frame</span><span class="p">[:</span><span class="n">Slen</span><span class="o">-</span><span class="n">len2</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_frame</span><span class="p">[</span><span class="n">len2</span><span class="p">:]</span>  <span class="c">#shift by len2</span>
-<span class="n">pos</span> <span class="o">=</span> <span class="n">len2</span>
+<span class="n">current_frame</span><span class="p">[:</span><span class="n">Slen</span><span class="o">-</span><span class="n">len2</span><span class="p">]</span> <span class="o">=</span> <span class="n">current_frame</span><span class="p">[</span><span class="n">len2</span><span class="p">:]</span>  <span class="c1">#shift by len2
+</span><span class="n">pos</span> <span class="o">=</span> <span class="n">len2</span>
 <span class="n">frame_id</span> <span class="o">=</span> <span class="n">frame_id</span> <span class="o">+</span> <span class="mi">1</span>
 
 <span class="n">x2</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">x2</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> 
 <span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">G</span><span class="o">*</span><span class="n">x1</span>
-<span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c">#amplitude clipping</span>
-<span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>      
-<span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x2</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)],</span> <span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x3</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>  <span class="c">#IIR filter     </span>
-<span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>  <span class="c">#amplitude clipping</span>
-<span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>      
+<span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1">#amplitude clipping
+</span><span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>      
+<span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x2</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">)],</span> <span class="n">b</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x3</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>  <span class="c1">#IIR filter     
+</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>  <span class="c1">#amplitude clipping
+</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>      
 <span class="n">x3</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">x3</span><span class="p">[:</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> 
 <span class="n">x3</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span>  <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-<span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x3</span><span class="p">,</span> <span class="n">rir</span><span class="p">[:</span><span class="n">N</span><span class="p">])</span>
+<span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x3</span><span class="p">,</span> <span class="n">rir</span><span class="p">[:</span><span class="n">N</span><span class="p">])</span>
 </code></pre></div></div>
 
 <p>从结果上看，除了初始阶段产生了啸叫，后面基本抑制住了，可以听到语音信号。但是有断断续续的低幅度啸叫产生。IPMP等需要啸叫达到一定程度才能检测出来，如果换用IMSD，可能可以更快地动态抑制啸叫。</p>
@@ -525,6 +525,38 @@
           
       
     
+  
+    
+      
+        
+          
+      
+          
+            
+            <div class="panel-body">
+              <h4>Related Posts</h4>
+              <ul>
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/en/dft-implementation-cn.html">C++实现离散傅里叶变换</a>
+                  
+                    (Categories: <a href="/category/信号处理">信号处理</a>)
+                  
+                </li>
+          
+          
+        
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
         
           
       
@@ -536,10 +568,6 @@
       
         
           
-            
-            <div class="panel-body">
-              <h4>Related Posts</h4>
-              <ul>
             
                 <li class="relatedPost">
                   <a href="https://chenwj1989.github.io/post/cn/speex-aec-cn.html">Speex回声消除</a>
@@ -647,16 +675,6 @@
       
         
           
-            
-                <li class="relatedPost">
-                  <a href="https://chenwj1989.github.io/post/cn/monaural-speech-enhancement-filtering-cn.html">单通道语音增强之谱减法与维纳滤波</a>
-                  
-                    (Categories: <a href="/category/语音">语音</a>)
-                  
-                </li>
-          
-          
-        
       
           
       
@@ -698,6 +716,8 @@
   
     <a class="prev" href="/post/cn/speex-aec-cn.html">&laquo; Speex回声消除</a>
   
+  
+    <a class="next" href="/post/en/dft-implementation-cn.html">C++实现离散傅里叶变换 &raquo;</a>
   
 </div>
 

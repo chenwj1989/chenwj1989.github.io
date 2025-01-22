@@ -161,25 +161,25 @@
 <p>信号估计理论是现代统计处理的基础课题[@ZhangXianDa2002ModernSP]，在通信、语音、图像领域均有广泛应用。语音增强，就是从带噪的语音测量信号中估计原始的无噪语音，这是典型的信号估计问题。
 《语音增强–理论与实践》[@loizou2007speech]一书中列举了用于语音增强的一系列统计模型。</p>
 
-<p>假设麦克风采集到的带噪语音序列为<script type="math/tex">y[n]</script>，并且噪声都是加性噪声。则带噪语音序列为无噪语音序列与噪声序列的和。原始语音信号与噪声均可视为随机信号。</p>
+<p>假设麦克风采集到的带噪语音序列为\(y[n]\)，并且噪声都是加性噪声。则带噪语音序列为无噪语音序列与噪声序列的和。原始语音信号与噪声均可视为随机信号。</p>
 
-<script type="math/tex; mode=display">y[n] = x[n] + d[n]</script>
+\[y[n] = x[n] + d[n]\]
 
 <p>在时域对$x[n]$进行估计是非常困难的，通过傅立叶变换，我们可以将信号分解为频域上互相独立的系数。信号估计模型转变为对每一个频点的系数进行估计的模型，不同频点之间的参数是相互独立的。</p>
 
-<script type="math/tex; mode=display">Y(\omega_{k}) = X(\omega_{k}) + D(\omega_{k})</script>
+\[Y(\omega_{k}) = X(\omega_{k}) + D(\omega_{k})\]
 
 <p>这个方法就叫做统计信号谱分析（Statistical Spectral
 Analysis)。显然地，纯净信号谱$X(\omega_{k})$带有幅度与相位两参数，我们实际上是对幅度$X_{k}$和相位$\theta_{y}(k)$进行参数估计。</p>
 
-<script type="math/tex; mode=display">Y_{k}e^{j\theta_{y}(k)} = X_{k}e^{j\theta_{x}(k)} + D_{k}e^{j\theta_{d}(k)}</script>
+\[Y_{k}e^{j\theta_{y}(k)} = X_{k}e^{j\theta_{x}(k)} + D_{k}e^{j\theta_{d}(k)}\]
 
 <p>重组谱幅度和谱相位估计值即可恢复纯净语音谱，估计值用上标来表示：$\hat{X}(\omega_{k})=\hat{X}(k)e^{j\hat{\theta}_{x}(k)}$。</p>
 
 <p>实际信号的幅度和相位是不方便直接用在运算过程中的，因为信号取值范围不定，且瞬时变化。在噪声抑制领域，更常用的语音谱估计方法是对抑制增益(Suppression
 Gain)进行估计，不同的估计准则称为抑制准则(Supression Rule)。</p>
 
-<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = H_{k}Y(\omega_{k})</script>
+\[\hat{X}(\omega_{k}) = H_{k}Y(\omega_{k})\]
 
 <p>通常会根据先验信噪比、后验信噪比来估计抑制增益$H_{k}$。
 并且可以在只有噪声出现的时刻更新$H_{k}$，
@@ -213,9 +213,9 @@ Gain)进行估计，不同的估计准则称为抑制准则(Supression Rule)。<
   </li>
 </ol>
 
-<script type="math/tex; mode=display">\left[D(\omega_{k})\right] = 
+\[\left[D(\omega_{k})\right] = 
 \frac{1}{\pi\lambda_{d}(k)}
-\exp\left[-\frac{|D(\omega_{k})|^2}{\lambda_{d}(k)}\right]</script>
+\exp\left[-\frac{|D(\omega_{k})|^2}{\lambda_{d}(k)}\right]\]
 
 <h2 id="2-最大似然估计ml">2. 最大似然估计ML</h2>
 
@@ -224,39 +224,39 @@ Likelihood
 Estimation）。将$y$的带参概率分布$p(y;x)$称为似然函数（Likelihood
 Function）。对纯净信号$x$的估计，表达为求解合适的$x$值，使得似然函数$p(y;x)$最大。</p>
 
-<script type="math/tex; mode=display">\hat{x} = \argmax_{x}p(y;x)</script>
+\[\hat{x} = \argmax_{x}p(y;x)\]
 
 <p>文献[@mcaulay1980speech]最早将最大似然估计法用在语音增强领域。对于纯净语音，可以假设纯净语音幅度$X_{k}$和相位$\theta_{y}(k)$是未知但确定，无需考虑其先验概率分布。最大似然语音增强模型表达为：</p>
 
-<script type="math/tex; mode=display">\hat{X}_{k},\hat{\theta}_{k} = \argmax_{X_{k},\theta_{k}} p\left[Y(\omega_{k});X_{k},\theta_{k}\right]</script>
+\[\hat{X}_{k},\hat{\theta}_{k} = \argmax_{X_{k},\theta_{k}} p\left[Y(\omega_{k});X_{k},\theta_{k}\right]\]
 
 <p>把$D_{k}e^{\theta_{d}(k)}=Y_{k}e^{\theta_{y}(k)} - X_{k}e^{\theta_{x}(k)} $代入噪声零均值复高斯分布公式中，得到：</p>
 
-<script type="math/tex; mode=display">p\left[Y(\omega_{k});X_{k},\theta_{k}\right] = \frac{1}{\pi \lambda_{d}(k)}\exp\left[-\frac{|Y(\omega_{k}) - X_{k}e^{j\theta_{x}(k)}|^2}{\lambda_{d}(k)}\right]</script>
+\[p\left[Y(\omega_{k});X_{k},\theta_{k}\right] = \frac{1}{\pi \lambda_{d}(k)}\exp\left[-\frac{|Y(\omega_{k}) - X_{k}e^{j\theta_{x}(k)}|^2}{\lambda_{d}(k)}\right]\]
 
-<script type="math/tex; mode=display">H_{k} = \frac{1}{2}+\frac{1}{2}\sqrt{\frac{\xi_{k}}{1+\xi_{k}}}</script>
+\[H_{k} = \frac{1}{2}+\frac{1}{2}\sqrt{\frac{\xi_{k}}{1+\xi_{k}}}\]
 
 <h2 id="3贝叶斯估计">3.贝叶斯估计</h2>
 
 <p>如果比最大似然估计更进一步，考虑待估计量$x$也是随机变量，且$x$的先验分布为$p(x)$，这种假设下的估计方法叫做贝叶斯估计[@ZhangXianDa2002ModernSP]。定义估计值$\hat{x}$与实际值$x$之间的误差函数为$c(\hat{x},x)$，贝叶斯估计器的目标即为找出是平均误差$E[c(\hat{x},x)]$最小的估计值$x$。</p>
 
-<script type="math/tex; mode=display">\hat{x} = \argmin_{\hat{x}} E[c(\hat{x}, x)]</script>
+\[\hat{x} = \argmin_{\hat{x}} E[c(\hat{x}, x)]\]
 
 <p>对于待估计的纯净语音谱，贝叶斯估计器可以表达为：</p>
 
-<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = \argmin_{\hat{X_{k}}} E[c(\hat{X}(\omega_{k}), X(\omega_{k}))]</script>
+\[\hat{X}(\omega_{k}) = \argmin_{\hat{X_{k}}} E[c(\hat{X}(\omega_{k}), X(\omega_{k}))]\]
 
 <p>误差$c(\hat{x},x)$的期望值取决于待测信号与测量信号的联合概率分布。</p>
 
-<script type="math/tex; mode=display">E[c(\hat{x}, x)] = \int_{x}\int_{y}c(\hat{x}, x)p(x, y)dxdy</script>
+\[E[c(\hat{x}, x)] = \int_{x}\int_{y}c(\hat{x}, x)p(x, y)dxdy\]
 
 <p>根据条件概率密度公式对联合概率密度进行分解：</p>
 
-<script type="math/tex; mode=display">E[c(\hat{x}, x)]  = \int_{x}\int_{y}c(\hat{x}, x)p(x|y)p(y)dxdy = \int_{y} \left[ \int_{x}c(\hat{x}, x)p(x|y)dx\right] p(y)dy</script>
+\[E[c(\hat{x}, x)]  = \int_{x}\int_{y}c(\hat{x}, x)p(x|y)p(y)dxdy = \int_{y} \left[ \int_{x}c(\hat{x}, x)p(x|y)dx\right] p(y)dy\]
 
 <p>因为估计值$\hat{x}$与$p(y)$相互独立，可以把外层对$y$的积分消除，也就是：</p>
 
-<script type="math/tex; mode=display">\hat{x} = \argmin_{\hat{x}} E[c(\hat{x}, x)|y]</script>
+\[\hat{x} = \argmin_{\hat{x}} E[c(\hat{x}, x)|y]\]
 
 <p>误差函数$c(\hat{x}, x)$的计算模型，会引出不同种类的估计器。典型的误差函数有几种类型[@ZhangXianDa2002ModernSP]：</p>
 
@@ -264,85 +264,84 @@ Function）。对纯净信号$x$的估计，表达为求解合适的$x$值，使
   <li>
     <p>平方误差函数，对应最小均方估计。</p>
 
-    <script type="math/tex; mode=display">c(\hat{x}, x)  = (\hat{x} - x)^2</script>
+\[c(\hat{x}, x)  = (\hat{x} - x)^2\]
   </li>
   <li>
     <p>绝对值误差函数，对应条件中位数估计。</p>
 
-    <script type="math/tex; mode=display">c(\hat{x}, x)  = |\hat{x} - x|</script>
+\[c(\hat{x}, x)  = |\hat{x} - x|\]
   </li>
   <li>
     <p>均匀误差函数，对应最大后验估计。</p>
   </li>
 </ol>
 
-<script type="math/tex; mode=display">% <![CDATA[
-c(\hat{x}, x)   =
+\[c(\hat{x}, x)   =
             \left\{
             \begin{array}{lr}
-            1 \quad (|\hat{x}-x|\geq\Delta/2) &  \\
-            &\Delta>0\\
-            0 \quad (|\hat{x}-x|<\Delta/2) & 
+            1 \quad (|\hat{x}-x|\geq\Delta/2) &amp;  \\
+            &amp;\Delta&gt;0\\
+            0 \quad (|\hat{x}-x|&lt;\Delta/2) &amp; 
             \end{array}
-            \right. %]]></script>
+            \right.\]
 
 <h3 id="31-最小均方估计mmse">3.1 最小均方估计（MMSE）</h3>
 
 <p>最小均方估计(Minimum Mean Square Error
 Estimation)[@ephraim1985speech]使用平方误差函数，平均误差为：</p>
 
-<script type="math/tex; mode=display">E[c(\hat{x}, x)|y]=\int_{x}(\hat{x} - x)^2 p(x|y)dx</script>
+\[E[c(\hat{x}, x)|y]=\int_{x}(\hat{x} - x)^2 p(x|y)dx\]
 
 <p>为求平均误差的极大值，可对估计量$\hat{x}$求导，并求极值点。</p>
 
-<script type="math/tex; mode=display">\frac{\partial E[c(\hat{x}, x)|y]}{\partial \hat{x}}=\int_{x}2(\hat{x} - x) p(x|y)dx =0</script>
+\[\frac{\partial E[c(\hat{x}, x)|y]}{\partial \hat{x}}=\int_{x}2(\hat{x} - x) p(x|y)dx =0\]
 
 <p>显然极值点的$\hat{x}$为被估计量$x$的条件均值：</p>
 
-<script type="math/tex; mode=display">\hat{x} =\int_{x}x p(x|y)dx = E[ x| y]</script>
+\[\hat{x} =\int_{x}x p(x|y)dx = E[ x| y]\]
 
 <p>亦可以使用贝叶斯公式展开，得到：</p>
 
-<script type="math/tex; mode=display">\begin{aligned}
+\[\begin{aligned}
     \hat{x} = \int_{x}x \frac{p(y|x)p(x)}{p(y)} dx \\
             = \frac{\int_{x}xp(y|x)p(x)dx}{\int_{x}p(y|x)p(x)dx}
-\end{aligned}</script>
+\end{aligned}\]
 
 <p>在语音增强的模型里，纯净语音谱的估计为其在带噪语音谱下的条件均值。</p>
 
-<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = E[X(\omega_{k})| Y(\omega_{k})]</script>
+\[\hat{X}(\omega_{k}) = E[X(\omega_{k})| Y(\omega_{k})]\]
 
 <p>上式中，为得到纯净语音谱需要分别估计谱幅度和谱相位: $\hat{X}, \hat{\theta}_{x}$。</p>
 
-<script type="math/tex; mode=display">\hat{X}_{k}e^{j\hat{\theta}_{x}(k)} = E[ X_{k}e^{j\theta_{x}(k)}| Y(\omega_{k})]</script>
+\[\hat{X}_{k}e^{j\hat{\theta}_{x}(k)} = E[ X_{k}e^{j\theta_{x}(k)}| Y(\omega_{k})]\]
 
 <p>同时估计谱幅度和谱相位是很难的，研究者提出了许多分别估计谱幅度和谱相位的方法，估计完成后再用两者重组复语音信号。</p>
 
-<script type="math/tex; mode=display">\hat{X}_{k} = E[ X_{k}| Y(\omega_{k})]</script>
+\[\hat{X}_{k} = E[ X_{k}| Y(\omega_{k})]\]
 
-<script type="math/tex; mode=display">e^{j\hat{\theta}_{x}(k)} = E[ e^{j\theta_{x}(k)}| Y(\omega_{k})]</script>
+\[e^{j\hat{\theta}_{x}(k)} = E[ e^{j\theta_{x}(k)}| Y(\omega_{k})]\]
 
 <h4 id="311-mmse谱幅度估计">3.1.1 MMSE谱幅度估计</h4>
 
 <p>最小均方根估计器MMSE short-time spectral amplitude</p>
 
-<script type="math/tex; mode=display">\hat{X_{k}} = E[ X_{k}| Y(\omega_{k})]</script>
+\[\hat{X_{k}} = E[ X_{k}| Y(\omega_{k})]\]
 
-<script type="math/tex; mode=display">v_{k} = \frac{\xi_{k}}{1+\xi_{k}}\gamma_{k}</script>
+\[v_{k} = \frac{\xi_{k}}{1+\xi_{k}}\gamma_{k}\]
 
-<script type="math/tex; mode=display">H_{k} =\frac{\sqrt{\pi v_{k}}}{ 2\gamma_{k}}[(1+v_{k})I_{0}(\frac{v_k}{2})+v_{1}I_{1}(\frac{v_{k}}{2})]\exp(\frac{-v_{k}}{2})</script>
+\[H_{k} =\frac{\sqrt{\pi v_{k}}}{ 2\gamma_{k}}[(1+v_{k})I_{0}(\frac{v_k}{2})+v_{1}I_{1}(\frac{v_{k}}{2})]\exp(\frac{-v_{k}}{2})\]
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">def</span> <span class="nf">mmse_stsa_gain</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 		<span class="n">gamma</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'gamma'</span><span class="p">]</span>
 		<span class="n">ksi</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'ksi'</span><span class="p">]</span>
 			
 		<span class="n">vk</span> <span class="o">=</span> <span class="n">ksi</span> <span class="o">*</span> <span class="n">gamma</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">ksi</span><span class="p">)</span>
-		<span class="n">j0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">i0</span><span class="p">(</span><span class="n">vk</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-		<span class="n">j1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">i1</span><span class="p">(</span><span class="n">vk</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+		<span class="n">j0</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">i0</span><span class="p">(</span><span class="n">vk</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+		<span class="n">j1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">i1</span><span class="p">(</span><span class="n">vk</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
 			
 		<span class="n">A</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">pi</span> <span class="o">*</span> <span class="n">vk</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">gamma</span>
 		<span class="n">B</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">vk</span><span class="p">)</span> <span class="o">*</span> <span class="n">j0</span> <span class="o">+</span> <span class="n">vk</span> <span class="o">*</span> <span class="n">j1</span>
-		<span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">vk</span><span class="p">)</span>
+		<span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">vk</span><span class="p">)</span>
 		<span class="n">gain</span> <span class="o">=</span> <span class="n">A</span> <span class="o">*</span> <span class="n">B</span> <span class="o">*</span> <span class="n">C</span>
 		<span class="k">return</span> <span class="n">gain</span>
 </code></pre></div></div>
@@ -352,11 +351,11 @@ Estimation)[@ephraim1985speech]使用平方误差函数，平均误差为：</p>
 <p>对数最小均方根估计器The MMSE log spectral amplitude (MMSE-LSA)，
 或者缩写为LogMMSE估计器。</p>
 
-<script type="math/tex; mode=display">c(\hat{X_{k}}, X_{k})  = (\log{X_{k}}- \log{X_{k}})^2</script>
+\[c(\hat{X_{k}}, X_{k})  = (\log{X_{k}}- \log{X_{k}})^2\]
 
-<script type="math/tex; mode=display">\log{\hat{X_{k}}} = E[ \log{X_{k}}| Y(\omega_{k})]</script>
+\[\log{\hat{X_{k}}} = E[ \log{X_{k}}| Y(\omega_{k})]\]
 
-<script type="math/tex; mode=display">H_{k} = \frac{\xi_{k}}{1+\xi_{k}}\exp(\frac{1}{2}\int_{v_{k}}^{\infty}\frac{e^{-t}}{t}dt)</script>
+\[H_{k} = \frac{\xi_{k}}{1+\xi_{k}}\exp(\frac{1}{2}\int_{v_{k}}^{\infty}\frac{e^{-t}}{t}dt)\]
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">def</span> <span class="nf">logmmse_gain</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 		<span class="n">gamma</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'gamma'</span><span class="p">]</span>
@@ -364,7 +363,7 @@ Estimation)[@ephraim1985speech]使用平方误差函数，平均误差为：</p>
 		<span class="n">A</span> <span class="o">=</span> <span class="n">ksi</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">ksi</span><span class="p">)</span>
 		<span class="n">vk</span> <span class="o">=</span> <span class="n">A</span> <span class="o">*</span> <span class="n">gamma</span>
 		<span class="n">ei_vk</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">expn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">vk</span><span class="p">)</span>
-		<span class="n">gain</span> <span class="o">=</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">ei_vk</span><span class="p">)</span>
+		<span class="n">gain</span> <span class="o">=</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">exp</span><span class="p">(</span><span class="n">ei_vk</span><span class="p">)</span>
 		<span class="k">return</span> <span class="n">gain</span>
 </code></pre></div></div>
 
@@ -372,19 +371,19 @@ Estimation)[@ephraim1985speech]使用平方误差函数，平均误差为：</p>
 
 <p>频谱幅度平方估计器MMSE magnitude squared[@wolfe2003efficient]</p>
 
-<script type="math/tex; mode=display">\hat{X_{k}^2} = E[ X_{k}^2| Y_{k}]</script>
+\[\hat{X_{k}^2} = E[ X_{k}^2| Y_{k}]\]
 
-<script type="math/tex; mode=display">\hat{X_{k}^2} = \frac{\xi_{k}}{1+\xi_{k}} (\frac{1+v_{k}}{\gamma_{k}})Y_{k}^2</script>
+\[\hat{X_{k}^2} = \frac{\xi_{k}}{1+\xi_{k}} (\frac{1+v_{k}}{\gamma_{k}})Y_{k}^2\]
 
-<script type="math/tex; mode=display">H_{k} = \sqrt{\frac{\xi_{k}}{1+\xi_{k}} (\frac{1+v_{k}}{\gamma_{k}})}</script>
+\[H_{k} = \sqrt{\frac{\xi_{k}}{1+\xi_{k}} (\frac{1+v_{k}}{\gamma_{k}})}\]
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">def</span> <span class="nf">mmse_sqr_gain</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 		<span class="n">gamma</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'gamma'</span><span class="p">]</span>
 		<span class="n">ksi</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'ksi'</span><span class="p">]</span>
 			
 		<span class="n">vk</span> <span class="o">=</span> <span class="n">ksi</span> <span class="o">*</span> <span class="n">gamma</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">ksi</span><span class="p">)</span>
-		<span class="n">j0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">i0</span><span class="p">(</span><span class="n">vk</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-		<span class="n">j1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">i1</span><span class="p">(</span><span class="n">vk</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+		<span class="n">j0</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">i0</span><span class="p">(</span><span class="n">vk</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+		<span class="n">j1</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">i1</span><span class="p">(</span><span class="n">vk</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
 			
 		<span class="n">A</span> <span class="o">=</span> <span class="n">ksi</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">ksi</span><span class="p">)</span>
 		<span class="n">B</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">vk</span><span class="p">)</span> <span class="o">/</span> <span class="n">gamma</span>
@@ -396,21 +395,20 @@ Estimation)[@ephraim1985speech]使用平方误差函数，平均误差为：</p>
 
 <p>当贝叶斯估计器采用均匀误差函数时，平均误差为：</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-\begin{aligned}
-    E[c(\hat{x}, x)|y] &= \int_{-\infty}^{\hat{x}-\Delta/2}  p(x|y)dx + \int_{\hat{x}+\Delta/2}^{\infty}  p(x|y)dx   \\
-                       &= 1-\int_{\hat{x}\Delta/2}^{\hat{x}+\Delta/2}  p(x|y)dx  
-\end{aligned} %]]></script>
+\[\begin{aligned}
+    E[c(\hat{x}, x)|y] &amp;= \int_{-\infty}^{\hat{x}-\Delta/2}  p(x|y)dx + \int_{\hat{x}+\Delta/2}^{\infty}  p(x|y)dx   \\
+                       &amp;= 1-\int_{\hat{x}\Delta/2}^{\hat{x}+\Delta/2}  p(x|y)dx  
+\end{aligned}\]
 
 <p>显然要使得平均误差最小，就是要求目标估计$\hat{x}$，使得
 $p(x|y)$最大。这种估计模型称作最大后验估计(Maximum A Posteriori
 Estimation)。这个模型的意思是只有估计值$\hat{x}$与原始值$x$相等，误差才为0，其他时候误差均匀为1。估计值可以表达为：</p>
 
-<script type="math/tex; mode=display">\hat{x} =\argmin_{x} p(x|y)</script>
+\[\hat{x} =\argmin_{x} p(x|y)\]
 
 <p>在语音增强的模型里，纯净语音谱的估计为其在带噪语音谱下的条件均值。</p>
 
-<script type="math/tex; mode=display">\hat{X}(\omega_{k}) = \argmin_{ X(\omega_{k})}\quad p\left[X(\omega_{k})| Y(\omega_{k})\right]</script>
+\[\hat{X}(\omega_{k}) = \argmin_{ X(\omega_{k})}\quad p\left[X(\omega_{k})| Y(\omega_{k})\right]\]
 
 <p>文献[@wolfe2003efficient]提出了两种基于最大后验估计(Maximum A Posteriori
 Estimation)的语音增强算法。一种是同时求解幅度和相位的混合最大后验估计：
@@ -420,7 +418,7 @@ Estimation)的语音增强算法。一种是同时求解幅度和相位的混合
 
 <p>[@wolfe2003efficient]</p>
 
-<script type="math/tex; mode=display">H_{k} = \frac{\xi_{k}+\sqrt{\xi_{k}^2+2(1+\xi_{k})\frac{\xi_{k}}{\gamma_{k}}}}{2(1+\xi_{k})}</script>
+\[H_{k} = \frac{\xi_{k}+\sqrt{\xi_{k}^2+2(1+\xi_{k})\frac{\xi_{k}}{\gamma_{k}}}}{2(1+\xi_{k})}\]
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">map_joint_gain</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 	<span class="n">gamma</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'gamma'</span><span class="p">]</span>
@@ -435,7 +433,7 @@ Estimation)的语音增强算法。一种是同时求解幅度和相位的混合
 
 <p>[@wolfe2003efficient]</p>
 
-<script type="math/tex; mode=display">H_{k} = \frac{\xi_{k}+\sqrt{\xi_{k}^2+(1+\xi_{k})\frac{\xi_{k}}{\gamma_{k}}}}{2(1+\xi_{k})}</script>
+\[H_{k} = \frac{\xi_{k}+\sqrt{\xi_{k}^2+(1+\xi_{k})\frac{\xi_{k}}{\gamma_{k}}}}{2(1+\xi_{k})}\]
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">map_sa_gain</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 	<span class="n">gamma</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s">'gamma'</span><span class="p">]</span>
@@ -482,6 +480,20 @@ Estimation)的语音增强算法。一种是同时求解幅度和相位的混合
 </div>
 
 
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
   
     
       

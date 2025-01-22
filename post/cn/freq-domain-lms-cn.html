@@ -157,11 +157,11 @@
 
 <p>若使用FIR滤波器设计$w(z)$, 自适应滤波器的输出就是输入信号与滤波器权值的卷积：</p>
 
-<script type="math/tex; mode=display">y(n)=\sum_{i=0}^{N-1}w_ix(n-i)</script>
+\[y(n)=\sum_{i=0}^{N-1}w_ix(n-i)\]
 
 <p>自适应滤波器的算法就是以误差$e(n)$为最小化目标，迭代求出最优的滤波器系数$w(z)$。</p>
 
-<script type="math/tex; mode=display">e(n)=d(n)-y(n)</script>
+\[e(n)=d(n)-y(n)\]
 
 <h2 id="2-lms和nlms算法">2. LMS和NLMS算法</h2>
 
@@ -197,21 +197,21 @@
 
 <p>　2.滤波：</p>
 
-<script type="math/tex; mode=display">\bm{y}(n)=\bm{w}^T(n)\bm{x}(n)</script>
+\[\bm{y}(n)=\bm{w}^T(n)\bm{x}(n)\]
 
 <p>　3.计算误差：</p>
 
-<script type="math/tex; mode=display">e(n)=\bm{d}(n) - \bm{y}(n)</script>
+\[e(n)=\bm{d}(n) - \bm{y}(n)\]
 
 <p>　4.更新系数：</p>
 
 <p>　　LMS:</p>
 
-<script type="math/tex; mode=display">\bm{w}(n+1)=\bm{w}(n) + 2\mu e(n)\bm{x}(n)</script>
+\[\bm{w}(n+1)=\bm{w}(n) + 2\mu e(n)\bm{x}(n)\]
 
 <p>　　NLMS:</p>
 
-<script type="math/tex; mode=display">\bm{w}(n+1)=\bm{w}(n) + \frac{\mu_0}{\bm{x}^T(n)\bm{x}(n)+\phi} e(n)\bm{x}(n)</script>
+\[\bm{w}(n+1)=\bm{w}(n) + \frac{\mu_0}{\bm{x}^T(n)\bm{x}(n)+\phi} e(n)\bm{x}(n)\]
 
 <p><strong>算法复杂度:</strong></p>
 
@@ -225,7 +225,7 @@
 
 <p>首先需要将串行的LMS算法转变为分块处理，也就是Block LMS(BLMS)。 每次迭代，输入数据被分成长度为$L$的块进行处理。和LMS使用瞬时梯度来进行滤波器参数更新不同，BLMS使用L点的平均梯度来进行参数更新。 也就是机器学习里面Stochastic Gradient Descent 和 Mini-Batch Gradient Descent的区别。 对第$k$块数据，BLMS算法递推公式为：</p>
 
-<script type="math/tex; mode=display">\bm{w}(k+1)=\bm{w}(k) + 2\mu_B \frac{\sum_{i=0}^{L-1}e(kL+i)\bm{x}(kL+i)}{L}</script>
+\[\bm{w}(k+1)=\bm{w}(k) + 2\mu_B \frac{\sum_{i=0}^{L-1}e(kL+i)\bm{x}(kL+i)}{L}\]
 
 <p><strong>输入:</strong></p>
 
@@ -255,19 +255,19 @@
 
 <p>　　2.1 滤波：</p>
 
-<script type="math/tex; mode=display">\bm{y}(kL+i)=\bm{w}^T(k)\bm{x}(kL+i)</script>
+\[\bm{y}(kL+i)=\bm{w}^T(k)\bm{x}(kL+i)\]
 
 <p>　　2.2 计算误差：</p>
 
-<script type="math/tex; mode=display">\bm{e}(kL+i)=\bm{d}(kL+i) - \bm{y}(kL+i)</script>
+\[\bm{e}(kL+i)=\bm{d}(kL+i) - \bm{y}(kL+i)\]
 
 <p>　　2.3 累计梯度：</p>
 
-<script type="math/tex; mode=display">\phi=\phi+ \mu \bm{e}(kL+i)\bm{x}(kL+i)</script>
+\[\phi=\phi+ \mu \bm{e}(kL+i)\bm{x}(kL+i)\]
 
 <p>　3 更新系数：</p>
 
-<script type="math/tex; mode=display">\bm{w}(k+1)=\bm{w}(k) + \phi</script>
+\[\bm{w}(k+1)=\bm{w}(k) + \phi\]
 
 <p><strong>算法复杂度:</strong></p>
 
@@ -279,9 +279,9 @@
 
 <p>长度为L的$x$和长度为M的$w$，线性卷积的结果是长度为$L+M-1$的$y$。 时域卷积，频域是相乘，因此有</p>
 
-<script type="math/tex; mode=display">y(n)=x(n)*w(n)</script>
+\[y(n)=x(n)*w(n)\]
 
-<script type="math/tex; mode=display">\mathcal{FT}\left[y(n)\right]= \mathcal{FT}\left[x(n)\right] \mathcal{FT}\left[w(n)\right]</script>
+\[\mathcal{FT}\left[y(n)\right]= \mathcal{FT}\left[x(n)\right] \mathcal{FT}\left[w(n)\right]\]
 
 <p>傅立叶变换在频域上是连续的，计算机做傅立叶运算会将频域离散化采样，转化成$N$点离散傅立叶变换(DFT)，并且用FFT算法做快速计算。 将卷积的输入$x$和$w$都补零成$N$点，做一个$N$点的DFT，其逆变换就是循环卷积的结果，时域上是周期为$N$的重复信号。</p>
 
@@ -294,7 +294,7 @@
 
 <p>于是两组有限长信号的卷积，则转换成3次DFT计算。</p>
 
-<script type="math/tex; mode=display">y(n)= \mathcal{IDFT}\left\{\mathcal{DFT}\left[x(n)\right] \mathcal{DFT}\left[w(n)\right]\right\}</script>
+\[y(n)= \mathcal{IDFT}\left\{\mathcal{DFT}\left[x(n)\right] \mathcal{DFT}\left[w(n)\right]\right\}\]
 
 <p>直接计算卷积， 大约需要$N^2$次乘法和$N^2$次加法。</p>
 
@@ -317,23 +317,23 @@
 
 <p>对于长度为$M$的滤波器，FBLMS一般采用$2M$点FFT，且使用Overlap-and-Savee的快速卷积方法。也就是说，滤波器向量$w$做FFT前须补$M$个零值。</p>
 
-<script type="math/tex; mode=display">W=FFT\left[ \begin{matrix} w\\ 0 \end{matrix} \right]</script>
+\[W=FFT\left[ \begin{matrix} w\\ 0 \end{matrix} \right]\]
 
 <p>输入向量的分块长度也设为$M$，则FFT的输入前$M$点是保存前一块的数据，后$M$点是当前块数据。</p>
 
-<script type="math/tex; mode=display">X=FFT\left[ \begin{matrix} x_{k-1}\\ x_k \end{matrix} \right]</script>
+\[X=FFT\left[ \begin{matrix} x_{k-1}\\ x_k \end{matrix} \right]\]
 
 <p>使用overlap-save快速卷积方法实现BLMS中的卷积部分，当前块输出向量$y$为IFFT的后$M$点。</p>
 
-<script type="math/tex; mode=display">\left[ \begin{matrix} C\\ y_k \end{matrix} \right]=IFFT\left[ 
+\[\left[ \begin{matrix} C\\ y_k \end{matrix} \right]=IFFT\left[ 
 FFT\left[ \begin{matrix} w\\ 0 \end{matrix} \right] 
-FFT\left[ \begin{matrix} x_{k-1}\\ x_k \end{matrix} \right]\right]</script>
+FFT\left[ \begin{matrix} x_{k-1}\\ x_k \end{matrix} \right]\right]\]
 
 <p>梯度的计算，可以将误差与输入信号放到频域来做，具体推导参考<a href="http://www.cs.tut.fi/~tabus/course/ASP/SGN2206LectureNew6.pdf">Block Adaptive Filters and Frequency Domain Adaptive Filters</a></p>
 
-<script type="math/tex; mode=display">\left[ \begin{matrix} \phi\\ D \end{matrix} \right]=IFFT\left[ 
+\[\left[ \begin{matrix} \phi\\ D \end{matrix} \right]=IFFT\left[ 
 FFT\left[ \begin{matrix} 0\\ e \end{matrix} \right] 
-FFT\left[ \begin{matrix} x_{k-1}\\ x_k \end{matrix} \right]'\right]</script>
+FFT\left[ \begin{matrix} x_{k-1}\\ x_k \end{matrix} \right]'\right]\]
 
 <figure align="center" style="width: 100%;margin:auto">
   <img width="auto" height="auto" src="/static/posts/2020/02/fblms.png" />
@@ -368,23 +368,23 @@ FFT\left[ \begin{matrix} x_{k-1}\\ x_k \end{matrix} \right]'\right]</script>
 
 <p>　2. 计算块输出</p>
 
-<script type="math/tex; mode=display">\left[ \begin{matrix} C\\ y_k \end{matrix} \right]=IFFT\left[ 
+\[\left[ \begin{matrix} C\\ y_k \end{matrix} \right]=IFFT\left[ 
 FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] 
-FFT\left[ \begin{matrix} x_{k-1}\\ x_k \end{matrix} \right]\right]</script>
+FFT\left[ \begin{matrix} x_{k-1}\\ x_k \end{matrix} \right]\right]\]
 
 <p>　3. 计算误差： $\bm{e} = \bm{y}_k - \bm{d}_k$</p>
 
 <p>　4. 计算梯度：</p>
 
-<script type="math/tex; mode=display">\left[ \begin{matrix} \phi\\ D \end{matrix} \right]=IFFT\left[ 
+\[\left[ \begin{matrix} \phi\\ D \end{matrix} \right]=IFFT\left[ 
 FFT\left[ \begin{matrix} 0\\ e \end{matrix} \right] 
-\overline{FFT\left[ \begin{matrix} x_{k-1}\\ x_k \end{matrix} \right]}\right]</script>
+\overline{FFT\left[ \begin{matrix} x_{k-1}\\ x_k \end{matrix} \right]}\right]\]
 
 <p>　5. 更新滤波器：</p>
 
-<script type="math/tex; mode=display">FFT\left[ \begin{matrix} w_{k+1}\\ 0 \end{matrix} \right]= 
+\[FFT\left[ \begin{matrix} w_{k+1}\\ 0 \end{matrix} \right]= 
 FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] +
-\mu FFT\left[ \begin{matrix} \phi\\ 0 \end{matrix} \right]</script>
+\mu FFT\left[ \begin{matrix} \phi\\ 0 \end{matrix} \right]\]
 
 <p><strong>算法复杂度:</strong></p>
 
@@ -403,38 +403,38 @@ FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] +
 	update: bool, optional
 	whether or not to update the filter coefficients
 	'''</span>  
-	<span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">:],</span> <span class="n">x_b</span><span class="p">])</span>
+	<span class="bp">self</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="p">.</span><span class="n">x</span><span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">B</span><span class="p">:],</span> <span class="n">x_b</span><span class="p">])</span>
 	
-	<span class="c"># block-update parameters</span>
-	<span class="n">X</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
-	<span class="n">y_2B</span> <span class="o">=</span> <span class="n">ifft</span><span class="p">(</span> <span class="n">X</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
-	<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">y_2B</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">:])</span>
+	<span class="c1"># block-update parameters
+</span>	<span class="n">X</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">x</span><span class="p">)</span>
+	<span class="n">y_2B</span> <span class="o">=</span> <span class="n">ifft</span><span class="p">(</span> <span class="n">X</span> <span class="o">*</span> <span class="bp">self</span><span class="p">.</span><span class="n">W</span><span class="p">)</span>
+	<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">real</span><span class="p">(</span><span class="n">y_2B</span><span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">B</span><span class="p">:])</span>
 	
 	<span class="n">e</span> <span class="o">=</span> <span class="n">d_b</span> <span class="o">-</span> <span class="n">y</span>
 	
-	<span class="c"># Update the parameters of the filter</span>
-	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">:</span>
-	<span class="n">E</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">),</span> <span class="n">e</span><span class="p">]))</span> <span class="c"># (2B)</span>
-	
-	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlms</span><span class="p">:</span>
-	<span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1e-10</span>
+	<span class="c1"># Update the parameters of the filter
+</span>	<span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">update</span><span class="p">:</span>
+	<span class="n">E</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">B</span><span class="p">),</span> <span class="n">e</span><span class="p">]))</span> <span class="c1"># (2B)
+</span>	
+	<span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">nlms</span><span class="p">:</span>
+	<span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1e-10</span>
 	<span class="n">E</span> <span class="o">=</span> <span class="n">E</span><span class="o">/</span><span class="n">norm</span>
-	<span class="c"># Set the upper bound of E, to prevent divergence</span>
-	<span class="n">m_errThreshold</span> <span class="o">=</span> <span class="mf">0.2</span>
-	<span class="n">Enorm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">E</span><span class="p">)</span> <span class="c"># (2B)</span>
-	<span class="c"># print(E)</span>
-	<span class="k">for</span> <span class="n">eidx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">):</span>
+	<span class="c1"># Set the upper bound of E, to prevent divergence
+</span>	<span class="n">m_errThreshold</span> <span class="o">=</span> <span class="mf">0.2</span>
+	<span class="n">Enorm</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">E</span><span class="p">)</span> <span class="c1"># (2B)
+</span>	<span class="c1"># print(E)
+</span>	<span class="k">for</span> <span class="n">eidx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="p">.</span><span class="n">B</span><span class="p">):</span>
 	<span class="k">if</span> <span class="n">Enorm</span><span class="p">[</span><span class="n">eidx</span><span class="p">]</span><span class="o">&gt;</span><span class="n">m_errThreshold</span><span class="p">:</span>
 	<span class="n">E</span><span class="p">[</span><span class="n">eidx</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_errThreshold</span><span class="o">*</span><span class="n">E</span><span class="p">[</span><span class="n">eidx</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">Enorm</span><span class="p">[</span><span class="n">eidx</span><span class="p">]</span><span class="o">+</span><span class="mf">1e-10</span><span class="p">)</span> 
 	
-	<span class="c"># Compute the correlation vector (gradient constraint)</span>
-	<span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">'i,i-&gt;i'</span><span class="p">,</span><span class="n">X</span><span class="o">.</span><span class="n">conj</span><span class="p">(),</span><span class="n">E</span><span class="p">)</span> <span class="c"># (2B)</span>
-	<span class="n">phi</span> <span class="o">=</span> <span class="n">ifft</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
-	<span class="n">phi</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+	<span class="c1"># Compute the correlation vector (gradient constraint)
+</span>	<span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">einsum</span><span class="p">(</span><span class="s">'i,i-&gt;i'</span><span class="p">,</span><span class="n">X</span><span class="p">.</span><span class="n">conj</span><span class="p">(),</span><span class="n">E</span><span class="p">)</span> <span class="c1"># (2B)
+</span>	<span class="n">phi</span> <span class="o">=</span> <span class="n">ifft</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+	<span class="n">phi</span><span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">B</span><span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
 	<span class="n">phi</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
 	
-	<span class="bp">self</span><span class="o">.</span><span class="n">W</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">W</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="o">*</span><span class="n">phi</span>
-	<span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">ifft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">W</span><span class="p">)[:</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">])</span> 
+	<span class="bp">self</span><span class="p">.</span><span class="n">W</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">W</span> <span class="o">+</span> <span class="bp">self</span><span class="p">.</span><span class="n">mu</span><span class="o">*</span><span class="n">phi</span>
+	<span class="bp">self</span><span class="p">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">real</span><span class="p">(</span><span class="n">ifft</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">W</span><span class="p">)[:</span><span class="bp">self</span><span class="p">.</span><span class="n">B</span><span class="p">])</span> 
 	
 <span class="k">return</span> <span class="n">y</span><span class="p">,</span> <span class="n">e</span>
 
@@ -456,9 +456,9 @@ Partitioned Fast Block LMS (PFBLMS)，Frequency Domain Adaptive Filter (PBFDAF)�
 
 <p>如果将长度为$M$的滤波器$w$等分为长度为$B$的小段，$M=P*B$。则卷积的结果可以分解为$P$个卷积之叠加。</p>
 
-<script type="math/tex; mode=display">y(n)=\sum_{l=0}^{P} y_l(n)</script>
+\[y(n)=\sum_{l=0}^{P} y_l(n)\]
 
-<script type="math/tex; mode=display">y_l(n)=\sum_{i=0}^{B-1} w_{i+lB}x(n-lB-i)</script>
+\[y_l(n)=\sum_{i=0}^{B-1} w_{i+lB}x(n-lB-i)\]
 
 <figure align="center" style="width: 70%;margin:auto">
   <img width="auto" height="auto" src="/static/posts/2020/02/partitioned_conv.png" />
@@ -504,28 +504,27 @@ Partitioned Fast Block LMS (PFBLMS)，Frequency Domain Adaptive Filter (PBFDAF)�
 
 <p>　（实际只需计算最后一列，前P-1列可以使用上一次迭代保留结果）</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
-Xf_k =
-FFT\left[ \begin{matrix} x_{k-P}&...& x_{k-2} & x_{k-1}\\x_{k-P+1}&...& x_{k-1} & x_k \end{matrix} \right] %]]></script>
+\[Xf_k =
+FFT\left[ \begin{matrix} x_{k-P}&amp;...&amp; x_{k-2} &amp; x_{k-1}\\x_{k-P+1}&amp;...&amp; x_{k-1} &amp; x_k \end{matrix} \right]\]
 
 <p>　2. 计算块输出</p>
 
-<script type="math/tex; mode=display">\left[ \begin{matrix} C\\ y_k \end{matrix} \right]=IFFT\left[ 
-FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] Xf_k\right]</script>
+\[\left[ \begin{matrix} C\\ y_k \end{matrix} \right]=IFFT\left[ 
+FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] Xf_k\right]\]
 
 <p>　3. 计算误差： $e = y_k - d_k$</p>
 
 <p>　4. 计算梯度：</p>
 
-<script type="math/tex; mode=display">\left[ \begin{matrix} \phi\\ D \end{matrix} \right]=IFFT\left[ 
+\[\left[ \begin{matrix} \phi\\ D \end{matrix} \right]=IFFT\left[ 
 FFT\left[ \begin{matrix} 0\\ e \end{matrix} \right] 
-\overline{Xf_k}\right]</script>
+\overline{Xf_k}\right]\]
 
 <p>　5. 更新滤波器：</p>
 
-<script type="math/tex; mode=display">FFT\left[ \begin{matrix} w_{k+1}\\ 0 \end{matrix} \right]= 
+\[FFT\left[ \begin{matrix} w_{k+1}\\ 0 \end{matrix} \right]= 
 FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] +
-\mu FFT\left[ \begin{matrix} \phi\\ 0 \end{matrix} \right]</script>
+\mu FFT\left[ \begin{matrix} \phi\\ 0 \end{matrix} \right]\]
 
 <p><strong>算法复杂度:</strong></p>
 
@@ -544,43 +543,43 @@ FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] +
 	update: bool, optional
 	whether or not to update the filter coefficients
 	'''</span>
-	<span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">:],</span> <span class="n">x_b</span><span class="p">])</span>
-	<span class="n">Xf_b</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+	<span class="bp">self</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">concatenate</span><span class="p">([</span><span class="bp">self</span><span class="p">.</span><span class="n">x</span><span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">B</span><span class="p">:],</span> <span class="n">x_b</span><span class="p">])</span>
+	<span class="n">Xf_b</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">x</span><span class="p">)</span>
 	
-	<span class="c"># block-update parameters</span>
-	<span class="bp">self</span><span class="o">.</span><span class="n">Xf</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Xf</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c"># Xf : Mx2B  sliding window</span>
-	<span class="bp">self</span><span class="o">.</span><span class="n">Xf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">Xf_b</span> <span class="c"># Xf : Mx2B  sliding window</span>
-	<span class="n">y_2B</span> <span class="o">=</span> <span class="n">ifft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Xf</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="c"># [Px2B] element multiply [Px2B] , then ifft</span>
-	<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">y_2B</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">:])</span>
+	<span class="c1"># block-update parameters
+</span>	<span class="bp">self</span><span class="p">.</span><span class="n">Xf</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">Xf</span><span class="p">[:</span><span class="bp">self</span><span class="p">.</span><span class="n">M</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># Xf : Mx2B  sliding window
+</span>	<span class="bp">self</span><span class="p">.</span><span class="n">Xf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">Xf_b</span> <span class="c1"># Xf : Mx2B  sliding window
+</span>	<span class="n">y_2B</span> <span class="o">=</span> <span class="n">ifft</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">Xf</span> <span class="o">*</span> <span class="bp">self</span><span class="p">.</span><span class="n">Wf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="c1"># [Px2B] element multiply [Px2B] , then ifft
+</span>	<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">real</span><span class="p">(</span><span class="n">y_2B</span><span class="p">[</span><span class="bp">self</span><span class="p">.</span><span class="n">B</span><span class="p">:])</span>
 	
 	<span class="n">e</span> <span class="o">=</span> <span class="n">d_b</span> <span class="o">-</span> <span class="n">y</span>
 	
 	<span class="k">if</span> <span class="n">update</span><span class="p">:</span>
-	<span class="n">E</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">),</span> <span class="n">e</span><span class="p">]))</span> <span class="c"># (2B)</span>
-	
-	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nlms</span><span class="p">:</span>
-	<span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">Xf_b</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1e-6</span>
+	<span class="n">E</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">B</span><span class="p">),</span> <span class="n">e</span><span class="p">]))</span> <span class="c1"># (2B)
+</span>	
+	<span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">nlms</span><span class="p">:</span>
+	<span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">Xf_b</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1e-6</span>
 	<span class="n">E</span> <span class="o">=</span> <span class="n">E</span><span class="o">/</span><span class="n">norm</span>
 	
-	<span class="c"># Set the upper bound of E, to prevent divergence</span>
-	<span class="n">m_errThreshold</span> <span class="o">=</span> <span class="mf">0.2</span>
-	<span class="n">Enorm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">E</span><span class="p">)</span> <span class="c"># (2B)</span>
-	<span class="c"># print(E)</span>
-	<span class="k">for</span> <span class="n">eidx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">):</span>
+	<span class="c1"># Set the upper bound of E, to prevent divergence
+</span>	<span class="n">m_errThreshold</span> <span class="o">=</span> <span class="mf">0.2</span>
+	<span class="n">Enorm</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="n">E</span><span class="p">)</span> <span class="c1"># (2B)
+</span>	<span class="c1"># print(E)
+</span>	<span class="k">for</span> <span class="n">eidx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="p">.</span><span class="n">B</span><span class="p">):</span>
 	<span class="k">if</span> <span class="n">Enorm</span><span class="p">[</span><span class="n">eidx</span><span class="p">]</span><span class="o">&gt;</span><span class="n">m_errThreshold</span><span class="p">:</span>
 	<span class="n">E</span><span class="p">[</span><span class="n">eidx</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_errThreshold</span><span class="o">*</span><span class="n">E</span><span class="p">[</span><span class="n">eidx</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">Enorm</span><span class="p">[</span><span class="n">eidx</span><span class="p">]</span><span class="o">+</span><span class="mf">1e-10</span><span class="p">)</span>    
 	
 	
-	<span class="c"># Update the parameters of the filter</span>
-	<span class="bp">self</span><span class="o">.</span><span class="n">Wf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wf</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mu</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Xf</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span>
+	<span class="c1"># Update the parameters of the filter
+</span>	<span class="bp">self</span><span class="p">.</span><span class="n">Wf</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">Wf</span> <span class="o">+</span> <span class="bp">self</span><span class="p">.</span><span class="n">mu</span><span class="o">*</span><span class="n">E</span><span class="o">*</span><span class="bp">self</span><span class="p">.</span><span class="n">Xf</span><span class="p">.</span><span class="n">conj</span><span class="p">()</span>
 	
-	<span class="c"># Compute the correlation vector (gradient constraint)</span>
-	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">constrained</span><span class="p">:</span>
-	<span class="n">waux</span> <span class="o">=</span> <span class="n">ifft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Wf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-	<span class="n">waux</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
-	<span class="bp">self</span><span class="o">.</span><span class="n">Wf</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="n">waux</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+	<span class="c1"># Compute the correlation vector (gradient constraint)
+</span>	<span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">constrained</span><span class="p">:</span>
+	<span class="n">waux</span> <span class="o">=</span> <span class="n">ifft</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">Wf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+	<span class="n">waux</span><span class="p">[:,</span> <span class="bp">self</span><span class="p">.</span><span class="n">B</span><span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+	<span class="bp">self</span><span class="p">.</span><span class="n">Wf</span> <span class="o">=</span> <span class="n">fft</span><span class="p">(</span><span class="n">waux</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 	
-	<span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">ifft</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Wf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+	<span class="bp">self</span><span class="p">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">real</span><span class="p">(</span><span class="n">ifft</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">Wf</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:</span><span class="bp">self</span><span class="p">.</span><span class="n">B</span><span class="p">].</span><span class="n">flatten</span><span class="p">())</span>
 <span class="k">return</span> <span class="n">y</span><span class="p">,</span> <span class="n">e</span>
 </code></pre></div></div>
 
@@ -625,6 +624,9 @@ FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] +
           
       
     
+  
+    
+      
         
           
       
@@ -633,6 +635,31 @@ FFT\left[ \begin{matrix} w_k\\ 0 \end{matrix} \right] +
             <div class="panel-body">
               <h4>Related Posts</h4>
               <ul>
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/en/dft-implementation-cn.html">C++实现离散傅里叶变换</a>
+                  
+                    (Categories: <a href="/category/信号处理">信号处理</a>)
+                  
+                </li>
+          
+          
+        
+      
+    
+  
+    
+      
+        
+          
+      
+          
+      
+    
+        
+          
+      
+          
             
                 <li class="relatedPost">
                   <a href="https://chenwj1989.github.io/post/cn/howling-suppression-cn.html">啸叫抑制之陷波法</a>

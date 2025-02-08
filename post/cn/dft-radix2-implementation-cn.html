@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/favicon.ico" />
+    <title>C++实现基2快速傅里叶变换 - All Articles</title>
+    <meta name="author" content="wjchen" />
+    <meta name="description" content="C++实现基2快速傅里叶变换" />
+    <meta name="keywords" content="C++实现基2快速傅里叶变换, All Articles, 信号处理" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
+    <meta content="" property="fb:app_id">
+    <meta content="All Articles" property="og:site_name">
+
+    
+
+    
+      <meta content="C++实现基2快速傅里叶变换" property="og:title">
+      <meta content="article" property="og:type">
+    
+
+    
+      <meta content="My Personal Thoughts" property="og:description">
+    
+
+    
+      <meta content="https://chenwj1989.github.io/post/cn/dft-radix2-implementation-cn.html" property="og:url">
+    
+
+    
+      <meta content="2024-12-18T20:00:00+08:00" property="article:published_time">
+      <meta content="https://chenwj1989.github.io/about/" property="article:author">
+    
+
+    
+      <meta content="https://chenwj1989.github.io/static/img/avatar.jpg" property="og:image">
+    
+
+    
+      
+        <meta content="信号处理" property="article:section">
+      
+    
+
+    
+      
+    
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:creator" content="@">
+
+    
+      <meta name="twitter:title" content="C++实现基2快速傅里叶变换">
+    
+
+    
+      <meta name="twitter:url" content="https://chenwj1989.github.io/post/cn/dft-radix2-implementation-cn.html">
+    
+
+    
+      <meta name="twitter:description" content="My Personal Thoughts">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="/static/css/fonts.css" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/katex/katex.min.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+          <div class="author" align="center">
+          <a href="/"><img class="profile-avatar" src="/static/img/avatar.jpg" height="100px" width="100px" /></a>
+          <h1 class="author-name">wjchen</h1>
+          
+            <div class="profile-about">
+              Never lose a holy curiosity.
+            </div>
+          
+           <div class="social">
+            <ul>
+              
+                <li><a href="https://github.com/chenwj1989" target="_blank"><i class="fab fa-github"></i></a></li>
+              
+            </ul>
+          </div>
+	  </div>
+          <div class="search" id="js-search">
+            <input type="text" placeholder="$ type to search" class="search__input form-control" id="js-search__input">
+            <ul class="search__results" id="js-search__results"></ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/projects/">My Projects</a></li>
+            
+              <li><a class="about" href="/about/">About Me</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-8 col-offset-1 main-layout">
+        <header class="post-header">
+  <h1 class="post-title">C++实现基2快速傅里叶变换</h1>
+</header>
+
+<span class="time">18 Dec 2024</span>
+
+  <span class="categories">
+    &raquo; <a href="/category/信号处理">信号处理</a>
+  </span>
+
+
+<div class="content">
+  <div class="post"><p><br /></p>
+<ul id="markdown-toc">
+  <li><a href="#用分治策略计算dft" id="markdown-toc-用分治策略计算dft">用分治策略计算DFT</a></li>
+  <li><a href="#fft的递归实现" id="markdown-toc-fft的递归实现">FFT的递归实现</a></li>
+  <li><a href="#fft的非递归实现" id="markdown-toc-fft的非递归实现">FFT的非递归实现</a></li>
+  <li><a href="#参考资料" id="markdown-toc-参考资料">参考资料</a></li>
+</ul>
+
+<p>从<a href="/post/cn/dft-implementation-cn.html">DFT的实现</a>可知其时间复杂度是 $O(N^2)$ 。这个实现的计算量很大，给工程落地带来很大的障碍。</p>
+
+<p>这一节，我们介绍DFT的快速实现：快速傅立叶变换（FFT）。FFT的实现方式有很多种，我们首先学习最经典的一种情况：对长度N为2的幂次方的序列，时间上按基2分解的Cooley–Tukey算法，这种FFT的实现计算量降到了 $O(N\log N)$</p>
+
+<h1 id="用分治策略计算dft">用分治策略计算DFT</h1>
+
+<p>首先，DFT的公式如下:</p>
+
+\[\begin{aligned}
+DFT: X[k] &amp; = \sum_{n=0}^{N-1} x[n] e^{-j2\pi \frac{k}{N}n}, for\ k = 0,1,..., N-1 \\
+IDFT: x[n] &amp; = \frac{1}{N}\sum_{n=0}^{N-1} X[k] e^{j2\pi \frac{k}{N}n} ,for\ n = 0,1,..., N-1 
+\end{aligned}\]
+
+<p>若n和k的长度N是偶数，则可以将DFT的偶数点和奇数点分开计算，原长度为N的序列被分解成两个长度为M=N/2的子序列 $x_e$ 和 $x_o$。</p>
+
+\[\begin{aligned}
+X[k] &amp; = \sum_{n=0}^{N-1} x[n] e^{-j2\pi \frac{k}{N}n} \\
+      &amp; = \sum_{m=0}^{N/2-1} x[2m] e^{-j2\pi \frac{k}{N}2m}  + \sum_{m=0}^{N/2-1} x[2m+1] e^{-j2\pi \frac{k}{N}2m+1} \\
+      &amp; = \sum_{m=0}^{N/2-1} x[2m] e^{-j2\pi \frac{k}{N/2}m}  + e^{-j2\pi \frac{k}{N}}\sum_{m=0}^{N/2-1} x[2m+1] e^{-j2\pi \frac{k}{N/2}m} \\
+      &amp; = \sum_{m=0}^{M-1} x_e[m] e^{-j2\pi \frac{k}{M}m}  + e^{-j2\pi \frac{k}{N}}\sum_{m=0}^{M-1} x_o[m] e^{-j2\pi \frac{k}{M}m} 
+\end{aligned}\]
+
+<p>把k也分成两部分，第一部分是k=0~N/2-1, 第二部分是k=N/2～N-1。首先看前一部分，DFT实际就被分解成了两个长度为M=N/2的子傅立叶变换 $X_e[k]$ 和 $X_o[k]$。</p>
+
+\[\begin{aligned}
+X[k] &amp; = \sum_{m=0}^{M-1} x_e[m] e^{-j2\pi \frac{k}{M}m}  + e^{-j2\pi \frac{k}{2M}}\sum_{m=0}^{M-1} x_o[m] e^{-j2\pi \frac{k}{M}m} \\
+&amp; = X_e[k] + e^{-j2\pi \frac{k}{2M}}X_o[k],\  for\ k =0,...N/2-1\\
+\end{aligned}\]
+
+<p>对于第二部分，我们把下标写作 k + M, 其中 k=0~N/2-1.</p>
+
+\[\begin{aligned} 
+X[k+M] &amp; = \sum_{m=0}^{M-1} x_e[m] e^{-j2\pi \frac{k + M}{M}m} + e^{-j2\pi \frac{k+M}{2M}}\sum_{m=0}^{M-1} x_o[m] e^{-j2\pi \frac{k+M}{M}m} \\
+&amp; = X_e[k] - e^{-j2\pi \frac{k}{2M}}X_o[k],\  for\ k =0,...N/2-1\\
+\end{aligned}\]
+
+<p>于是，我们就得到了偶数序列DFT的分治策略，就是分解成奇序列和偶序列的子DFT的加权和。其中系数 $e^{-j2\pi \frac{k}{N}}$ 被称为旋转因子，也记作 $W^k_N$ 。</p>
+
+\[\begin{aligned}
+X[k] &amp; = X_e[k] + e^{-j2\pi \frac{k}{N}}X_o[k] \\
+X[k + \frac{N}{2}] &amp; = X_e[k]- e^{-j2\pi \frac{k}{N}}X_o[k] \\
+\end{aligned}\]
+
+<p>长度为N的DFT = 两个长度为N/2的DFT + N次乘法 + N次加法。 分治之后的计算杂度为</p>
+
+\[\begin{aligned}
+T(N) = 2T(\frac{N}{2}) + O(n)
+\end{aligned}\]
+
+<h1 id="fft的递归实现">FFT的递归实现</h1>
+
+<p>如果长度N是2的幂次方，则每次分解成一半长度的DFT后，都可以按照一下步骤继续分解：</p>
+
+<ul>
+  <li>按偶数奇数下边，将序列分解成两个半长度子序列</li>
+  <li>计算两个子序列的DFT</li>
+  <li>将奇序列的DFT乘上旋转因子</li>
+  <li>偶序列的DFT与旋转后的奇序列的DFT相加，得到前一半DFT</li>
+  <li>偶序列的DFT与旋转后的奇序列的DFT相减，得到后一半DFT</li>
+</ul>
+
+<p>一直分解到只有一个点 $X[0] = x[0]$ 。</p>
+
+<p>按照以上思想，很容易写出递归的基2FFT实现。首先写一个分解奇偶元素的函数。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">&gt;</span>
+    <span class="kt">void</span> <span class="nf">DeInterleave</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">len</span><span class="p">,</span> <span class="n">T</span><span class="o">*</span> <span class="n">data</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">half_len</span> <span class="o">=</span> <span class="n">len</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">tmp</span><span class="p">(</span><span class="n">half_len</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">half_len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="p">];</span>
+            <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">half_len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">half_len</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>然后写一个FFT递归核心函数。</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kt">void</span> <span class="nf">FFTCoreRecursive</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">len</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_in</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">imag_in</span><span class="p">,</span> 
+                          <span class="kt">double</span><span class="o">*</span> <span class="n">real_out</span><span class="p">,</span><span class="kt">double</span><span class="o">*</span> <span class="n">imag_out</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">forward</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">f_sign</span> <span class="o">=</span> <span class="n">forward</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">len</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">real_out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">real_in</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+            <span class="n">imag_out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">imag_in</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">half_len</span> <span class="o">=</span> <span class="n">len</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">m_size</span> <span class="o">/</span> <span class="n">len</span><span class="p">;</span>
+            <span class="n">DeInterleave</span><span class="p">(</span><span class="n">len</span><span class="p">,</span> <span class="n">real_in</span><span class="p">);</span>
+            <span class="n">DeInterleave</span><span class="p">(</span><span class="n">len</span><span class="p">,</span> <span class="n">imag_in</span><span class="p">);</span>
+            <span class="kt">double</span><span class="o">*</span> <span class="n">even_in_real</span> <span class="o">=</span> <span class="n">real_in</span><span class="p">;</span>
+            <span class="kt">double</span><span class="o">*</span> <span class="n">even_in_imag</span> <span class="o">=</span> <span class="n">imag_in</span><span class="p">;</span>
+            <span class="kt">double</span><span class="o">*</span> <span class="n">odd_in_real</span> <span class="o">=</span> <span class="n">real_in</span> <span class="o">+</span> <span class="n">half_len</span><span class="p">;</span>
+            <span class="kt">double</span><span class="o">*</span> <span class="n">odd_in_imag</span> <span class="o">=</span> <span class="n">imag_in</span> <span class="o">+</span> <span class="n">half_len</span><span class="p">;</span>
+            <span class="kt">double</span><span class="o">*</span> <span class="n">even_out_real</span> <span class="o">=</span> <span class="n">real_out</span><span class="p">;</span>
+            <span class="kt">double</span><span class="o">*</span> <span class="n">even_out_imag</span> <span class="o">=</span> <span class="n">imag_out</span><span class="p">;</span>
+            <span class="kt">double</span><span class="o">*</span> <span class="n">odd_out_real</span> <span class="o">=</span> <span class="n">real_out</span> <span class="o">+</span> <span class="n">half_len</span><span class="p">;</span>
+            <span class="kt">double</span><span class="o">*</span> <span class="n">odd_out_imag</span> <span class="o">=</span> <span class="n">imag_out</span> <span class="o">+</span> <span class="n">half_len</span><span class="p">;</span>
+
+            <span class="n">FFTCoreRecursive</span><span class="p">(</span><span class="n">half_len</span><span class="p">,</span> <span class="n">even_in_real</span><span class="p">,</span> <span class="n">even_in_imag</span><span class="p">,</span> <span class="n">even_out_real</span><span class="p">,</span> <span class="n">even_out_imag</span><span class="p">,</span>
+                             <span class="n">forward</span><span class="p">);</span>
+            <span class="n">FFTCoreRecursive</span><span class="p">(</span><span class="n">half_len</span><span class="p">,</span> <span class="n">odd_in_real</span><span class="p">,</span> <span class="n">odd_in_imag</span><span class="p">,</span> <span class="n">odd_out_real</span><span class="p">,</span> <span class="n">odd_out_imag</span><span class="p">,</span>
+                             <span class="n">forward</span><span class="p">);</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">half_len</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="kt">double</span> <span class="n">odd_twiddle_real</span> <span class="o">=</span>
+                    <span class="n">T</span><span class="p">(</span><span class="n">odd_out_real</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_cos</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">m</span><span class="p">]</span> <span class="o">+</span> <span class="n">f_sign</span> <span class="o">*</span> <span class="n">odd_out_imag</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_sin</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">m</span><span class="p">]);</span>
+                <span class="kt">double</span> <span class="n">odd_twiddle_imag</span> <span class="o">=</span>
+                    <span class="n">T</span><span class="p">(</span><span class="n">odd_out_imag</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_cos</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">m</span><span class="p">]</span> <span class="o">-</span> <span class="n">f_sign</span> <span class="o">*</span> <span class="n">odd_out_real</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_sin</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">m</span><span class="p">]);</span>
+
+                <span class="n">real_out</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="n">half_len</span><span class="p">]</span> <span class="o">=</span> <span class="n">even_out_real</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">odd_twiddle_real</span><span class="p">;</span>
+                <span class="n">imag_out</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="n">half_len</span><span class="p">]</span> <span class="o">=</span> <span class="n">even_out_imag</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">odd_twiddle_imag</span><span class="p">;</span>
+                <span class="n">real_out</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">even_out_real</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">odd_twiddle_real</span><span class="p">;</span>
+                <span class="n">imag_out</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">even_out_imag</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">odd_twiddle_imag</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="fft的非递归实现">FFT的非递归实现</h1>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">static</span> <span class="kt">void</span> <span class="nf">GenBitReverseOrder</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">len</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;&amp;</span> <span class="n">arr</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="kt">size_t</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+            <span class="kt">size_t</span> <span class="n">step</span> <span class="o">=</span> <span class="n">len</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">idx</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">idx</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">step</span><span class="p">;</span>
+                <span class="n">idx</span> <span class="o">/=</span> <span class="mi">2</span><span class="p">;</span>
+                <span class="n">step</span> <span class="o">/=</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="n">GenBitReverseOrder</span><span class="p">(</span><span class="n">m_size</span><span class="p">,</span> <span class="n">m_bit_reverse_idx</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kt">void</span> <span class="n">FFTRadix2</span><span class="o">::</span><span class="n">Forward</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_in</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span><span class="o">*</span> <span class="n">imag_in</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">real_out</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">imag_out</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">real_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">real_in</span><span class="p">[</span><span class="n">m_bit_reverse_idx</span><span class="p">[</span><span class="n">i</span><span class="p">]];</span>
+            <span class="n">imag_out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">imag_in</span><span class="p">[</span><span class="n">m_bit_reverse_idx</span><span class="p">[</span><span class="n">i</span><span class="p">]];</span>
+        <span class="p">}</span>
+        <span class="n">FFTRadix2Core</span><span class="p">(</span><span class="n">real_out</span><span class="p">,</span> <span class="n">imag_out</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+    <span class="p">}</span>
+
+
+    <span class="kt">void</span> <span class="n">FFTRadix2</span><span class="o">::</span><span class="n">FFTRadix2Core</span><span class="p">(</span><span class="kt">double</span><span class="o">*</span> <span class="n">real_out</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">imag_out</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">forward</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">f_sign</span> <span class="o">=</span> <span class="n">forward</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">btfly</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">btfly</span> <span class="o">&lt;=</span> <span class="n">m_size</span><span class="p">;</span> <span class="n">btfly</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">step</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">m_size</span> <span class="o">/</span> <span class="n">btfly</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m_size</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">btfly</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">step</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="kt">int</span> <span class="n">even</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">k</span><span class="p">;</span>
+                    <span class="kt">int</span> <span class="n">odd</span> <span class="o">=</span> <span class="n">even</span> <span class="o">+</span> <span class="n">step</span><span class="p">;</span>
+
+                    <span class="kt">double</span> <span class="n">odd_twiddle_real</span> <span class="o">=</span>
+                        <span class="n">T</span><span class="p">(</span><span class="n">real_out</span><span class="p">[</span><span class="n">odd</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_cos</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">m</span><span class="p">]</span> <span class="o">+</span> <span class="n">f_sign</span> <span class="o">*</span> <span class="n">imag_out</span><span class="p">[</span><span class="n">odd</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_sin</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">m</span><span class="p">]);</span>
+                    <span class="kt">double</span> <span class="n">odd_twiddle_imag</span> <span class="o">=</span>
+                        <span class="n">T</span><span class="p">(</span><span class="n">imag_out</span><span class="p">[</span><span class="n">odd</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_cos</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">m</span><span class="p">]</span> <span class="o">-</span> <span class="n">f_sign</span> <span class="o">*</span> <span class="n">real_out</span><span class="p">[</span><span class="n">odd</span><span class="p">]</span> <span class="o">*</span> <span class="n">m_sin</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">m</span><span class="p">]);</span>
+
+                    <span class="n">real_out</span><span class="p">[</span><span class="n">odd</span><span class="p">]</span> <span class="o">=</span> <span class="n">real_out</span><span class="p">[</span><span class="n">even</span><span class="p">]</span> <span class="o">-</span> <span class="n">odd_twiddle_real</span><span class="p">;</span>
+                    <span class="n">imag_out</span><span class="p">[</span><span class="n">odd</span><span class="p">]</span> <span class="o">=</span> <span class="n">imag_out</span><span class="p">[</span><span class="n">even</span><span class="p">]</span> <span class="o">-</span> <span class="n">odd_twiddle_imag</span><span class="p">;</span>
+                    <span class="n">real_out</span><span class="p">[</span><span class="n">even</span><span class="p">]</span> <span class="o">=</span> <span class="n">real_out</span><span class="p">[</span><span class="n">even</span><span class="p">]</span> <span class="o">+</span> <span class="n">odd_twiddle_real</span><span class="p">;</span>
+                    <span class="n">imag_out</span><span class="p">[</span><span class="n">even</span><span class="p">]</span> <span class="o">=</span> <span class="n">imag_out</span><span class="p">[</span><span class="n">even</span><span class="p">]</span> <span class="o">+</span> <span class="n">odd_twiddle_imag</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h1 id="参考资料">参考资料</h1>
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm">Cooley–Tukey FFT algorithm</a></li>
+  <li>Proakis, John G. Digital signal processing: principles algorithms and applications. Pearson Education India, 2001.</li>
+  <li><a href="https://ccrma.stanford.edu/~jos/mdft/mdft.html">Mathematics of the Discrete Fourier Transform (DFT), with Audio Applications — Second Edition, by Julius O. Smith III, W3K Publishing, 2007</a></li>
+  <li><a href="https://alan23273850.gitbook.io/signals-and-systems">從傅立葉轉換到數位訊號處理</a></li>
+  <li><a href="https://github.com/mborgerding/kissfft">KISSFFT, by Mark Borgerding</a></li>
+  <li><a href="https://bitbucket.org/jpommier/pffft/src/master/">PFFFT: a pretty fast FFT</a></li>
+</ul>
+</div>
+  <div class="share-page">
+  <span style="float: left;">Share this on &rarr;&nbsp;&nbsp;</span>
+
+  <!-- Twitter -->
+  <a href="https://twitter.com/share" class="twitter-share-button" data-via="">Tweet</a>
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+  <!-- Facebook -->
+  <div class="fb-share-button" data-href="https://chenwj1989.github.io/post/cn/dft-radix2-implementation-cn.html" data-layout="button_count" style="position: relative; top: -8px; left: 3px;"></div>
+</div>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</div>
+
+
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+            
+            <div class="panel-body">
+              <h4>Related Posts</h4>
+              <ul>
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/dft-implementation-cn.html">C++实现离散傅里叶变换</a>
+                  
+                    (Categories: <a href="/category/信号处理">信号处理</a>)
+                  
+                </li>
+          
+          
+        
+      
+    
+  
+    
+      
+        
+          
+      
+    
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/howling-suppression-cn.html">啸叫抑制之陷波法</a>
+                  
+                    (Categories: <a href="/category/语音">语音</a>, <a href="/category/信号处理">信号处理</a>)
+                  
+                </li>
+          
+          
+        
+      
+    
+  
+    
+      
+        
+          
+      
+    
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/speex-aec-cn.html">Speex回声消除</a>
+                  
+                    (Categories: <a href="/category/语音">语音</a>, <a href="/category/信号处理">信号处理</a>)
+                  
+                </li>
+          
+          
+        
+      
+    
+  
+    
+      
+        
+          
+      
+    
+        
+          
+            
+                <li class="relatedPost">
+                  <a href="https://chenwj1989.github.io/post/cn/freq-domain-lms-cn.html">频域LMS自适应滤波</a>
+                  
+                    (Categories: <a href="/category/机器学习">机器学习</a>, <a href="/category/信号处理">信号处理</a>)
+                  
+                </li>
+          
+          
+        
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+    
+      
+        
+          
+      
+    
+  
+  
+  </ul>
+</div>
+
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/post/en/dft-implementation-en.html">&laquo; Implement the Discrete Fourier Transform using C++</a>
+  
+  
+</div>
+
+<div class="disqus-comments">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    /* <![CDATA[ */
+    var disqus_shortname = "wjchen";
+    var disqus_identifier = "https://chenwj1989.github.io_C++实现基2快速傅里叶变换";
+    var disqus_title = "C++实现基2快速傅里叶变换";
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    /* ]]> */
+  </script>
+</div>
+
+        <footer>
+          &copy; wjchen
+          
+            - <a href="https://github.com/chenwj1989">https://github.com/chenwj1989</a> - Powered by Jekyll.
+          
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/jquery-1.11.0.min.js"></script>
+    <script src="/static/js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+    
+    <script src="/static/katex/katex.min.js"></script>
+    <script src="/static/katex/contrib/auto-render.min.js"></script>
+    <script src="/static/katex/contrib/mathtex-script-type.min.js"></script>
+    <script>
+      renderMathInElement(
+          document.body,
+          {
+              delimiters: [
+                  {left: "$$", right: "$$", display: true},
+                  {left: "\\[", right: "\\]", display: true},
+                  {left: "$", right: "$", display: false},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          }
+      );
+    </script>
+
+  </body>
+</html>
+
